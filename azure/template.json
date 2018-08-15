@@ -48,7 +48,7 @@
             "value": "[parameters('aseResourceGroup')]"
           },
           "aspSize": {
-            "value": 1
+            "value": "1"
           },
           "aspInstances": {
             "value": 1
