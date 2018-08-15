@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string",
+      "metadata": {
+          "description": "App service plan to run the app under"
+      }
+    },
+    "aseHostingEnvironmentName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+          "description": "App service plan to run the app under"
+      }
+    },
+    "aseResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+          "description": "Resource group the app service plan is in"
+      }
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "primaryStorageAccount",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'app-service-plan.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "aseHostingEnvironmentName": {
+            "value": "[parameters('aseHostingEnvironmentName')]"
+          },
+          "aseResourceGroup": {
+            "value": "[parameters('aseResourceGroup')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
