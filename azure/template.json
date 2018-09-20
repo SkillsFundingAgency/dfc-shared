@@ -93,10 +93,10 @@
             "value": "abfa0a7c-a6b6-4736-8310-5855508787cd"
           },
           "secretName": {
-            "value": "Foo"
+            "value": "[parameters('appServicePlanName')]"
           },
           "secretValue": {
-            "value": "Bar"
+            "value": "[reference('sharedAppServerPlan').outputs.appServicePlanId.value]"
           }
         }
       }
