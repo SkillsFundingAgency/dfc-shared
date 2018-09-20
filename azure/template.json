@@ -40,6 +40,12 @@
       "metadata": {
           "description": "Resource group the app service plan is in"
       }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+          "description": "Name of the key vault"
+      }
     }
   },
   "variables": {
@@ -79,6 +85,9 @@
       "apiVersion": "2017-05-10",
       "name": "sharedKeyVault",
       "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "sharedAppServerPlan"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -87,7 +96,7 @@
         },
         "parameters": {
           "keyVaultName": {
-            "value": "[parameters('appServicePlanName')]"
+            "value": "[parameters('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
             "value": "abfa0a7c-a6b6-4736-8310-5855508787cd"
