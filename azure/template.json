@@ -8,6 +8,25 @@
           "description": "App service plan to run the app under"
       }
     },
+    "appServicePlanSize": {
+      "type": "string",
+      "defaultValue": "1",
+      "metadata": {
+          "description": "Size of the instances in the app service plan"
+      },
+      "allowedValues": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "appServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+          "description": "Number of instances in the app service plan"
+      }
+    },
     "aseHostingEnvironmentName": {
       "type": "string",
       "defaultValue": "",
@@ -29,7 +48,7 @@
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "primaryStorageAccount",
+      "name": "sharedAppServerPlan",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -48,10 +67,39 @@
             "value": "[parameters('aseResourceGroup')]"
           },
           "aspSize": {
-            "value": "1"
+            "value": "[parameters('appServicePlanSize')]"
           },
           "aspInstances": {
-            "value": 1
+            "value": "[parameters('appServicePlanInstances')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "sharedKeyVault",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "sharedAppServerPlan"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'keyvault.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[reference('sharedAppServerPlan').outputs.appServicePlanId.value]"
+          },
+          "secretName": {
+            "value": "Foo"
+          },
+          "secretValue": {
+            "value": "Bar"
           }
         }
       }
