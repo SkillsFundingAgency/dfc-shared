@@ -82,31 +82,16 @@
       }
     },
     {
-      "apiVersion": "2017-05-10",
-      "name": "sharedKeyVault",
-      "type": "Microsoft.Resources/deployments",
-      "dependsOn": [
-        "sharedAppServerPlan"
-      ],
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2016-10-01",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {},
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'keyvault.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": {
-            "value": "[parameters('keyVaultName')]"
-          },
-          "servicePrincipalObjectId": {
-            "value": "abfa0a7c-a6b6-4736-8310-5855508787cd"
-          },
-          "secretName": {
-            "value": "[parameters('appServicePlanName')]"
-          },
-          "secretValue": {
-            "value": "[reference('sharedAppServerPlan').outputs.appServicePlanId.value]"
-          }
+        "tenantId": "[subscription().tenantId]",
+        "sku": {
+          "family": "A",
+          "name": "standard"
         }
       }
     }
