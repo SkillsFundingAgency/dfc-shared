@@ -18,6 +18,13 @@
         "dev",
         "prod"
       ]
+    },
+    "certificates": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+          "description": "Array of certificates (must exist in keyvault)"
+      }
     }
   },
   "variables": {
@@ -45,6 +52,36 @@
       }
     },
     {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[parameters('certificates')[copyIndex()]]",
+      "dependsOn": [
+        "[variables('keyVaultName')]"
+      ],
+      "copy": { 
+        "name": "certpos", 
+        "count": "[length(parameters('certificates'))]" 
+      }, 
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultCertificateName": {
+            "value": "[parameters('certificates')[copyIndex()]]"
+          },
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "keyVaultResourceGroup": {
+            "value": "[resourceGroup().name]"
+          }       
+        }
+      }
+    },
+    {
       "type": "Microsoft.Sql/servers",
       "apiVersion": "2015-05-01-preview",
       "name": "[variables('sqlServerName')]",
@@ -52,11 +89,6 @@
       "tags": {},
       "identity": {
         "type": "SystemAssigned"
-      },
-      "properties": {
-        "administratorLogin": "string",
-        "administratorLoginPassword": "string",
-        "version": "string"
       }
     }
   ],
