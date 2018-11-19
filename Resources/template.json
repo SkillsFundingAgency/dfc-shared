@@ -1,0 +1,64 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sharedPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
+      }
+    },
+    "envType": {
+      "type": "string",
+      "defaultValue": "dev",
+      "metadata": {
+          "description": "Type of environment, either dev or prod"
+      },
+      "allowedValues": [
+        "dev",
+        "prod"
+      ]
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
+    "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
+    "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
+    "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
+    "elasticPoolName": "[concat(parameters('sharedPrefix'),'-epl')]",
+    "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2016-10-01",
+      "name": "[variables('keyVaultName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {},
+      "properties": {
+        "tenantId": "[subscription().tenantId]",
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "accessPolicies": []
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2015-05-01-preview",
+      "name": "[variables('sqlServerName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {},
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "administratorLogin": "string",
+        "administratorLoginPassword": "string",
+        "version": "string"
+      }
+    }
+  ],
+  "outputs": {}
+}
