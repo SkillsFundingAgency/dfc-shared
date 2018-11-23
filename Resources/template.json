@@ -28,7 +28,7 @@
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
@@ -37,58 +37,20 @@
   },
   "resources": [
     {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2016-10-01",
       "name": "[variables('keyVaultName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {},
-      "properties": {
-        "tenantId": "[subscription().tenantId]",
-        "sku": {
-          "family": "A",
-          "name": "standard"
-        },
-        "accessPolicies": []
-      }
-    },
-    {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[parameters('certificates')[copyIndex()]]",
-      "dependsOn": [
-        "[variables('keyVaultName')]"
-      ],
-      "copy": { 
-        "name": "certpos", 
-        "count": "[length(parameters('certificates'))]" 
-      }, 
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'),'keyvault.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultCertificateName": {
-            "value": "[parameters('certificates')[copyIndex()]]"
-          },
           "keyVaultName": {
             "value": "[variables('keyVaultName')]"
-          },
-          "keyVaultResourceGroup": {
-            "value": "[resourceGroup().name]"
           }       
         }
-      }
-    },
-    {
-      "type": "Microsoft.Sql/servers",
-      "apiVersion": "2015-05-01-preview",
-      "name": "[variables('sqlServerName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {},
-      "identity": {
-        "type": "SystemAssigned"
       }
     }
   ],
