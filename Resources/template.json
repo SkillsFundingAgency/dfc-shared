@@ -49,10 +49,43 @@
         "parameters": {
           "keyVaultName": {
             "value": "[variables('keyVaultName')]"
-          }       
+          }
+        }
+      }
+    },
+    {
+      "name": "[variables('sqlServerName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'sqlserver-elasticpool.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "sqlServerName": {
+            "value": "[variables('sqlServerName')]"
+          },
+          "elasticPoolName": {
+            "value": "[variables('elasticPoolName')]"
+          }
         }
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "keyVaultName": {
+      "type": "string",
+      "value": "[variables('keyVaultName')]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "value": "[variables('sqlServerName')]"
+    },
+    "elasticPoolName": {
+      "type": "string",
+      "value": "[variables('elasticPoolName')]"
+    }
+  }
 }
