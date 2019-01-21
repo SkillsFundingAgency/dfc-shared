@@ -66,7 +66,7 @@
     "storageContainerName": "backups",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
-    "elasticPoolName": "[if(equals(parameters('envType'),''),concat(parameters('sharedPrefix'),'-epl'),'')]",
+    "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]"
   },
   "resources": [
