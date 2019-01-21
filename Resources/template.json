@@ -127,6 +127,9 @@
           "sqlServerAdminPassword": {
             "value": "[parameters('sqlServerAdminPassword')]"
           },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
           "sqlServerActiveDirectoryAdminLogin": {
             "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
           },
@@ -135,9 +138,6 @@
           },
           "threatDetectionEmailAddress": {
             "value": "[parameters('threatDetectionEmailAddress')]"
-          },
-          "sqlStorageAccountName": {
-            "value": "[variables('storageAccountName')]"
           },
           "elasticPoolName": {
             "value": "[variables('elasticPoolName')]"
