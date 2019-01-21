@@ -10,7 +10,6 @@
     },
     "envType": {
       "type": "string",
-      "defaultValue": "dev",
       "metadata": {
           "description": "Type of environment, either dev or prod"
       },
@@ -18,6 +17,38 @@
         "dev",
         "prod"
       ]
+    },
+    "sqlServerAdminUserName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Azure SQL Server Administrator (SA) username (will auto-generate one if not passed in)"
+      }
+    },
+    "sqlServerAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The Azure SQL Server Administrator (SA) password"
+      }
+    },
+    "sqlServerActiveDirectoryAdminLogin": {
+      "type": "string",
+      "metadata": {
+        "description": "The active directory admin that will be assigned to the SQL server"
+      }
+    },
+    "sqlServerActiveDirectoryAdminObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "The object id of the active directory admin that will be assigned to the SQL server"
+      }
+    },
+    "threatDetectionEmailAddress": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "The email address that threat alerts will be sent to"
+      }
     },
     "certificates": {
       "type": "array",
@@ -29,15 +60,18 @@
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "dasDeploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
+    "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
+    "storageContainerName": "backups",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
-    "elasticPoolName": "[concat(parameters('sharedPrefix'),'-epl')]",
+    "elasticPoolName": "[if(equals(parameters('envType'),''),concat(parameters('sharedPrefix'),'-epl'),'')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]"
   },
   "resources": [
     {
-      "name": "[variables('keyVaultName')]",
+      "name": "sharedKeyVault",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "properties": {
@@ -54,9 +88,32 @@
       }
     },
     {
-      "name": "[variables('sqlServerName')]",
+      "name": "sharedStorage",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm-container.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
+          "storageContainerName": {
+            "value": "[variables('storageContainerName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "sharedSQLServer",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "sharedStorage"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -66,6 +123,24 @@
         "parameters": {
           "sqlServerName": {
             "value": "[variables('sqlServerName')]"
+          },
+          "sqlServerAdminUserName": {
+            "value": "[parameters('sqlServerAdminUserName')]"
+          },
+          "sqlServerAdminPassword": {
+            "value": "[parameters('sqlServerAdminPassword')]"
+          },
+          "sqlServerActiveDirectoryAdminLogin": {
+            "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
+          },
+          "sqlServerActiveDirectoryAdminObjectId": {
+            "value": "[parameters('sqlServerActiveDirectoryAdminObjectId')]"
+          },
+          "threatDetectionEmailAddress": {
+            "value": "[parameters('threatDetectionEmailAddress')]"
+          },
+          "sqlStorageAccountName": {
+            "value": "[variables('storageAccountName')]"
           },
           "elasticPoolName": {
             "value": "[variables('elasticPoolName')]"
@@ -79,9 +154,17 @@
       "type": "string",
       "value": "[variables('keyVaultName')]"
     },
-    "sqlServerName": {
+    "storageAccountName": {
       "type": "string",
-      "value": "[variables('sqlServerName')]"
+      "value": "[variables('storageAccountName')]"
+    },
+    "sqlServerFqdn": {
+      "type": "string",
+      "value": "[reference('sharedSQLServer').outputs.sqlServerFqdn.value]"
+    },
+    "saAdministratorLogin": {
+      "type": "string",
+      "value": "[reference('sharedSQLServer').outputs.saAdministratorLogin.value]"
     },
     "elasticPoolName": {
       "type": "string",
