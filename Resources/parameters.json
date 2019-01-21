@@ -4,6 +4,18 @@
   "parameters": {
     "sharedPrefix": {
       "value": "dfc-foo-shared"
+    },
+    "envType": {
+      "value": "dev"
+    },
+    "sqlServerAdminPassword": {
+      "value": "not-a-real-password"
+    },
+    "sqlServerActiveDirectoryAdminLogin": {
+      "value": "AD_GRP_NAME"
+    },
+    "sqlServerActiveDirectoryAdminObjectId": {
+      "value": "12345678-abcd-abcd-abcd-1234567890ab"
     }
   }
 }
