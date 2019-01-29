@@ -60,10 +60,8 @@
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
-    "dasDeploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
-    "storageContainerName": "backups",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
@@ -83,6 +81,30 @@
         "parameters": {
           "keyVaultName": {
             "value": "[variables('keyVaultName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "sharedKeyVaultCertificates",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "condition": "[greater(length(parameters('certificates')), 0)]",
+      "dependsOn": [
+        "sharedKeyVault"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'keyvault-secrets.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "certificates": {
+            "value": "[parameters('certificates')]"
           }
         }
       }
@@ -151,9 +173,17 @@
       "type": "string",
       "value": "[variables('keyVaultName')]"
     },
+    "KeyVaultUri": {
+      "type": "string",
+      "value": "[reference('sharedKeyVault').outputs.KeyVaultUri.value]"
+    },
     "storageAccountName": {
       "type": "string",
       "value": "[variables('storageAccountName')]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "value": "[variables('sqlServerName')]"
     },
     "sqlServerFqdn": {
       "type": "string",
