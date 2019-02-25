@@ -65,7 +65,8 @@
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
-    "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]"
+    "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
+    "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]"
   },
   "resources": [
     {
@@ -166,6 +167,26 @@
           }
         }
       }
+    },
+    {
+      "name": "sharedCDN",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'cdn-profile.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "cdnProfileName": {
+            "value": "[variables('cdnName')]"
+          },
+          "cdnSKU": {
+            "value": "Standard_Verizon"
+          }
+        }
+      }
     }
   ],
   "outputs": {
@@ -196,6 +217,10 @@
     "elasticPoolName": {
       "type": "string",
       "value": "[variables('elasticPoolName')]"
+    },
+    "cdnName": {
+      "type": "string",
+      "value": "[variables('cdnName')]"
     }
   }
 }
