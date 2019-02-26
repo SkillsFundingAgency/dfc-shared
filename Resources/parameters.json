@@ -5,6 +5,21 @@
     "sharedPrefix": {
       "value": "dfc-foo-shared"
     },
+    "apimHostnameRoot": {
+      "value": "api.notarealservice.org.uk"
+    },
+    "apimPortalKeyVaultCertificatePath": {
+      "value": "https://dfc-foo-shared-kv.vault.azure.net/certificates/wildcard-dfc-notarealservice-org-uk/identifierstringabc123"
+    },
+    "apimProxyKeyVaultCertificatePath": {
+      "value": "https://dfc-foo-shared-kv.vault.azure.net/certificates/wildcard-dfc-notarealservice-org-uk/identifierstringabc123"
+    },
+    "apimSkuTier": {
+      "value": "Developer"
+    },
+    "envAbbreviation": {
+      "value": "dev"
+    },
     "envType": {
       "value": "dev"
     },
