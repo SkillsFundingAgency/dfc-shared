@@ -93,7 +93,9 @@
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
+    "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
+    "apimOrganizationName" : "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
@@ -220,7 +222,30 @@
       }
     },
     {
-      "name": "sharedApimService",
+      "name": "sharedApimKeyVaultAccessPolicy",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'/KeyVault/keyvault-access-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[reference(concat()).outputs.ApimServiceIdentityPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedApimServiceBasic"
+      ]
+    },
+    {
+      "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "properties": {
@@ -231,7 +256,33 @@
         },
         "parameters": {
           "adminEmail": {
-            "value": "careersdevops@education.gov.uk"
+            "value": "[variables('apimAdminEmail')]"
+          },
+          "apimServiceName": {
+            "value": "[variables('apimName')]"
+          },
+          "organizationName": {
+            "value": "[variables('apimOrganizationName')]"
+          },
+          "skuTier": {
+            "value": "[parameters('apimSkuTier')]"
+          }
+        }
+      }
+    }, 
+    {
+      "name": "sharedApimServiceFull",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'apim-service.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminEmail": {
+            "value": "[variables('apimAdminEmail')]"
           },
           "apimServiceName": {
             "value": "[variables('apimName')]"
@@ -243,19 +294,23 @@
             "value": "[parameters('apimHostnameRoot')]"
           },
           "organizationName": {
-            "value": "National Careers Service"
+            "value": "[variables('apimOrganizationName')]"
           },
           "portalKeyVaultCertificatePath": {
             "value": "[parameters('apimPortalKeyVaultCertificatePath')]"
           },
-          "ProxyKeyVaultCertificatePath": {
+          "proxyKeyVaultCertificatePath": {
             "value": "[parameters('apimProxyKeyVaultCertificatePath')]"
           },
           "skuTier": {
             "value": "[parameters('apimSkuTier')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "sharedApimServiceBasic",
+        "sharedApimKeyVaultAccessPolicy"
+      ]
     }
   ],
   "outputs": {
