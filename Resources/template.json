@@ -8,6 +8,37 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "apimHostnameRoot": {
+      "type": "string",
+      "metadata": {
+        "description": "The hostname used by the API (Proxy) and Developer Portal (Portal)"
+      }
+    },
+    "apimPortalKeyVaultCertificatePath": {
+      "type": "string",
+      "metadata": {
+          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+      }
+    },
+    "apimProxyKeyVaultCertificatePath": {
+      "type": "string",
+      "metadata": {
+          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+      }
+    },
+    "apimSkuTier": {
+      "type": "string",
+      "defaultValue": "Developer"
+    },
+    "envAbbreviation": {
+      "type": "string",
+      "allowedValues": [
+        "dev",
+        "sit",
+        "pp",
+        "prd"
+      ]
+    },
     "envType": {
       "type": "string",
       "metadata": {
@@ -62,7 +93,9 @@
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
+    "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
+    "apimOrganizationName" : "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
@@ -187,6 +220,97 @@
           }
         }
       }
+    },
+    {
+      "name": "sharedApimKeyVaultAccessPolicy",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'/KeyVault/keyvault-access-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[reference('sharedApimServiceBasic').outputs.ApimServiceIdentityPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedApimServiceBasic"
+      ]
+    },
+    {
+      "name": "sharedApimServiceBasic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'apim-service.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminEmail": {
+            "value": "[variables('apimAdminEmail')]"
+          },
+          "apimServiceName": {
+            "value": "[variables('apimName')]"
+          },
+          "organizationName": {
+            "value": "[variables('apimOrganizationName')]"
+          },
+          "skuTier": {
+            "value": "[parameters('apimSkuTier')]"
+          }
+        }
+      }
+    }, 
+    {
+      "name": "sharedApimServiceFull",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'apim-service.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminEmail": {
+            "value": "[variables('apimAdminEmail')]"
+          },
+          "apimServiceName": {
+            "value": "[variables('apimName')]"
+          },
+          "environmentName": {
+            "value": "[parameters('envAbbreviation')]"
+          },
+          "hostnameRoot": {
+            "value": "[parameters('apimHostnameRoot')]"
+          },
+          "organizationName": {
+            "value": "[variables('apimOrganizationName')]"
+          },
+          "portalKeyVaultCertificatePath": {
+            "value": "[parameters('apimPortalKeyVaultCertificatePath')]"
+          },
+          "proxyKeyVaultCertificatePath": {
+            "value": "[parameters('apimProxyKeyVaultCertificatePath')]"
+          },
+          "skuTier": {
+            "value": "[parameters('apimSkuTier')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedApimServiceBasic",
+        "sharedApimKeyVaultAccessPolicy"
+      ]
     }
   ],
   "outputs": {
