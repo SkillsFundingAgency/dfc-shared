@@ -34,6 +34,7 @@
       "type": "string",
       "allowedValues": [
         "dev",
+        "lab",
         "sit",
         "pp",
         "prd"
@@ -345,6 +346,10 @@
     "cdnName": {
       "type": "string",
       "value": "[variables('cdnName')]"
+    },
+    "apimName": {
+      "type": "string",
+      "value": "[variables('apimName')]"
     }
   }
 }
