@@ -17,6 +17,13 @@
     "apimSkuTier": {
       "value": "Developer"
     },
+    "defaultKeyVaultReadAccess": {
+      "value": [
+        "4d2471e2-510f-4d6e-a4b3-1f356b45c034",
+        "69671774-66b0-4465-af12-6ac44622417a",
+        "a46e640e-44d8-4f89-8f56-cb9ab12888e2"
+      ]
+    },
     "envAbbreviation": {
       "value": "dev"
     },
