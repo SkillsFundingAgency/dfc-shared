@@ -164,15 +164,15 @@
           "servicePrincipalObjectId": {
             "value": "[parameters('defaultKeyVaultReadAccess')[copyIndex()]]"
           }
-        },
-        "copy": {
-          "name": "keyvaultReadAccessCopy",
-          "count": "[length(parameters('defaultKeyVaultReadAccess'))]"
         }
       },
       "dependsOn": [
         "sharedKeyVault"
-      ]
+      ],
+      "copy": {
+        "name": "keyvaultReadAccessCopy",
+        "count": "[length(parameters('defaultKeyVaultReadAccess'))]"
+      }
     },
     {
       "name": "sharedStorage",
