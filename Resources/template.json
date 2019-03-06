@@ -30,6 +30,10 @@
       "type": "string",
       "defaultValue": "Developer"
     },
+    "defaultKeyVaultReadAccess": {
+      "type": "array",
+      "defaultValue": []
+    },
     "envAbbreviation": {
       "type": "string",
       "allowedValues": [
@@ -142,6 +146,34 @@
             "value": "[parameters('certificates')]"
           }
         }
+      }
+    },
+    {
+      "name": "[concat('sharedKeyVaultDefaultReadAccessPolicy-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('defaultKeyVaultReadAccess')), 0)]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'/KeyVault/keyvault-access-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[parameters('defaultKeyVaultReadAccess')[copyIndex()]]"
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedKeyVault"
+      ],
+      "copy": {
+        "name": "keyvaultReadAccessCopy",
+        "count": "[length(parameters('defaultKeyVaultReadAccess'))]"
       }
     },
     {
