@@ -31,7 +31,8 @@
       "defaultValue": "Developer"
     },
     "defaultKeyVaultReadAccess": {
-      "type": "array"
+      "type": "array",
+      "defaultValue": []
     },
     "envAbbreviation": {
       "type": "string",
@@ -150,6 +151,7 @@
     {
       "name": "[concat('sharedKeyVaultDefaultReadAccessPolicy-', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('defaultKeyVaultReadAccess')), 0)]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
