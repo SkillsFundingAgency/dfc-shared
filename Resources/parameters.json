@@ -5,6 +5,9 @@
     "sharedPrefix": {
       "value": "dfc-foo-shared"
     },
+    "apimExists": {
+      "value": true
+    },
     "apimHostnameRoot": {
       "value": "api.notarealservice.org.uk"
     },
