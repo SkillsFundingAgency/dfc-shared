@@ -283,7 +283,7 @@
     {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[parameters('apimExists')]",
+      "condition": "[not(parameters('apimExists'))]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
