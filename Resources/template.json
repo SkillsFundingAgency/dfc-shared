@@ -8,6 +8,9 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "apimExists": {
+      "type": "bool"
+    },
     "apimHostnameRoot": {
       "type": "string",
       "metadata": {
@@ -280,6 +283,7 @@
     {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[parameters('apimExists')]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
