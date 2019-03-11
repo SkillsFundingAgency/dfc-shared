@@ -272,7 +272,7 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[reference('sharedApimServiceBasic').outputs.ApimServiceIdentityPrincipalId.value]"
+            "value": "[reference('sharedApimServiceBasic', '2017-05-10', 'Full').outputs.ApimServiceIdentityPrincipalId.value]"
           }
         }
       },
