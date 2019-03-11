@@ -29,9 +29,30 @@
         "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
       }
     },
+    "apimNetworkSecurityGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+      }
+    },
+    "apimSubnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the subnet the ASE will be connected to."
+      }
+    },
     "apimSkuTier": {
       "type": "string",
       "defaultValue": "Developer"
+    },
+    "apimVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the VNet the APIM subnet is part of."
+      }
     },
     "aseDomainName": {
       "type": "string",
@@ -52,13 +73,6 @@
       "defaultValue": "",
       "metadata": {
         "description": "Name of the subnet the ASE will be connected to."
-      }
-    },
-    "aseVnetResourceGroup": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Name of the Resource Group that contains the VNet the ASE subnet is part of."
       }
     },
     "aseVnetName": {
@@ -320,6 +334,27 @@
       ]
     },
     {
+      "name": "apimNetworkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('apimNetworkSecurityGroup')]"
+          },
+          "subnetAddressPrefix": {
+            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('apimVnetName'), '/subnets/', parameters('apimSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+          }
+        }
+      }
+    },
+    {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
       "condition": "[not(parameters('apimExists'))]",
@@ -380,6 +415,15 @@
           },
           "skuTier": {
             "value": "[parameters('apimSkuTier')]"
+          },
+          "subnetName": {
+            "value": "[parameters('apimSubnetName')]"
+          },
+          "vnetResourceGroup": {
+            "value": "[if(equals(parameters('apimVnetName'), ''), '', reference(concat('Microsoft.Network/virtualNetworks/', parameters('apimVnetName'), '/subnets/', parameters('apimSubnetName')), '2018-07-01', 'Full').resourceGroupName)]"
+          },
+          "vnetName": {
+            "value": "[parameters('apimVnetName')]"
           }
         }
       },
@@ -431,7 +475,7 @@
             "value": "[parameters('aseSubnetName')]"
           },
           "virtualnetworkResourceGroupName": {
-            "value": "[parameters('aseVnetResourceGroup')]"
+            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('aseVnetName'), '/subnets/', parameters('aseSubnetName')), '2018-07-01', 'Full').resourceGroupName]"
           },
           "virtualNetworkName": {
             "value": "[parameters('aseVnetName')]"
