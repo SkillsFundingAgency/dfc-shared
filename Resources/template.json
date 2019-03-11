@@ -20,18 +20,53 @@
     "apimPortalKeyVaultCertificatePath": {
       "type": "string",
       "metadata": {
-          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+        "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
       }
     },
     "apimProxyKeyVaultCertificatePath": {
       "type": "string",
       "metadata": {
-          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+        "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
       }
     },
     "apimSkuTier": {
       "type": "string",
       "defaultValue": "Developer"
+    },
+    "aseDomainName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "DNS zone used to resolve the addresses for the ASE and child apps"
+      }     
+    },
+    "aseNetworkSecurityGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+      }
+    },
+    "aseSubnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the subnet the ASE will be connected to."
+      }
+    },
+    "aseVnetResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the Resource Group that contains the VNet the ASE subnet is part of."
+      }
+    },
+    "aseVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name the VNet the ASE subnet is part of."
+      }
     },
     "defaultKeyVaultReadAccess": {
       "type": "array",
@@ -50,7 +85,7 @@
     "envType": {
       "type": "string",
       "metadata": {
-          "description": "Type of environment, either dev or prod"
+        "description": "Type of environment, either dev or prod"
       },
       "allowedValues": [
         "dev",
@@ -93,7 +128,7 @@
       "type": "array",
       "defaultValue": [],
       "metadata": {
-          "description": "Array of certificates (must exist in keyvault)"
+        "description": "Array of certificates (must exist in keyvault)"
       }
     }
   },
@@ -103,11 +138,12 @@
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
-    "apimOrganizationName" : "National Careers Service",
+    "apimOrganizationName": "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
-    "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]"
+    "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
   },
   "resources": [
     {
@@ -309,7 +345,7 @@
           }
         }
       }
-    }, 
+    },
     {
       "name": "sharedApimServiceFull",
       "type": "Microsoft.Resources/deployments",
@@ -350,6 +386,60 @@
       "dependsOn": [
         "sharedApimServiceBasic",
         "sharedApimKeyVaultAccessPolicy"
+      ]
+    },
+    {
+      "name": "aseNetworkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('aseNetworkSecurityGroup')]"
+          },
+          "subnetAddressPrefix": {
+            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('aseVnetName'), '/subnets/', parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+          }
+        }
+      }
+    },
+    {
+      "name": "sharedAppServiceEnvironment",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[variables('appServiceEnvName')]"
+          },
+          "domainName": {
+            "value": "[parameters('aseDomainName')]"
+          },
+          "subnetName": {
+            "value": "[parameters('aseSubnetName')]"
+          },
+          "virtualnetworkResourceGroupName": {
+            "value": "[parameters('aseVnetResourceGroup')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('aseVnetName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "aseNetworkSecurityGroup"
       ]
     }
   ],
