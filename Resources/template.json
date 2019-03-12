@@ -176,7 +176,9 @@
       ],
       "copy": {
         "name": "keyvaultReadAccessCopy",
-        "count": "[length(parameters('defaultKeyVaultReadAccess'))]"
+        "count": "[length(parameters('defaultKeyVaultReadAccess'))]",
+        "mode": "Serial",
+        "batchSize": 1
       }
     },
     {
