@@ -8,6 +8,9 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "apimExists": {
+      "type": "bool"
+    },
     "apimHostnameRoot": {
       "type": "string",
       "metadata": {
@@ -173,7 +176,9 @@
       ],
       "copy": {
         "name": "keyvaultReadAccessCopy",
-        "count": "[length(parameters('defaultKeyVaultReadAccess'))]"
+        "count": "[length(parameters('defaultKeyVaultReadAccess'))]",
+        "mode": "Serial",
+        "batchSize": 1
       }
     },
     {
@@ -269,17 +274,19 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[reference('sharedApimServiceBasic').outputs.ApimServiceIdentityPrincipalId.value]"
+            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId, reference('sharedApimServiceBasic', '2017-05-10', 'Full').outputs.ApimServiceIdentityPrincipalId.value)]"
           }
         }
       },
       "dependsOn": [
-        "sharedApimServiceBasic"
+        "sharedApimServiceBasic",
+        "sharedKeyVault"
       ]
     },
     {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[not(parameters('apimExists'))]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
