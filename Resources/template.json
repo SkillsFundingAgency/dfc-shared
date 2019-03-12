@@ -277,7 +277,8 @@
         }
       },
       "dependsOn": [
-        "sharedApimServiceBasic"
+        "sharedApimServiceBasic",
+        "sharedKeyVault"
       ]
     },
     {
