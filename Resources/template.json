@@ -54,6 +54,13 @@
         "description": "Name of the VNet the APIM subnet is part of."
       }
     },
+    "apimVNetResourceGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Resource Group of the VNet the APIM subnet is part of."
+      }
+    },
     "aseDomainName": {
       "type": "string",
       "defaultValue": "",
@@ -80,6 +87,13 @@
       "defaultValue": "",
       "metadata": {
         "description": "Name the VNet the ASE subnet is part of."
+      }
+    },
+    "aseVNetResourceGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Resource Group of the VNet the ASE subnet is part of."
       }
     },
     "defaultKeyVaultReadAccess": {
@@ -350,7 +364,7 @@
             "value": "[parameters('apimNetworkSecurityGroup')]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('apimVnetName'), '/subnets/', parameters('apimSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+            "value": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
           }
         }
       }
@@ -421,7 +435,7 @@
             "value": "[parameters('apimSubnetName')]"
           },
           "vnetResourceGroup": {
-            "value": "[if(equals(parameters('apimVnetName'), ''), '', reference(concat('Microsoft.Network/virtualNetworks/', parameters('apimVnetName'), '/subnets/', parameters('apimSubnetName')), '2018-07-01', 'Full').resourceGroupName)]"
+            "value": "[parameters('apimVNetResourceGroupName')]"
           },
           "vnetName": {
             "value": "[parameters('apimVnetName')]"
@@ -449,7 +463,7 @@
             "value": "[parameters('aseNetworkSecurityGroup')]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('aseVnetName'), '/subnets/', parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+            "value": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
           }
         }
       }
@@ -476,7 +490,7 @@
             "value": "[parameters('aseSubnetName')]"
           },
           "virtualnetworkResourceGroupName": {
-            "value": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('aseVnetName'), '/subnets/', parameters('aseSubnetName')), '2018-07-01', 'Full').resourceGroupName]"
+            "value": "[parameters('aseVNetResourceGroupName')]"
           },
           "virtualNetworkName": {
             "value": "[parameters('aseVnetName')]"
