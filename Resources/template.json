@@ -363,8 +363,14 @@
           "name": {
             "value": "[parameters('apimNetworkSecurityGroup')]"
           },
-          "subnetAddressPrefix": {
-            "value": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+          "aseSubnetName": {
+              "value": "[parameters('aseSubnetName')]"
+          },
+          "aseVnetName": {
+              "value": "[parameters('aseVnetName')]"
+          },
+          "aseVNetResourceGroupName": {
+              "value": "[parameters('aseVNetResourceGroupName')]"
           }
         }
       }
@@ -462,8 +468,14 @@
           "name": {
             "value": "[parameters('aseNetworkSecurityGroup')]"
           },
-          "subnetAddressPrefix": {
-            "value": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+          "aseSubnetName": {
+              "value": "[parameters('aseSubnetName')]"
+          },
+          "aseVnetName": {
+              "value": "[parameters('aseVnetName')]"
+          },
+          "aseVNetResourceGroupName": {
+              "value": "[parameters('aseVNetResourceGroupName')]"
           }
         }
       }

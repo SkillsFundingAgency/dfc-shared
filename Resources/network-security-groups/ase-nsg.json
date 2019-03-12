@@ -5,7 +5,13 @@
         "name": {
             "type": "string"
         },
-        "subnetAddressPrefix": {
+        "aseSubnetName": {
+            "type": "string"
+        },
+        "aseVnetName": {
+            "type": "string"
+        },
+        "aseVNetResourceGroupName": {
             "type": "string"
         }
     },
@@ -37,7 +43,7 @@
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
                             "destinationPortRange": "*",
-                            "sourceAddressPrefix": "[parameters('subnetAddressPrefix')]",
+                            "sourceAddressPrefix": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
                             "priority": 110,
@@ -168,7 +174,7 @@
                             "sourcePortRange": "*",
                             "destinationPortRange": "*",
                             "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "[parameters('subnetAddressPrefix')]",
+                            "destinationAddressPrefix": "[reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]",
                             "access": "Allow",
                             "priority": 160,
                             "direction": "Outbound"
