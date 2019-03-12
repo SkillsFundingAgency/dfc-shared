@@ -272,7 +272,7 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId.value, reference('sharedApimServiceBasic', '2017-05-10', 'Full').outputs.ApimServiceIdentityPrincipalId.value)]"
+            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId.value, reference('sharedApimServiceBasic', '2017-05-10', 'Full').outputs.ApimServiceIdentityPrincipalId)]"
           }
         }
       },
