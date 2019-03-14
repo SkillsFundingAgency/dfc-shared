@@ -500,7 +500,7 @@
             "value": "[parameters('aseDomainName')]"
           },
           "networkSecurityGroupAssigned": {
-            "value": "[reference('aseNetworkSecurityGroup').outputs.assignedToSubnet]"
+            "value": "[reference('aseNetworkSecurityGroup').outputs.assignedToSubnet.value]"
           },
           "subnetName": {
             "value": "[parameters('aseSubnetName')]"
