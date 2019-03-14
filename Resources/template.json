@@ -500,7 +500,7 @@
             "value": "[parameters('aseDomainName')]"
           },
           "networkSecurityGroupAssigned": {
-            "value": "[if(variables('deployAse'), reference('aseNetworkSecurityGroup', '2017-05-10', 'Full').outputs.assignedToSubnet.value, bool('false'))]"
+            "value": "[if(variables('deployAse'), equals(parameters('aseNetworkSecurityGroup'), split(reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.networkSecurityGroup.id, '/')[8]), bool('false'))]"
           },
           "subnetName": {
             "value": "[parameters('aseSubnetName')]"

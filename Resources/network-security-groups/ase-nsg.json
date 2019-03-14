@@ -196,11 +196,5 @@
                 ]
             }
         }
-    ],
-    "outputs": {
-        "assignedToSubnet": {
-            "type": "bool",
-            "value": "[equals(parameters('name'), split(reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.networkSecurityGroup.id, '/')[8])]"
-        }
-    }
+    ]
 }
