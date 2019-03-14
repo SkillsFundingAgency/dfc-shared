@@ -489,7 +489,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "",
+          "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/NCSD-356-AddAseAndNsgTemplates/ArmTemplates/app-service-envionment.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -498,6 +498,9 @@
           },
           "domainName": {
             "value": "[parameters('aseDomainName')]"
+          },
+          "networkSecurityGroupAssigned": {
+            "value": "[reference('aseNetworkSecurityGroup').outputs.assignedToSubnet]"
           },
           "subnetName": {
             "value": "[parameters('aseSubnetName')]"
