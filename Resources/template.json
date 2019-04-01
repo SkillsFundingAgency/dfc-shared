@@ -20,18 +20,81 @@
     "apimPortalKeyVaultCertificatePath": {
       "type": "string",
       "metadata": {
-          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+        "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
       }
     },
     "apimProxyKeyVaultCertificatePath": {
       "type": "string",
       "metadata": {
-          "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+        "description": "The certificate identifier, eg https://dss-dev-shared-kv.vault.azure.net/certificates/wildcard-dss-nationalcareersservice-direct-gov-uk/identifierstringabc123"
+      }
+    },
+    "apimNetworkSecurityGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+      }
+    },
+    "apimSubnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the subnet the ASE will be connected to."
       }
     },
     "apimSkuTier": {
       "type": "string",
       "defaultValue": "Developer"
+    },
+    "apimVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the VNet the APIM subnet is part of."
+      }
+    },
+    "apimVNetResourceGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Resource Group of the VNet the APIM subnet is part of."
+      }
+    },
+    "aseDomainName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "DNS zone used to resolve the addresses for the ASE and child apps"
+      }     
+    },
+    "aseNetworkSecurityGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+      }
+    },
+    "aseSubnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of the subnet the ASE will be connected to."
+      }
+    },
+    "aseVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name the VNet the ASE subnet is part of."
+      }
+    },
+    "aseVNetResourceGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Resource Group of the VNet the ASE subnet is part of."
+      }
     },
     "defaultKeyVaultReadAccess": {
       "type": "array",
@@ -50,7 +113,7 @@
     "envType": {
       "type": "string",
       "metadata": {
-          "description": "Type of environment, either dev or prod"
+        "description": "Type of environment, either dev or prod"
       },
       "allowedValues": [
         "dev",
@@ -93,21 +156,23 @@
       "type": "array",
       "defaultValue": [],
       "metadata": {
-          "description": "Array of certificates (must exist in keyvault)"
+        "description": "Array of certificates (must exist in keyvault)"
       }
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
-    "apimOrganizationName" : "National Careers Service",
+    "apimOrganizationName": "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
-    "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]"
+    "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
   },
   "resources": [
     {
@@ -117,7 +182,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'keyvault.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'keyvault.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -138,7 +203,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'keyvault-certificates.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'keyvault-certificates.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -159,7 +224,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'/KeyVault/keyvault-access-policy.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'/KeyVault/keyvault-access-policy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -188,7 +253,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'storage-account.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'storage-account.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -208,7 +273,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'sql-server.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'sql-server.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -246,7 +311,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'cdn-profile.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'cdn-profile.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -266,7 +331,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'/KeyVault/keyvault-access-policy.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'/KeyVault/keyvault-access-policy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -280,8 +345,36 @@
       },
       "dependsOn": [
         "sharedApimServiceBasic",
-        "sharedKeyVault"
+        "sharedKeyVault",
+        "keyvaultReadAccessCopy"
       ]
+    },
+    {
+      "name": "apimNetworkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/apim-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('apimNetworkSecurityGroup')]"
+          },
+          "aseSubnetName": {
+              "value": "[parameters('aseSubnetName')]"
+          },
+          "aseVnetName": {
+              "value": "[parameters('aseVnetName')]"
+          },
+          "aseVNetResourceGroupName": {
+              "value": "[parameters('aseVNetResourceGroupName')]"
+          }
+        }
+      }
     },
     {
       "name": "sharedApimServiceBasic",
@@ -291,7 +384,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'apim-service.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'apim-service.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -309,7 +402,7 @@
           }
         }
       }
-    }, 
+    },
     {
       "name": "sharedApimServiceFull",
       "type": "Microsoft.Resources/deployments",
@@ -317,7 +410,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'apim-service.json')]",
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'apim-service.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -344,12 +437,84 @@
           },
           "skuTier": {
             "value": "[parameters('apimSkuTier')]"
+          },
+          "subnetName": {
+            "value": "[parameters('apimSubnetName')]"
+          },
+          "vnetResourceGroup": {
+            "value": "[parameters('apimVNetResourceGroupName')]"
+          },
+          "vnetName": {
+            "value": "[parameters('apimVnetName')]"
           }
         }
       },
       "dependsOn": [
         "sharedApimServiceBasic",
         "sharedApimKeyVaultAccessPolicy"
+      ]
+    },
+    {
+      "name": "aseNetworkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/ase-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('aseNetworkSecurityGroup')]"
+          },
+          "aseSubnetName": {
+              "value": "[parameters('aseSubnetName')]"
+          },
+          "aseVnetName": {
+              "value": "[parameters('aseVnetName')]"
+          },
+          "aseVNetResourceGroupName": {
+              "value": "[parameters('aseVNetResourceGroupName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "sharedAppServiceEnvironment",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[variables('deployAse')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'app-service-envionment.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[variables('appServiceEnvName')]"
+          },
+          "domainName": {
+            "value": "[parameters('aseDomainName')]"
+          },
+          "networkSecurityGroupAssigned": {
+            "value": "[if(variables('deployAse'), equals(parameters('aseNetworkSecurityGroup'), split(reference(resourceId(parameters('aseVNetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')), '2018-07-01', 'Full').properties.networkSecurityGroup.id, '/')[8]), bool('false'))]"
+          },
+          "subnetName": {
+            "value": "[parameters('aseSubnetName')]"
+          },
+          "virtualnetworkResourceGroupName": {
+            "value": "[parameters('aseVNetResourceGroupName')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('aseVnetName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "aseNetworkSecurityGroup"
       ]
     }
   ],
