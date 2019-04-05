@@ -233,6 +233,12 @@
           },
           "servicePrincipalObjectId": {
             "value": "[parameters('defaultKeyVaultReadAccess')[copyIndex()]]"
+          },
+          "secretPermissions": {
+            "value": [
+              "get",
+              "list"
+            ]
           }
         }
       },
