@@ -100,15 +100,8 @@
       "type": "array",
       "defaultValue": []
     },
-    "envAbbreviation": {
-      "type": "string",
-      "allowedValues": [
-        "dev",
-        "lab",
-        "sit",
-        "pp",
-        "prd"
-      ]
+    "environmentName": {
+      "type": "string"
     },
     "envType": {
       "type": "string",
@@ -427,7 +420,7 @@
             "value": "[variables('apimName')]"
           },
           "environmentName": {
-            "value": "[parameters('envAbbreviation')]"
+            "value": "[parameters('environmentName')]"
           },
           "hostnameRoot": {
             "value": "[parameters('apimHostnameRoot')]"
