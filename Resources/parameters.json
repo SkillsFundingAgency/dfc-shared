@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sharedPrefix": {
-      "value": "__ApimExists__"
+      "value": "__sharedPrefix__"
     },
     "apimExists": {
       "value": false

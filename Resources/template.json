@@ -187,9 +187,10 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/deployments",
       "name": "sharedManagedInstanceEnvironment",
+      "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
+      "condition": "[equals(parameters('envType'),'dev')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -566,15 +567,15 @@
   "outputs": {
     "virtualNetworkName": {
       "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment').outputs.virtualNetworkName.value]"
+      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value]"
     },
     "routeTableName": {
       "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment').outputs.routeTableName.value]"
+      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableName.value]"
     },
     "routeTableId": {
       "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment').outputs.routeTableId.value]"
+      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableId.value]"
     },
     "keyVaultName": {
       "type": "string",
@@ -582,7 +583,7 @@
     },
     "KeyVaultUri": {
       "type": "string",
-      "value": "[reference('sharedKeyVault').outputs.KeyVaultUri.value]"
+      "value": "[reference('sharedKeyVault','2017-05-10').outputs.KeyVaultUri.value]"
     },
     "storageAccountName": {
       "type": "string",
@@ -594,11 +595,11 @@
     },
     "sqlServerFqdn": {
       "type": "string",
-      "value": "[reference('sharedSQLServer').outputs.sqlServerFqdn.value]"
+      "value": "[reference('sharedSQLServer','2017-05-10').outputs.sqlServerFqdn.value]"
     },
     "saAdministratorLogin": {
       "type": "string",
-      "value": "[reference('sharedSQLServer').outputs.saAdministratorLogin.value]"
+      "value": "[reference('sharedSQLServer','2017-05-10').outputs.saAdministratorLogin.value]"
     },
     "elasticPoolName": {
       "type": "string",
