@@ -3,95 +3,95 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sharedPrefix": {
-      "value": "__ApimExists__"
+      "value": "dfc-local-shared"
     },
     "apimExists": {
       "value": false
     },
     "apimHostnameRoot": {
-      "value": "__apimHostnameRoot__"
+      "value": "api.notarealservice.org.uk"
     },
     "apimPortalKeyVaultCertificatePath": {
-      "value": "__apiKeyVaultCertificatePath__"
+      "value": "https://dfc-foo-shared-kv.vault.azure.net/certificates/wildcard-dfc-notarealservice-org-uk/identifierstringabc123"
     },
     "apimProxyKeyVaultCertificatePath": {
-      "value": "__apiKeyVaultCertificatePath__"
+      "value": "https://dfc-foo-shared-kv.vault.azure.net/certificates/wildcard-dfc-notarealservice-org-uk/identifierstringabc123"
     },
     "apimNetworkSecurityGroup": {
-      "value": "__apimNetworkSecurityGroup__"
+      "value": ""
     },
     "apimSubnetName": {
-      "value": "__apimSubnetName__"
+      "value": ""
     },
     "apimSkuTier": {
       "value": "Developer"
     },
     "apimVnetName": {
-      "value": "__apimVnetName__"
+      "value": ""
     },
     "apimVNetResourceGroupName": {
-      "value": "__apimVNetResourceGroupName__"
+      "value": ""
     },
     "aseDomainName": {
-      "value": "__aseDomainName__"
+      "value": ""
     },
     "aseNetworkSecurityGroup": {
-      "value": "__aseNetworkSecurityGroup__"
+      "value": ""
     },
     "aseSubnetName": {
-      "value": "__aseSubnetName__"
+      "value": ""
     },
     "aseVnetName": {
-      "value": "__aseVnetName__"
+      "value": ""
     },
     "aseVNetResourceGroupName": {
-      "value": "__aseVNetResourceGroupName__"
+      "value": ""
     },
     "defaultKeyVaultReadAccess": {
       "value": [
-        "__defaultKeyVaultReadAccess__"
+        "4d2471e2-510f-4d6e-a4b3-1f356b45c034",
+        "69671774-66b0-4465-af12-6ac44622417a",
+        "a46e640e-44d8-4f89-8f56-cb9ab12888e2"
       ]
     },
     "environmentName": {
-      "value": "__Release.EnvironmentName__"
+      "value": "DEV"
     },
     "envType": {
-      "value": "__envType__"
+      "value": "dev"
     },
     "sqlServerAdminPassword": {
-      "value": "__sqlAdminPassword__"
+      "value": "not-real-1980!"
     },
     "sqlServerAdminUserName": {
-      "value": "__sqlAdminLogin__"
+      "value": "local_usr"
     },
     "sqlServerActiveDirectoryAdminLogin": {
-      "value": "__sqlAdGroupName__"
+      "value": "AD_GRP_NAME"
     },
     "sqlServerActiveDirectoryAdminObjectId": {
-      "value": "__sqlAdGroupObjectID__"
+      "value": "12345678-abcd-abcd-abcd-1234567890ab"
     },
     "virtualNetworkPrefix": {
-      "value": "vNetPrefix"
+      "value": "dfc-local"
     },
     "virtualNetworkRoutedSubnets": {
       "value": [
-        "__virtualNetworkRoutedSubnets__"
+        "dfc-local-ase",
+        "dfc-local-apim",
+        "dfc-local-msql"
       ]
     },
     "virtualNetworkNonRoutedSubnets": {
       "value": [
-        "__virtualNetworkNonRoutedSubnets__"
+        "dfc-local-ag"
       ]
     },
     "threatDetectionEmailAddress": {
-      "value": [
-        "__threatDetectionEmailAddress__"
-      ]
+      "value": []
     },
     "certificates": {
-      "value": [
-        "__certificates__"
-      ]
+      "value": []
     }
   }
 }

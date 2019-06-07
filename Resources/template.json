@@ -9,7 +9,10 @@
       }
     },
     "apimExists": {
-      "type": "bool"
+      "type": "bool",
+      "metadata": {
+        "description": "Bool to determine whether the Basic APIM deployment is complete"
+      }
     },
     "apimHostnameRoot": {
       "type": "string",
@@ -31,16 +34,15 @@
     },
     "apimNetworkSecurityGroup": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
-        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+        "description": "The network security group assigned to the APIM subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
       }
     },
     "apimSubnetName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Name of the subnet the ASE will be connected to."
+        "description": "Name of the subnet the APIM will be connected to."
       }
     },
     "apimSkuTier": {
@@ -49,49 +51,42 @@
     },
     "apimVnetName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "Name of the VNet the APIM subnet is part of."
       }
     },
     "apimVNetResourceGroupName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "The Resource Group of the VNet the APIM subnet is part of."
       }
     },
     "aseDomainName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "DNS zone used to resolve the addresses for the ASE and child apps"
-      }     
+      }
     },
     "aseNetworkSecurityGroup": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
       }
     },
     "aseSubnetName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "Name of the subnet the ASE will be connected to."
       }
     },
     "aseVnetName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "Name the VNet the ASE subnet is part of."
       }
     },
     "aseVNetResourceGroupName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "The Resource Group of the VNet the ASE subnet is part of."
       }
@@ -115,7 +110,6 @@
     },
     "sqlServerAdminUserName": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
         "description": "The Azure SQL Server Administrator (SA) username (will auto-generate one if not passed in)"
       }
@@ -140,7 +134,6 @@
     },
     "threatDetectionEmailAddress": {
       "type": "array",
-      "defaultValue": [],
       "metadata": {
         "description": "The email address that threat alerts will be sent to"
       }
@@ -151,6 +144,31 @@
       "metadata": {
         "description": "Array of certificates (must exist in keyvault)"
       }
+    },
+    "virtualNetworkPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of new Azure VNet where you can deploy Azure Sql Managed Instances and the resources that use them"
+      }
+    },
+    "virtualNetworkAddressPrefix": {
+        "type": "string",
+        "defaultValue": "10.0",
+        "metadata": {
+            "description": "First 2 octects of VNet Private IP address range (VNet prefix)"
+        }
+    },
+    "virtualNetworkRoutedSubnets": {
+        "type": "array",
+        "metadata": {
+            "description": "Array of subnets to create"
+        }
+    },
+    "virtualNetworkNonRoutedSubnets": {
+       "type": "array",
+       "metadata": {
+           "description": "Array of subnets to create"
+     }
     }
   },
   "variables": {
@@ -168,6 +186,32 @@
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "sharedManagedInstanceEnvironment",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'network.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkPrefix": {
+            "value": "[parameters('virtualNetworkPrefix')]"
+          },
+          "virtualNetworkAddressPrefix": {
+            "value": "[parameters('virtualNetworkAddressPrefix')]"
+          },
+          "virtualNetworkRoutedSubnets": {
+            "value": "[parameters('virtualNetworkRoutedSubnets')]"
+          },
+          "virtualNetworkNonRoutedSubnets": {
+            "value": "[parameters('virtualNetworkNonRoutedSubnets')]"
+          }
+        }
+      }
+    },
     {
       "name": "sharedKeyVault",
       "type": "Microsoft.Resources/deployments",
@@ -326,6 +370,7 @@
     {
       "name": "sharedApimKeyVaultAccessPolicy",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('certificates')), 0)]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -378,7 +423,7 @@
     {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[not(parameters('apimExists'))]",
+      "condition": "[and(not(parameters('apimExists')), greater(length(parameters('certificates')), 0))]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -405,6 +450,7 @@
     {
       "name": "sharedApimServiceFull",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('certificates')), 0)]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -518,6 +564,18 @@
     }
   ],
   "outputs": {
+    "virtualNetworkName": {
+      "type": "string",
+      "value": "[reference('sharedManagedInstanceEnvironment').outputs.virtualNetworkName.value]"
+    },
+    "routeTableName": {
+      "type": "string",
+      "value": "[reference('sharedManagedInstanceEnvironment').outputs.routeTableName.value]"
+    },
+    "routeTableId": {
+      "type": "string",
+      "value": "[reference('sharedManagedInstanceEnvironment').outputs.routeTableId.value]"
+    },
     "keyVaultName": {
       "type": "string",
       "value": "[variables('keyVaultName')]"
