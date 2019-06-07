@@ -30,4 +30,4 @@ steps:
   displayName: Publish Artifact
   inputs:
      pathtoPublish: $(Build.ArtifactStagingDirectory)
-     artifactName: Dfc.AppGateway
+     artifactName: drop
