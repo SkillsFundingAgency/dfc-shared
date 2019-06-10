@@ -79,9 +79,6 @@
     },
     "threatDetectionEmailAddress": {
       "value": __threatDetectionEmailAddress__
-    },
-    "certificates": {
-      "value": __certificates__
     }
   }
 }
