@@ -9,12 +9,6 @@ resources:
     endpoint: 'GitHub (ESFA)'
     ref: refs/tags/v1.2.1
 
-trigger:
-  branches:
-    include:
-    - master
-    - NCSD-754_ArmTemplate
-
 pr:
   branches:
     include:
@@ -26,6 +20,12 @@ steps:
 - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
   parameters:
     ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
+    steps:
+- task: CopyFiles@2
+  displayName: 'Copy PSScripts Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: 'PSScripts/**/*.ps1'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact
   inputs:
