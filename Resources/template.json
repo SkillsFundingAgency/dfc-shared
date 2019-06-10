@@ -134,12 +134,6 @@
         "description": "The email address that threat alerts will be sent to"
       }
     },
-    "virtualNetworkPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of new Azure VNet where you can deploy Azure Sql Managed Instances and the resources that use them"
-      }
-    },
     "virtualNetworkAddressPrefix": {
         "type": "string",
         "defaultValue": "10.0",
@@ -188,7 +182,7 @@
         },
         "parameters": {
           "virtualNetworkPrefix": {
-            "value": "[parameters('virtualNetworkPrefix')]"
+            "value": "[parameters('sharedPrefix')]"
           },
           "virtualNetworkAddressPrefix": {
             "value": "[parameters('virtualNetworkAddressPrefix')]"

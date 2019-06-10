@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sharedPrefix": {
-      "value": "dfc-local-shared"
+      "value": "dfc-foo-shared"
     },
     "apimExists": {
       "value": false
@@ -72,19 +72,16 @@
     "sqlServerActiveDirectoryAdminObjectId": {
       "value": "12345678-abcd-abcd-abcd-1234567890ab"
     },
-    "virtualNetworkPrefix": {
-      "value": "dfc-local"
-    },
     "virtualNetworkRoutedSubnets": {
       "value": [
-        "dfc-local-ase",
-        "dfc-local-apim",
-        "dfc-local-msql"
+        "dfc-foo-ase",
+        "dfc-foo-apim",
+        "dfc-foo-msql"
       ]
     },
     "virtualNetworkNonRoutedSubnets": {
       "value": [
-        "dfc-local-ag"
+        "dfc-foo-ag"
       ]
     },
     "threatDetectionEmailAddress": {

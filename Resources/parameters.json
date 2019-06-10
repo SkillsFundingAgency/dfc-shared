@@ -68,9 +68,6 @@
     "sqlServerActiveDirectoryAdminObjectId": {
       "value": "__sqlAdGroupObjectID__"
     },
-    "virtualNetworkPrefix": {
-      "value": "__virtualNetworkPrefix__"
-    },
     "virtualNetworkRoutedSubnets": {
       "value": __virtualNetworkRoutedSubnets__
     },
