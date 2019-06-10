@@ -51,7 +51,7 @@
       "value": __defaultKeyVaultReadAccess__
     },
     "environmentName": {
-      "value": "__Release.EnvironmentName__"
+      "value": "__ReleaseEnvironmentName__"
     },
     "envType": {
       "value": "__envType__"
