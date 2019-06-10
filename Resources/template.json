@@ -102,11 +102,7 @@
       "type": "string",
       "metadata": {
         "description": "Type of environment, either dev or prod"
-      },
-      "allowedValues": [
-        "dev",
-        "prod"
-      ]
+      }
     },
     "sqlServerAdminUserName": {
       "type": "string",

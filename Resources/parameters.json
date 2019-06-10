@@ -48,9 +48,7 @@
       "value": "__aseVNetResourceGroupName__"
     },
     "defaultKeyVaultReadAccess": {
-      "value": [
-        "__defaultKeyVaultReadAccess__"
-      ]
+      "value": __defaultKeyVaultReadAccess__
     },
     "environmentName": {
       "value": "__Release.EnvironmentName__"
@@ -74,24 +72,16 @@
       "value": "vNetPrefix"
     },
     "virtualNetworkRoutedSubnets": {
-      "value": [
-        "__virtualNetworkRoutedSubnets__"
-      ]
+      "value": __virtualNetworkRoutedSubnets__
     },
     "virtualNetworkNonRoutedSubnets": {
-      "value": [
-        "__virtualNetworkNonRoutedSubnets__"
-      ]
+      "value": __virtualNetworkNonRoutedSubnets__
     },
     "threatDetectionEmailAddress": {
-      "value": [
-        "__threatDetectionEmailAddress__"
-      ]
+      "value": __threatDetectionEmailAddress__
     },
     "certificates": {
-      "value": [
-        "__certificates__"
-      ]
+      "value": __certificates__
     }
   }
 }
