@@ -51,7 +51,7 @@
       "value": __defaultKeyVaultReadAccess__
     },
     "environmentName": {
-      "value": "__Release.EnvironmentName__"
+      "value": "__ReleaseEnvironmentName__"
     },
     "envType": {
       "value": "__envType__"
@@ -67,9 +67,6 @@
     },
     "sqlServerActiveDirectoryAdminObjectId": {
       "value": "__sqlAdGroupObjectID__"
-    },
-    "virtualNetworkPrefix": {
-      "value": "vNetPrefix"
     },
     "virtualNetworkRoutedSubnets": {
       "value": __virtualNetworkRoutedSubnets__

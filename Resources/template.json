@@ -134,12 +134,6 @@
         "description": "The email address that threat alerts will be sent to"
       }
     },
-    "virtualNetworkPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of new Azure VNet where you can deploy Azure Sql Managed Instances and the resources that use them"
-      }
-    },
     "virtualNetworkAddressPrefix": {
         "type": "string",
         "defaultValue": "10.0",
@@ -188,7 +182,7 @@
         },
         "parameters": {
           "virtualNetworkPrefix": {
-            "value": "[parameters('virtualNetworkPrefix')]"
+            "value": "[parameters('sharedPrefix')]"
           },
           "virtualNetworkAddressPrefix": {
             "value": "[parameters('virtualNetworkAddressPrefix')]"
@@ -348,7 +342,7 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId, reference('sharedApimServiceBasic', '2017-05-10', 'Full').outputs.ApimServiceIdentityPrincipalId.value)]"
+            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId, reference('sharedApimServiceBasic', '2017-05-10').outputs.ApimServiceIdentityPrincipalId.value)]"
           }
         }
       },
