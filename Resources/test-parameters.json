@@ -3,9 +3,12 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sharedPrefix": {
-      "value": "dfc-foo-shared"
+      "value": "dfc-local-shared"
     },
     "apimExists": {
+      "value": false
+    },
+    "deployApim": {
       "value": false
     },
     "apimHostnameRoot": {
@@ -74,18 +77,24 @@
     },
     "virtualNetworkRoutedSubnets": {
       "value": [
-        "dfc-foo-ase",
-        "dfc-foo-apim",
-        "dfc-foo-msql"
+        "dfc-local-ase",
+        "dfc-local-apim",
+        "dfc-local-msql"
       ]
     },
     "virtualNetworkNonRoutedSubnets": {
       "value": [
-        "dfc-foo-ag"
+        "dfc-local-ag"
       ]
     },
     "threatDetectionEmailAddress": {
       "value": []
+    },
+    "msqlSubnetName": {
+      "value": "dfc-local-msql"
+    },
+    "deployManageSql": {
+      "value": true
     }
   }
 }
