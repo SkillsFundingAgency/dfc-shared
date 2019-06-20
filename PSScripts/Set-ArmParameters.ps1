@@ -6,4 +6,5 @@ param(
 
 $ApimExists = $null -ne (Get-AzureRmApiManagement -ResourceGroupName "dfc-$Environment-shared-rg" -Name "dfc-$Environment-shared-apim" -ErrorAction Ignore)
 Write-Verbose "Writing value $ApimExists to variable apimExists"
-Write-Output "##vso[task.setvariable variable=apimExists]$($ApimExists.ToString().ToLower())"
+Write-Output "##vso[task.setvariable variable=apimExists]$ApimExists"
+

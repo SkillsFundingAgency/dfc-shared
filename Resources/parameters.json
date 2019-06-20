@@ -6,7 +6,7 @@
       "value": "__sharedPrefix__"
     },
     "apimExists": {
-      "value": "__apimExists__"
+      "value": __apimExists__
     },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
