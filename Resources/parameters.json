@@ -6,7 +6,7 @@
       "value": "__sharedPrefix__"
     },
     "apimExists": {
-      "value": false
+      "value": __apimExists__
     },
     "deployApim": {
       "value": true
