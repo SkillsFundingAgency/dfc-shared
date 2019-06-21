@@ -12,10 +12,10 @@
       "value": "__apimHostnameRoot__"
     },
     "apimPortalKeyVaultCertificatePath": {
-      "value": "__apiKeyVaultCertificatePath__"
+      "value": "__portalApiKeyVaultCertificatePath__"
     },
     "apimProxyKeyVaultCertificatePath": {
-      "value": "__apiKeyVaultCertificatePath__"
+      "value": "__proxyApiKeyVaultCertificatePath__"
     },
     "apimNetworkSecurityGroup": {
       "value": "__apimNetworkSecurityGroup__"
