@@ -94,7 +94,7 @@
       "value": "dfc-local-msql"
     },
     "deployManageSql": {
-      "value": true
+      "value": false
     }
   }
 }

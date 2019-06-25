@@ -81,10 +81,10 @@
       "value": __threatDetectionEmailAddress__
     },
     "msqlSubnetName": {
-      "value": "__msqlSubnetId__"
+      "value": "__msqlSubnetName__"
     },
     "deployManageSql": {
-      "value": true
+      "value": __deployManageSql__
     }
   }
 }
