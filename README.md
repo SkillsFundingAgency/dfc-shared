@@ -13,4 +13,6 @@ Two parameters files must be maintained:
 
 To test the deployment without APIM, set the parameter 'apimExists' to false and do not pass a value for the parameter 'certificates'
 
-If the template is run locally please ensure you clean up the resources created to avoid pipeline failures with name clashes.
+To run the deployment without Managed SQL Instance set the paramter 'deployManageSql' to 'false'.
+
+If the template is run locally please ensure you clean up the resources created to avoid pipeline failures with name clashes. If you don not do this the template wil fail with inner errors such as "The account -storage account- is already in another resource group in this susbscription.\"
