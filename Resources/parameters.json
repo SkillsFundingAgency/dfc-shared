@@ -6,7 +6,7 @@
       "value": "__sharedPrefix__"
     },
     "apimExists": {
-      "value": __apimExists__
+      "value": "__apimExists__"
     },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
@@ -48,7 +48,7 @@
       "value": "__aseVNetResourceGroupName__"
     },
     "defaultKeyVaultReadAccess": {
-      "value": __defaultKeyVaultReadAccess__
+      "value": "__defaultKeyVaultReadAccess__"
     },
     "environmentName": {
       "value": "__ReleaseEnvironmentName__"
@@ -69,13 +69,13 @@
       "value": "__sqlAdGroupObjectID__"
     },
     "virtualNetworkRoutedSubnets": {
-      "value": __virtualNetworkRoutedSubnets__
+      "value": "__virtualNetworkRoutedSubnets__"
     },
     "virtualNetworkNonRoutedSubnets": {
-      "value": __virtualNetworkNonRoutedSubnets__
+      "value": "__virtualNetworkNonRoutedSubnets__"
     },
     "threatDetectionEmailAddress": {
-      "value": __threatDetectionEmailAddress__
+      "value": "__threatDetectionEmailAddress__"
     }
   }
 }
