@@ -173,7 +173,7 @@
       }
   },
   "variables": {
-    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/NCSD-817/ArmTemplates/",
+    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
