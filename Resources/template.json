@@ -342,7 +342,7 @@
             "value": "[variables('msqlServerName')]"
           },
           "msqlSubnetId": {
-            "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
+            "value": "[parameters('msqlSubnetName')]"
           },
           "sqlServerAdminUserName": {
             "value": "[parameters('sqlServerAdminUserName')]"
@@ -576,22 +576,6 @@
     }
   ],
   "outputs": {
-    "virtualNetworkName": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value]"
-    },
-    "routeTableName": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableName.value]"
-    },
-    "routeTableId": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableId.value]"
-    },
-    "msqlSubnetId": {
-      "type": "string",
-      "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
-    },
     "keyVaultName": {
       "type": "string",
       "value": "[variables('keyVaultName')]"
