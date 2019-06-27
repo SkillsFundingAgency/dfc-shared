@@ -14,6 +14,12 @@
         "description": "Bool to determine whether the Basic APIM deployment is complete"
       }
     },
+    "deployApim": {
+      "type": "bool",
+      "metadata": {
+        "description": "Used to control whether APIM is deployed at all as part of the APIM Basic deployment condition"
+      }
+    },
     "apimHostnameRoot": {
       "type": "string",
       "metadata": {
@@ -152,7 +158,19 @@
        "metadata": {
            "description": "Array of subnets to create"
      }
-    }
+    },
+      "msqlSubnetName": {
+        "type": "string",
+        "metadata": {
+          "description": "Used for managed sql deployment"
+        }
+      },
+      "deployManageSql": {
+        "type": "bool",
+        "metadata": {
+          "description": ""
+        }
+      }
   },
   "variables": {
     "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
@@ -166,7 +184,8 @@
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
-    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
+    "msqlServerName": "[concat(parameters('sharedPrefix'),'-msql')]"
   },
   "resources": [
     {
@@ -308,6 +327,39 @@
       }
     },
     {
+      "name": "managedSQL",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "condition": "[parameters('deployManageSql')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'sql-managed-instance.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "msqlServerName": {
+            "value": "[variables('msqlServerName')]"
+          },
+          "msqlSubnetId": {
+            "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
+          },
+          "sqlServerAdminUserName": {
+            "value": "[parameters('sqlServerAdminUserName')]"
+          },
+          "sqlServerAdminPassword": {
+            "value": "[parameters('sqlServerAdminPassword')]"
+          },
+          "sqlServerActiveDirectoryAdminLogin": {
+            "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
+          },
+          "sqlServerActiveDirectoryAdminObjectId": {
+            "value": "[parameters('sqlServerActiveDirectoryAdminObjectId')]"
+          }
+        }
+      }
+    },
+    {
       "name": "sharedCDN",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -330,6 +382,7 @@
     {
       "name": "sharedApimKeyVaultAccessPolicy",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[parameters('deployApim')]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -342,7 +395,7 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId, reference('sharedApimServiceBasic', '2017-05-10').outputs.ApimServiceIdentityPrincipalId.value)]"
+            "value": "[if(parameters('deployApim'), if(parameters('apimExists'), reference(concat('Microsoft.ApiManagement/service/', variables('apimName')), '2018-01-01', 'Full').identity.principalId, reference('sharedApimServiceBasic', '2017-05-10').outputs.ApimServiceIdentityPrincipalId.value), '')]"
           }
         }
       },
@@ -382,7 +435,7 @@
     {
       "name": "sharedApimServiceBasic",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[not(parameters('apimExists'))]",
+      "condition": "[and(not(parameters('apimExists')),parameters('deployApim'))]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -409,6 +462,7 @@
     {
       "name": "sharedApimServiceFull",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[parameters('deployApim')]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -533,6 +587,10 @@
     "routeTableId": {
       "type": "string",
       "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableId.value]"
+    },
+    "msqlSubnetId": {
+      "type": "string",
+      "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
     },
     "keyVaultName": {
       "type": "string",

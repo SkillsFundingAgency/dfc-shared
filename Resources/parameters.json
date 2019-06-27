@@ -8,6 +8,9 @@
     "apimExists": {
       "value": "__apimExists__"
     },
+    "deployApim": {
+      "value": true
+    },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
     },
@@ -76,6 +79,12 @@
     },
     "threatDetectionEmailAddress": {
       "value": "__threatDetectionEmailAddress__"
+    },
+    "msqlSubnetName": {
+      "value": "__msqlSubnetName__"
+    },
+    "deployManageSql": {
+      "value": "__deployManageSql__"
     }
   }
 }
