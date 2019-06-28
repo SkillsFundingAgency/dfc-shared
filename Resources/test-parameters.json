@@ -96,5 +96,8 @@
     "deployManageSql": {
       "value": false
     }
-  }
+  },
+    "vnetResourceGroup": {
+      "value": ""
+    }
 }
