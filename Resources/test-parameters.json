@@ -98,6 +98,6 @@
     }
   },
     "vnetResourceGroup": {
-      "value": ""
+      "value": "dfc-local-shared-rg"
     }
 }
