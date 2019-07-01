@@ -183,6 +183,13 @@
         "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
       }
     },
+    "appGatewayVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name the VNet the ASE subnet is part of. Only needed if envType is Prod."
+      }
+    },
     "appGatewaySubnetName": {
       "type": "string",
       "metadata": {
@@ -584,7 +591,7 @@
             "value": "[parameters('appGatewaySubnetName')]"
           },
           "vnetName": {
-            "value": "[parameters('aseVnetName')]"
+            "value": "[if(equals(parameters('envType'),'dev'), reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('appGatewayVnetName'))]"
           },
           "vnetResourceGroupName": {
             "value": "[parameters('vnetResourceGroup')]"

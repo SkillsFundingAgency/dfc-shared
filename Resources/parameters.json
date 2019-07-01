@@ -92,6 +92,9 @@
     "appGatewayNetworkSecurityGroup": {
       "value": "__appGatewayNsgName__"
     },
+    "appGatewayVnetName": {
+      "value": "__appGatewayVnetName__"
+    },
     "appGatewaySubnetName": {
       "value": "__appGatewaySubnetName__"
     },
