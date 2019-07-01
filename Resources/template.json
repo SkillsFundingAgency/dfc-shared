@@ -348,7 +348,7 @@
             "value": "[variables('msqlServerName')]"
           },
           "msqlSubnetId": {
-            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('aseSubnetName')))]"
+            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('msqlSubnetName')))]"
           },
           "sqlServerAdminUserName": {
             "value": "[parameters('sqlServerAdminUserName')]"
