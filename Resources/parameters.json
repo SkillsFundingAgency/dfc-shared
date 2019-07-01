@@ -85,6 +85,9 @@
     },
     "deployManageSql": {
       "value": __deployManageSql__
+    },
+    "vnetResourceGroup": {
+      "value": "__vnetResourceGroup__"
     }
   }
 }

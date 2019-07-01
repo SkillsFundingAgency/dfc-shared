@@ -170,6 +170,12 @@
         "metadata": {
           "description": ""
         }
+      },
+      "vnetResourceGroup": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group vNets are deployed"
+        }
       }
   },
   "variables": {
@@ -342,7 +348,7 @@
             "value": "[variables('msqlServerName')]"
           },
           "msqlSubnetId": {
-            "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
+            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('msqlSubnetName')))]"
           },
           "sqlServerAdminUserName": {
             "value": "[parameters('sqlServerAdminUserName')]"
@@ -576,22 +582,6 @@
     }
   ],
   "outputs": {
-    "virtualNetworkName": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value]"
-    },
-    "routeTableName": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableName.value]"
-    },
-    "routeTableId": {
-      "type": "string",
-      "value": "[reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.routeTableId.value]"
-    },
-    "msqlSubnetId": {
-      "type": "string",
-      "value": "[resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName'))]"
-    },
     "keyVaultName": {
       "type": "string",
       "value": "[variables('keyVaultName')]"

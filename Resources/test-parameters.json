@@ -95,6 +95,9 @@
     },
     "deployManageSql": {
       "value": false
+    },
+    "vnetResourceGroup": {
+      "value": "dfc-local-shared-rg"
     }
   }
 }
