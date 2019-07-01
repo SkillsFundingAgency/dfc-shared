@@ -104,9 +104,6 @@
     },
     "appGatewaySubnetName": {
       "value": "dfc-ag-01"
-    },
-    "appGatewayIncomingIpAddressRange": {
-      "value": "10.10.10.0/24"
     }
   }
 }
