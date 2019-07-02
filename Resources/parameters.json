@@ -27,7 +27,7 @@
       "value": "__apimSubnetName__"
     },
     "apimSkuTier": {
-      "value": "Developer"
+      "value": "__apimSkuTier__"
     },
     "apimVnetName": {
       "value": "__apimVnetName__"
