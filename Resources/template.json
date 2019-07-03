@@ -141,42 +141,68 @@
       }
     },
     "virtualNetworkAddressPrefix": {
-        "type": "string",
-        "defaultValue": "10.0",
-        "metadata": {
-            "description": "First 2 octects of VNet Private IP address range (VNet prefix)"
-        }
+      "type": "string",
+      "defaultValue": "10.0",
+      "metadata": {
+        "description": "First 2 octects of VNet Private IP address range (VNet prefix)"
+      }
     },
     "virtualNetworkRoutedSubnets": {
-        "type": "array",
-        "metadata": {
-            "description": "Array of subnets to create"
-        }
+      "type": "array",
+      "metadata": {
+        "description": "Array of subnets to create"
+      }
     },
     "virtualNetworkNonRoutedSubnets": {
-       "type": "array",
-       "metadata": {
-           "description": "Array of subnets to create"
-     }
-    },
-      "msqlSubnetName": {
-        "type": "string",
-        "metadata": {
-          "description": "Used for managed sql deployment"
-        }
-      },
-      "deployManageSql": {
-        "type": "bool",
-        "metadata": {
-          "description": ""
-        }
-      },
-      "vnetResourceGroup": {
-        "type": "string",
-        "metadata": {
-          "description": "Name of the resource group vNets are deployed"
-        }
+      "type": "array",
+      "metadata": {
+        "description": "Array of subnets to create"
       }
+    },
+    "msqlSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Used for managed sql deployment"
+      }
+    },
+    "deployManageSql": {
+      "type": "bool",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "vnetResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the resource group vNets are deployed"
+      }
+    },
+    "appGatewayNetworkSecurityGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The network security group assigned to the ASEs subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+      }
+    },
+    "appGatewayVnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name the VNet the ASE subnet is part of. Only needed if envType is Prod."
+      }
+    },
+    "appGatewaySubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet gateway name"
+      }
+    },
+    "appGatewayIncomingIpAddressRange": {
+      "type": "string",
+      "defaultValue": "0.0.0.0/1,128.0.0.0/2,192.0.0.0/3,224.0.0.0/4",
+      "metadata": {
+        "description": "Restricts HTTP(S) traffic to App Gateway to the passed in range"
+      }
+    }
   },
   "variables": {
     "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
@@ -540,6 +566,38 @@
           },
           "aseVNetResourceGroupName": {
               "value": "[parameters('aseVNetResourceGroupName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "appGatewayNetworkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "sharedManagedInstanceEnvironment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/ag-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('appGatewayNetworkSecurityGroup')]"
+          },
+          "agSubnetName": {
+            "value": "[parameters('appGatewaySubnetName')]"
+          },
+          "vnetName": {
+            "value": "[if(equals(parameters('envType'),'dev'), reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('appGatewayVnetName'))]"
+          },
+          "vnetResourceGroupName": {
+            "value": "[parameters('vnetResourceGroup')]"
+          },
+          "privateIpAddressRange": {
+            "value": "[parameters('appGatewayIncomingIpAddressRange')]"
           }
         }
       }

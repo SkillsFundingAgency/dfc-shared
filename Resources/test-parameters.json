@@ -98,6 +98,12 @@
     },
     "vnetResourceGroup": {
       "value": "dfc-local-shared-rg"
+    },
+    "appGatewayNetworkSecurityGroup": {
+      "value": "dfc-local-appgateway-nsg"
+    },
+    "appGatewaySubnetName": {
+      "value": "dfc-ag-01"
     }
   }
 }
