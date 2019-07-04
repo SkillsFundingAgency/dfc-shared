@@ -88,6 +88,9 @@
     },
     "vnetResourceGroup": {
       "value": "__vnetResourceGroup__"
+    },
+    "msqlNetworkSecurityGroup": {
+      "value": "__msqlNetworkSecurityGroup__"
     }
   }
 }

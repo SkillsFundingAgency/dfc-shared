@@ -176,6 +176,12 @@
         "metadata": {
           "description": "Name of the resource group vNets are deployed"
         }
+      },
+      "msqlNetworkSecurityGroup": {
+        "type": "string",
+        "metadata": {
+          "description": "The network security group assigned to the managedSQL subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
+        }
       }
   },
   "variables": {
@@ -328,6 +334,33 @@
           },
           "elasticPoolName": {
             "value": "[variables('elasticPoolName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "managedSQLNSG",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[parameters('deployManageSql')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/msql-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('msqlNetworkSecurityGroup')]"
+          },
+          "msqlSubnetName": {
+              "value": "[parameters('msqlSubnetName')]"
+          },
+          "msqlVnetName": {
+              "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName')))]"
+          },
+          "msqlVNetResourceGroupName": {
+              "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().location, parameters('msqlSubnetName'))]"
           }
         }
       }

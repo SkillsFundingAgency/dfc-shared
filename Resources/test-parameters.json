@@ -94,10 +94,13 @@
       "value": "dfc-local-msql"
     },
     "deployManageSql": {
-      "value": false
+      "value": true
     },
     "vnetResourceGroup": {
       "value": "dfc-local-shared-rg"
+    },
+    "msqlNetworkSecurityGroup": {
+      "value": ""
     }
   }
 }
