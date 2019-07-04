@@ -44,7 +44,7 @@
                             "sourcePortRange": "*",
                             "protocol": "Tcp",
                             "destinationPortRange": "65200-65535",
-                            "destinationAddressPrefix": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('agSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+                            "destinationAddressPrefix": "*"
                         }
                     },
                     {
