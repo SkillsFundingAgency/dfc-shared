@@ -100,7 +100,7 @@
       "value": "dfc-local-shared-rg"
     },
     "msqlNetworkSecurityGroup": {
-      "value": ""
+      "value": "dfc-local-msql-nsg"
     }
   }
 }
