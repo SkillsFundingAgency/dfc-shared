@@ -101,6 +101,12 @@
     },
     "msqlNetworkSecurityGroup": {
       "value": "dfc-local-msql-nsg"
+    },
+    "appGatewayNetworkSecurityGroup": {
+      "value": "dfc-local-appgateway-nsg"
+    },
+    "appGatewaySubnetName": {
+      "value": "dfc-ag-01"
     }
   }
 }

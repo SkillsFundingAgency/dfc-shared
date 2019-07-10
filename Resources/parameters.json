@@ -27,7 +27,7 @@
       "value": "__apimSubnetName__"
     },
     "apimSkuTier": {
-      "value": "Developer"
+      "value": "__apimSkuTier__"
     },
     "apimVnetName": {
       "value": "__apimVnetName__"
@@ -91,6 +91,18 @@
     },
     "msqlNetworkSecurityGroup": {
       "value": "__msqlNetworkSecurityGroup__"
+    },
+    "appGatewayNetworkSecurityGroup": {
+      "value": "__appGatewayNsgName__"
+    },
+    "appGatewayVnetName": {
+      "value": "__appGatewayVnetName__"
+    },
+    "appGatewaySubnetName": {
+      "value": "__appGatewaySubnetName__"
+    },
+    "appGatewayIncomingIpAddressRange": {
+      "value": "__appGatewayIncomingIpRange__"
     }
   }
 }
