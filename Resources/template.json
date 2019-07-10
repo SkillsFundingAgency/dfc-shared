@@ -183,6 +183,12 @@
         "description": "The network security group assigned to the Managed SQL subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
       }
     },
+    "msqlResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "The resourcee group where Managaged SQL in located"
+      }
+    },
     "vnetResourceGroup": {
       "type": "string",
       "metadata": {
@@ -392,7 +398,7 @@
               "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('msqlVnetName')))]"
           },
           "msqlVNetResourceGroupName": {
-              "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().location, parameters('msqlSubnetName'))]"
+              "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().location, parameters('msqlResourceGroupName'))]"
           }
         }
       }

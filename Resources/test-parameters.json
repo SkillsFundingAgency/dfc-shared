@@ -90,17 +90,23 @@
     "threatDetectionEmailAddress": {
       "value": []
     },
+    "msqlVnetName": {
+      "value": ""
+    },
     "msqlSubnetName": {
       "value": "dfc-local-msql"
+    },
+    "msqlNetworkSecurityGroup": {
+      "value": "dfc-local-msql-nsg"
     },
     "deployManageSql": {
       "value": true
     },
+    "msqlResourceGroupName": {
+      "value": ""
+    },
     "vnetResourceGroup": {
       "value": "dfc-local-shared-rg"
-    },
-    "msqlNetworkSecurityGroup": {
-      "value": "dfc-local-msql-nsg"
     },
     "appGatewayNetworkSecurityGroup": {
       "value": "dfc-local-appgateway-nsg"
