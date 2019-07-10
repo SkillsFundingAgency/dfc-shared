@@ -159,16 +159,28 @@
         "description": "Array of subnets to create"
       }
     },
+    "deployManageSql": {
+      "type": "bool",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "msqlVnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name the VNet the ASE subnet is part of."
+      }
+    },
     "msqlSubnetName": {
       "type": "string",
       "metadata": {
         "description": "Used for managed sql deployment"
       }
     },
-    "deployManageSql": {
-      "type": "bool",
+    "msqlNetworkSecurityGroup": {
+      "type": "string",
       "metadata": {
-        "description": ""
+        "description": "The network security group assigned to the Managed SQL subnet.  The rules on this group will be altered by the release so this group should not be shared with other subnets."
       }
     },
     "vnetResourceGroup": {
@@ -377,7 +389,7 @@
               "value": "[parameters('msqlSubnetName')]"
           },
           "msqlVnetName": {
-              "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName')))]"
+              "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('msqlVnetName')))]"
           },
           "msqlVNetResourceGroupName": {
               "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().location, parameters('msqlSubnetName'))]"
@@ -401,7 +413,7 @@
             "value": "[variables('msqlServerName')]"
           },
           "msqlSubnetId": {
-            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('msqlSubnetName')))]"
+            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('msqlVnetName'), parameters('msqlSubnetName')))]"
           },
           "sqlServerAdminUserName": {
             "value": "[parameters('sqlServerAdminUserName')]"
