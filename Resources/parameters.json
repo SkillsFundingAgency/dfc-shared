@@ -80,12 +80,6 @@
     "threatDetectionEmailAddress": {
       "value": __threatDetectionEmailAddress__
     },
-    "msqlSubnetName": {
-      "value": "__msqlSubnetName__"
-    },
-    "deployManageSql": {
-      "value": __deployManageSql__
-    },
     "vnetResourceGroup": {
       "value": "__vnetResourceGroup__"
     },

@@ -159,18 +159,6 @@
         "description": "Array of subnets to create"
       }
     },
-    "msqlSubnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Used for managed sql deployment"
-      }
-    },
-    "deployManageSql": {
-      "type": "bool",
-      "metadata": {
-        "description": ""
-      }
-    },
     "vnetResourceGroup": {
       "type": "string",
       "metadata": {
@@ -216,8 +204,7 @@
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
-    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
-    "msqlServerName": "[concat(parameters('sharedPrefix'),'-msql')]"
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
   },
   "resources": [
     {
@@ -354,39 +341,6 @@
           },
           "elasticPoolName": {
             "value": "[variables('elasticPoolName')]"
-          }
-        }
-      }
-    },
-    {
-      "name": "managedSQL",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "condition": "[parameters('deployManageSql')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'sql-managed-instance.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "msqlServerName": {
-            "value": "[variables('msqlServerName')]"
-          },
-          "msqlSubnetId": {
-            "value": "[if(equals(parameters('envType'),'dev'), resourceid('Microsoft.Network/virtualNetworks/subnets', reference('sharedManagedInstanceEnvironment','2017-05-10').outputs.virtualNetworkName.value, parameters('msqlSubnetName')), resourceid(parameters('vnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aseVnetName'), parameters('msqlSubnetName')))]"
-          },
-          "sqlServerAdminUserName": {
-            "value": "[parameters('sqlServerAdminUserName')]"
-          },
-          "sqlServerAdminPassword": {
-            "value": "[parameters('sqlServerAdminPassword')]"
-          },
-          "sqlServerActiveDirectoryAdminLogin": {
-            "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
-          },
-          "sqlServerActiveDirectoryAdminObjectId": {
-            "value": "[parameters('sqlServerActiveDirectoryAdminObjectId')]"
           }
         }
       }

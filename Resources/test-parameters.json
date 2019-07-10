@@ -78,8 +78,7 @@
     "virtualNetworkRoutedSubnets": {
       "value": [
         "dfc-local-ase",
-        "dfc-local-apim",
-        "dfc-local-msql"
+        "dfc-local-apim"
       ]
     },
     "virtualNetworkNonRoutedSubnets": {
@@ -89,12 +88,6 @@
     },
     "threatDetectionEmailAddress": {
       "value": []
-    },
-    "msqlSubnetName": {
-      "value": "dfc-local-msql"
-    },
-    "deployManageSql": {
-      "value": false
     },
     "vnetResourceGroup": {
       "value": "dfc-local-shared-rg"
