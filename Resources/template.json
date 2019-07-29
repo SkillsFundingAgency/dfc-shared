@@ -103,7 +103,10 @@
     },
     "certificateKeyVaultWriteAccess": {
       "type": "array",
-      "defaultValue": []
+      "defaultValue": [],
+      "metadata": {
+        "description": "A list of azure service pricipals to assign write access to certificates on the shared key vault"
+      }
     },
     "environmentName": {
       "type": "string"
@@ -208,7 +211,8 @@
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
-    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
+    "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]"
   },
   "resources": [
     {
@@ -330,7 +334,7 @@
       ],
       "copy": {
         "name": "certificateKeyVaultWriteAccessCopy",
-        "count": "[length(parameters('certificateKeyVaultWriteAccess'))]",
+        "count": "[variables('certificateWriteAccessHack')]",
         "mode": "Serial",
         "batchSize": 1
       }
