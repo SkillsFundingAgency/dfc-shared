@@ -277,13 +277,14 @@
           },
           "certificatePermissions": {
             "value": [
-            "get",
-            "list",
-            "create",
-            "update",
-            "getissuers",
-            "listissuers"
-          ]
+              "get",
+              "list",
+              "create",
+              "update",
+              "getissuers",
+              "listissuers"
+            ]
+          }
         }
       },
       "dependsOn": [
