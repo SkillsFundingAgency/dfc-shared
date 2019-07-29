@@ -274,7 +274,15 @@
               "get",
               "list"
             ]
-          }
+          },
+          "certificates": [
+            "get",
+            "list",
+            "create",
+            "update",
+            "getissuers",
+            "listissuers"
+          ]
         }
       },
       "dependsOn": [
