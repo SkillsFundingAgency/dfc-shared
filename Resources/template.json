@@ -101,6 +101,10 @@
       "type": "array",
       "defaultValue": []
     },
+    "certificateKeyVaultWriteAccess": {
+      "type": "array",
+      "defaultValue": []
+    },
     "environmentName": {
       "type": "string"
     },
@@ -279,8 +283,6 @@
             "value": [
               "get",
               "list",
-              "create",
-              "update",
               "getissuers",
               "listissuers"
             ]
@@ -293,6 +295,42 @@
       "copy": {
         "name": "keyvaultReadAccessCopy",
         "count": "[length(parameters('defaultKeyVaultReadAccess'))]",
+        "mode": "Serial",
+        "batchSize": 1
+      }
+    },
+    {
+      "name": "[concat('sharedKeyVaultCertificateWriteAccessPolicy-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('certificateKeyVaultWriteAccess')), 0)]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'/KeyVault/keyvault-access-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[parameters('certificateKeyVaultWriteAccess')[copyIndex()]]"
+          },
+          "certificatePermissions": {
+            "value": [
+              "create",
+              "update"
+            ]
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedKeyVault"
+      ],
+      "copy": {
+        "name": "certificateKeyVaultWriteAccessCopy",
+        "count": "[length(parameters('certificateKeyVaultWriteAccess'))]",
         "mode": "Serial",
         "batchSize": 1
       }
