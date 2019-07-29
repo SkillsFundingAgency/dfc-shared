@@ -275,7 +275,8 @@
               "list"
             ]
           },
-          "certificates": [
+          "certificatePermissions": {
+            "value": [
             "get",
             "list",
             "create",
