@@ -212,6 +212,7 @@
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
+    "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
     "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]"
   },
   "resources": [
@@ -298,7 +299,7 @@
       ],
       "copy": {
         "name": "keyvaultReadAccessCopy",
-        "count": "[length(parameters('defaultKeyVaultReadAccess'))]",
+        "count": "[variables('defaultKeyVaultReadAccessHack')]",
         "mode": "Serial",
         "batchSize": 1
       }
