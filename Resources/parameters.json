@@ -53,6 +53,9 @@
     "defaultKeyVaultReadAccess": {
       "value": __defaultKeyVaultReadAccess__
     },
+    "certificateKeyVaultWriteAccess": {
+      "value": __certificateKeyVaultWriteAccess__
+    },
     "environmentName": {
       "value": "__ReleaseEnvironmentName__"
     },
