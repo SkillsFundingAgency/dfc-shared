@@ -57,6 +57,9 @@
         "a46e640e-44d8-4f89-8f56-cb9ab12888e2"
       ]
     },
+    "certificateKeyVaultWriteAccess": {
+      "value": []
+    },
     "environmentName": {
       "value": "DEV"
     },

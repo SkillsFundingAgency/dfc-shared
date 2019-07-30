@@ -101,6 +101,13 @@
       "type": "array",
       "defaultValue": []
     },
+    "certificateKeyVaultWriteAccess": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "A list of azure service pricipals to assign write access to certificates on the shared key vault"
+      }
+    },
     "environmentName": {
       "type": "string"
     },
@@ -204,7 +211,9 @@
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
     "appServiceEnvName": "[concat(parameters('sharedPrefix'),'-ase')]",
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
-    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]"
+    "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
+    "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
+    "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]"
   },
   "resources": [
     {
@@ -274,15 +283,65 @@
               "get",
               "list"
             ]
+          },
+          "certificatePermissions": {
+            "value": [
+              "get",
+              "list",
+              "getissuers",
+              "listissuers"
+            ]
           }
         }
       },
       "dependsOn": [
         "sharedKeyVault"
       ],
+      "metadata": {
+        "description": "The count parameter in the copy block is populated with either the length of the defaultKeyVaultReadAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
+      },      
       "copy": {
         "name": "keyvaultReadAccessCopy",
-        "count": "[length(parameters('defaultKeyVaultReadAccess'))]",
+        "count": "[variables('defaultKeyVaultReadAccessHack')]",
+        "mode": "Serial",
+        "batchSize": 1
+      }
+    },
+    {
+      "name": "[concat('sharedKeyVaultCertificateWriteAccessPolicy-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[greater(length(parameters('certificateKeyVaultWriteAccess')), 0)]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'/KeyVault/keyvault-access-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "servicePrincipalObjectId": {
+            "value": "[parameters('certificateKeyVaultWriteAccess')[copyIndex()]]"
+          },
+          "certificatePermissions": {
+            "value": [
+              "create",
+              "update"
+            ]
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedKeyVault"
+      ],
+      "metadata": {
+        "description": "The count parameter in copy block is populated with either the length of the certificateWriteAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
+      },      
+      "copy": {
+        "name": "certificateKeyVaultWriteAccessCopy",
+        "count": "[variables('certificateWriteAccessHack')]",
         "mode": "Serial",
         "batchSize": 1
       }
