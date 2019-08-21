@@ -100,6 +100,9 @@
     },
     "appGatewaySubnetName": {
       "value": "dfc-ag-01"
+    },
+    "appGatewayCloudServiceIpAddress": {
+      "value": "4.4.4.4"
     }
   }
 }
