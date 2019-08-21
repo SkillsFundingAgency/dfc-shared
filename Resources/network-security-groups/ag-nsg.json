@@ -19,6 +19,12 @@
             "metadata": {
                 "description": "Restricts HTTP(S) traffic in the NSG to the passed in range"
             }
+        },
+        "cloudServiceIpAddress": {
+            "type": "string",
+            "metadata": {
+                "description": "IP address of cloud service"
+            }
         }
     },
     "variables": {
@@ -75,6 +81,20 @@
                             "protocol": "Tcp",
                             "destinationPortRange": "443",
                             "destinationAddressPrefix": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('agSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+                        }
+                    },
+                    {
+                        "name": "CloudServiceIp",
+                        "properties": {
+                            "direction": "Outbound",
+                            "priority": 100,
+                            "access": "Allow",
+                            "description": "Cloud service IP address to allow access to",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "*",
+                            "destinationAddressPrefix": "[parameters('cloudServiceIpAddress')]"
                         }
                     }
                 ]

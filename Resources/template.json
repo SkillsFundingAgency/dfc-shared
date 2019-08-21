@@ -191,6 +191,12 @@
         "description": "Subnet gateway name"
       }
     },
+    "appGatewayCloudServiceIpAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "Used for App Gateway NSG to allow outbound traffic to given Cloud Service Ip Address"
+      }
+    },
     "appGatewayIncomingIpAddressRange": {
       "type": "string",
       "defaultValue": "0.0.0.0/1,128.0.0.0/2,192.0.0.0/3,224.0.0.0/4",
@@ -201,7 +207,7 @@
   },
   "variables": {
     "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
-    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/NCSD-1385/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
@@ -611,6 +617,9 @@
           },
           "privateIpAddressRange": {
             "value": "[parameters('appGatewayIncomingIpAddressRange')]"
+          },
+          "cloudServiceIpAddress": {
+            "value": "[parameters('appGatewayCloudServiceIpAddress')]"
           }
         }
       }

@@ -97,6 +97,9 @@
     },
     "appGatewayIncomingIpAddressRange": {
       "value": "__appGatewayIncomingIpRange__"
+    },
+    "appGatewayCloudServiceIpAddress": {
+      "value": "__appGatewayCloudServiceIpAddress__"
     }
   }
 }
