@@ -219,9 +219,28 @@
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
     "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
-    "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]"
+    "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]",
+    "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]"
   },
   "resources": [
+    {
+      "name": "containerRegistry",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[or(equals(parameters('environmentName'), 'DEV'), equals(parameters('environmentName'), 'PRD'))]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+              "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'container-registry.json')]",
+              "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+              "containerRegistryName": {
+                  "value": "[variables('containerRegistryName')]"
+              }
+          }
+      }
+    },
     {
       "name": "sharedManagedInstanceEnvironment",
       "type": "Microsoft.Resources/deployments",
