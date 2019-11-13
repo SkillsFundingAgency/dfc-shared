@@ -6,6 +6,8 @@ Creates the Service Principals and App Registrations required by an Azure Kubern
 Creates the Service Principals and App Registrations required by an Azure Kubernetes Cluster
 
 .PARAMETER AksServicePrincipalName
+The name of the AAD Service Principal that will be granted Contributor rights on the Azure Subscription that the AKS cluster resides in.
+If executed from Azure DevOps this will be the default subscription of the Azure DevOps Service Principal.  The name should be in the format dfc-<env>-shared-aks-svc.
 
 .PARAMETER AksAdClientApplicationName
 
@@ -15,6 +17,11 @@ The permissions granted will be Directory.Read.All and User.Read.  The name shou
 
 .PARAMETER DfcDevOpsScriptRoot
 The path to the PSScripts folder in the local copy of the dfc-devops repo, eg $(System.DefaultWorkingDirectory)/_SkillsFundingAgency_dfc-devops/PSScripts in an Azure DevOps task
+
+.NOTES
+These documents are generally for Azure CLI rather than PowerShell but are a useful reference point
+AksServicePrincipalName: https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal
+AksAdClientApplicationName & AksAdServerApplicationName: https://docs.microsoft.com/en-us/azure/aks/azure-ad-integration-cli
 #>
 
 [CmdletBinding()]
@@ -31,7 +38,20 @@ param(
     [String]$SharedKeyVaultName
 )
 
-# Create Service Principal with Contributor on Subscription (as per das-dev-aks-svc)
+# Create Service Principal with Contributor on Subscription
+$AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id --RoleDefinitionName Contributor
+if ($ExistingAssignment) {
+
+    Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName)"
+
+}
+else {
+
+    Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
+    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id --RoleDefinitionName Contributor
+
+}
 
 # Create Service Principl with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
 & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
