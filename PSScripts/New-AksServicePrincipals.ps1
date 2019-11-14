@@ -10,6 +10,7 @@ The name of the AAD Service Principal that will be granted Contributor rights on
 If executed from Azure DevOps this will be the default subscription of the Azure DevOps Service Principal.  The name should be in the format dfc-<env>-shared-aks-svc.
 
 .PARAMETER AksAdClientApplicationName
+The name of the AAD Application registration that will be granted permissions user_impersonation on the AksAdServerApplicationName app registration.  The name should be in the format dfc-<env>-shared-aks-client.
 
 .PARAMETER AksAdServerApplicationName
 The name of the AAD Application registration that will be granted permissions on the Microsoft Graph API to interact with AAD on behalf of the AKS cluster.
@@ -61,4 +62,3 @@ $AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1
 # Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
 & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdClientApplicationName -ApiName $AksAdServerApplication.DisplayName -DelegatedPermissions "user_impersonation" -Verbose
-
