@@ -57,7 +57,8 @@ else {
 
 # Create Service Principl with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
 $AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
-& $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -DelegatedPermissions "Directory.Read.All",  "User.Read" -Verbose
+& $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -DelegatedPermissions "Directory.Read.All",  "User.Read" -Verbose
+& $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -Verbose
 
 # Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
 & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
