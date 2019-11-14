@@ -55,8 +55,10 @@ else {
 }
 
 # Create Service Principl with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
-& $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+$AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -DelegatedPermissions "Directory.Read.All",  "User.Read" -Verbose
 
-# Create Service Principal with Delegated user_impersonation on ``das-dev-shared-aks-api`` (as per Apprenticeships Kubernetes Service)
+# Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
+& $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+& $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdClientApplicationName -ApiName $AksAdServerApplication.DisplayName -DelegatedPermissions "user_impersonation" -Verbose
 
