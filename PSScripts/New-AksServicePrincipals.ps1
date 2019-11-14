@@ -40,7 +40,7 @@ param(
 
 # Create Service Principal with Contributor on Subscription
 $AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
-$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id --RoleDefinitionName Contributor
+$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor
 if ($ExistingAssignment) {
 
     Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName)"
@@ -49,7 +49,7 @@ if ($ExistingAssignment) {
 else {
 
     Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
-    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id --RoleDefinitionName Contributor
+    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor
 
 }
 
