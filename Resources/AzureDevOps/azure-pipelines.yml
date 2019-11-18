@@ -1,5 +1,3 @@
-# dotnet core build
-
 resources:
   repositories:
   - repository: self
@@ -14,20 +12,44 @@ pr:
     include:
     - master
 
-steps:
+stages:
 
-# ARM template
-- template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
-  parameters:
-    ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
+- stage: Build
+  jobs:
+  - job: TestAndPublish
+    pool:
+      name: 'NCS CI and CD'
     steps:
-- task: CopyFiles@2
-  displayName: 'Copy PSScripts Files to: $(Build.ArtifactStagingDirectory)'
-  inputs:
-    Contents: 'PSScripts/**/*.ps1'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact
-  inputs:
-     pathtoPublish: $(Build.ArtifactStagingDirectory)
-     artifactName: drop
+    # ARM template
+    - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
+      parameters:
+        ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
+        steps:
+    - task: CopyFiles@2
+      displayName: 'Copy PSScripts Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        Contents: 'PSScripts/**/*.ps1'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishPipelineArtifact@0
+      displayName: Publish Artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)
+        artifactName: drop
+
+- stage: DeployToDev
+  variables:
+  - group: dfc-shared-all
+  - group: dfc-shared-infrastructure-all
+  - template: VariableTemplates\ReleaseVariables.yml
+  - group: dfc-shared-infrastructure-dev
+  - template: VariableTemplates\DevVariables.yml
+  jobs:
+  - template: JobTemplates\Deploy.yml
+    parameters:
+      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+      envAbbreviation: ${{ variables.envAbbreviation }}
+      Environment: 'DEV'
+      EnvironmentTag: ${{ variables.EnvironmentTag }}
+      resourceGroup: ${{ variables.resourceGroup }}
+      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}

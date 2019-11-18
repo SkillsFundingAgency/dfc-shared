@@ -1,0 +1,39 @@
+variables:
+- name: apimExists
+  value: true
+- name: apimSkuTier
+  value: Developer
+- name: appGatewayCloudServiceIpAddress
+  value: $(cloudServiceIp)
+- name: appGatewayNsgName
+  value: $(sharedPrefix)-ag-nsg
+- name: appGatewaySubnetName
+  value: dfc-ag-01
+- name: appGatewayVnetName
+  value: ''
+- name: deployManageSql
+  value: false
+- name: msqlSubnetName
+  value: dfc-msql-01
+- name: ParentBusinessTag
+  value: National Careers Service (PP)
+- name: portalApiKeyVaultCertificatePath
+  value: $(defaultApiKeyVaultCertificatePath)
+- name: proxyApiKeyVaultCertificatePath
+  value: $(defaultApiKeyVaultCertificatePath)
+- name: ReleaseEnvironmentName
+  value: $(Environment.Name)
+- name: resourceGroup
+  value: $(sharedPrefix)-rg
+- name: ServiceOfferingTag
+  value: Digital First Career Service (DFCS) Website (PP)
+- name: sharedPrefix
+  value: dfc-$(envAbbreviation)-shared
+- name: threatDetectionEmailAddress
+  value: '[ "careersdevops@education.gov.uk" ]'
+- name: virtualNetworkNonRoutedSubnets
+  value: '[ "$(appGatewaySubnetName)" ]'
+- name: virtualNetworkRoutedSubnets
+  value: '[ "$(msqlSubnetName)" ]'
+- name: vnetResourceGroup
+  value: $(resourceGroup)

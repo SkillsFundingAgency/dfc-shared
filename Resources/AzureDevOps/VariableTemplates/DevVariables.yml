@@ -1,0 +1,9 @@
+variables:
+- name: apimHostnameRoot
+  value: api.nationalcareersservice.org.uk
+- name: envAbbreviation
+  value: dev
+- name: EnvironmentTag
+  value: Dev/Test
+- name: envType
+  value: dev
