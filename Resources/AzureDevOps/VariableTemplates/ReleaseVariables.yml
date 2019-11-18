@@ -22,13 +22,11 @@ variables:
 - name: proxyApiKeyVaultCertificatePath
   value: $(defaultApiKeyVaultCertificatePath)
 - name: ReleaseEnvironmentName
-  value: $(Environment.Name)
+  value: DEV
 - name: resourceGroup
   value: $(sharedPrefix)-rg
 - name: ServiceOfferingTag
   value: Digital First Career Service (DFCS) Website (PP)
-- name: sharedPrefix
-  value: dfc-$(envAbbreviation)-shared
 - name: threatDetectionEmailAddress
   value: '[ "careersdevops@education.gov.uk" ]'
 - name: virtualNetworkNonRoutedSubnets

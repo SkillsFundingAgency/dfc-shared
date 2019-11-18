@@ -7,3 +7,5 @@ variables:
   value: Dev/Test
 - name: envType
   value: dev
+- name: sharedPrefix
+  value: dfc-$(envAbbreviation)-shared

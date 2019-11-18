@@ -48,7 +48,7 @@ stages:
     parameters:
       AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
       envAbbreviation: ${{ variables.envAbbreviation }}
-      Environment: 'DEV'
+      Environment: 'DEV_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
       resourceGroup: ${{ variables.resourceGroup }}
       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
