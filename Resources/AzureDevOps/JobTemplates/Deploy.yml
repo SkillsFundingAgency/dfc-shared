@@ -49,7 +49,7 @@ jobs:
           displayName: 'Azure Deployment: Shared infrastructure'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
-            resourceGroupName: '$${{ parameters.resourceGroup }}'
+            resourceGroupName: '${{ parameters.resourceGroup }}'
             location: 'West Europe'
             csmFile: '$(Pipeline.Workspace)/drop/ArmTemplates/template.json'
             csmParametersFile: '$(Pipeline.Workspace)/drop/ArmTemplates/parameters.json'
