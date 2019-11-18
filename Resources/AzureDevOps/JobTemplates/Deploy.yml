@@ -23,13 +23,13 @@ jobs:
           displayName: 'Azure PowerShell script: Set-ArmParameters'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
-            ScriptPath:  '$(Pipeline.Workspace)/drop/PSScripts/Set-ArmParameters.ps1'
+            ScriptPath:  '$(Pipeline.Workspace)/Dfc.Shared/PSScripts/Set-ArmParameters.ps1'
             ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
             azurePowerShellVersion: LatestVersion
         - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
           displayName: 'Tokenization: Transform file parameters.json'
           inputs:
-            SourcePath: '$(Pipeline.Workspace)/drop/ArmTemplates'
+            SourcePath: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates'
             TargetFileNames: parameters.json
         - task: PowerShell@2
           name: DownloadSetEsfaResourceGroupTagsScript
@@ -51,6 +51,6 @@ jobs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             resourceGroupName: '${{ parameters.resourceGroup }}'
             location: 'West Europe'
-            csmFile: '$(Pipeline.Workspace)/drop/ArmTemplates/template.json'
-            csmParametersFile: '$(Pipeline.Workspace)/drop/ArmTemplates/parameters.json'
+            csmFile: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates/template.json'
+            csmParametersFile: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates/parameters.json'
             deploymentOutputs: ARMOutputs

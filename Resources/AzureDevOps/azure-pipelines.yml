@@ -31,13 +31,13 @@ stages:
         Contents: 'PSScripts/**/*.ps1'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishPipelineArtifact@0
-      displayName: Publish Artifact
+      displayName: Publish Pipeline Artifact
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
-        artifactName: drop
+        artifactName: Dfc.Shared
     # Also publish build artifact for backwards compatibility
     - task: PublishBuildArtifacts@1
-      displayName: Publish Artifact
+      displayName: Publish Build Artifact
       inputs:
         pathtoPublish: $(Build.ArtifactStagingDirectory)
         artifactName: drop
