@@ -35,6 +35,12 @@ stages:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
         artifactName: drop
+    # Also publish build artifact for backwards compatibility
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: drop
 
 - stage: DeployToDev
   variables:
