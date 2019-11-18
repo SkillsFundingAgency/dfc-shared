@@ -18,7 +18,7 @@ stages:
   jobs:
   - job: TestAndPublish
     pool:
-      name: 'NCS CI and CD'
+      name: 'NCS - CI and CD'
     steps:
     # ARM template
     - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
