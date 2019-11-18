@@ -1,56 +1,56 @@
-  parameters:
-  - AzureSubscription: ''
-  - envAbbreviation: ''
-  - Environment: ''
-  - EnvironmentTag: ''
-  - resourceGroup: ''
-  - ParentBusinessTag: ''
-  - ServiceOfferingTag: ''
+parameters:
+  AzureSubscription: ''
+  envAbbreviation: ''
+  Environment: ''
+  EnvironmentTag: ''
+  resourceGroup: ''
+  ParentBusinessTag: ''
+  ServiceOfferingTag: ''
   
-  jobs:
-  - deployment: DeployToDev
-    pool:
-      name: 'Continuous Integration 02 - SSD - 160ACU'
-    variables:
-      SetTagsNameScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
-      SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
-    environment: ${{ parameters.Environment }}
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzurePowerShell@3
-            displayName: 'Azure PowerShell script: Set-ArmParameters'
-            inputs:
-              azureSubscription: ${{ parameters.AzureSubscription }}
-              ScriptPath:  '$(Pipeline.Workspace)/drop/PSScripts/Set-ArmParameters.ps1'
-              ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
-              azurePowerShellVersion: LatestVersion
-          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-            displayName: 'Tokenization: Transform file parameters.json'
-            inputs:
-              SourcePath: '$(Pipeline.Workspace)/drop/ArmTemplates'
-              TargetFileNames: parameters.json
-          - task: PowerShell@2
-            name: DownloadSetEsfaResourceGroupTagsScript
-            displayName: 'Download Set-EsfaResourceGroupTags script'
-            inputs:
+jobs:
+- deployment: DeployToDev
+  pool:
+    name: 'Continuous Integration 02 - SSD - 160ACU'
+  variables:
+    SetTagsNameScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
+    SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: AzurePowerShell@3
+          displayName: 'Azure PowerShell script: Set-ArmParameters'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath:  '$(Pipeline.Workspace)/drop/PSScripts/Set-ArmParameters.ps1'
+            ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
+            azurePowerShellVersion: LatestVersion
+        - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+          displayName: 'Tokenization: Transform file parameters.json'
+          inputs:
+            SourcePath: '$(Pipeline.Workspace)/drop/ArmTemplates'
+            TargetFileNames: parameters.json
+        - task: PowerShell@2
+          name: DownloadSetEsfaResourceGroupTagsScript
+          displayName: 'Download Set-EsfaResourceGroupTags script'
+          inputs:
             targetType: 'inline'
             script: Invoke-WebRequest -Uri $(SetTagsNameScriptUrl) -OutFile $(SetTagsScriptFilePath)
-          - task: AzurePowerShell@3
-            displayName: 'Resource group tagging'
-            inputs:
-              azureSubscription: ${{ parameters.AzureSubscription }}
-              scriptType: filePath
-              ScriptPath: $(SetTagsScriptFilePath)
-              ScriptArguments: '-ResourceGroupName ${{ parameters.resourceGroup }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
-              azurePowerShellVersion: LatestVersion
-          - task: AzureResourceGroupDeployment@2
-            displayName: 'Azure Deployment: Shared infrastructure'
-            inputs:
-              azureSubscription: ${{ parameters.AzureSubscription }}
-              resourceGroupName: '$${{ parameters.resourceGroup }}'
-              location: 'West Europe'
-              csmFile: '$(Pipeline.Workspace)/drop/ArmTemplates/template.json'
-              csmParametersFile: '$(Pipeline.Workspace)/drop/ArmTemplates/parameters.json'
-              deploymentOutputs: ARMOutputs
+        - task: AzurePowerShell@3
+          displayName: 'Resource group tagging'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            scriptType: filePath
+            ScriptPath: $(SetTagsScriptFilePath)
+            ScriptArguments: '-ResourceGroupName ${{ parameters.resourceGroup }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
+            azurePowerShellVersion: LatestVersion
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Azure Deployment: Shared infrastructure'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            resourceGroupName: '$${{ parameters.resourceGroup }}'
+            location: 'West Europe'
+            csmFile: '$(Pipeline.Workspace)/drop/ArmTemplates/template.json'
+            csmParametersFile: '$(Pipeline.Workspace)/drop/ArmTemplates/parameters.json'
+            deploymentOutputs: ARMOutputs
