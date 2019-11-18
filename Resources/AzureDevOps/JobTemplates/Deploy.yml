@@ -10,7 +10,7 @@ parameters:
 jobs:
 - deployment: DeployToDev
   pool:
-    name: 'Continuous Integration 02 - SSD - 160ACU'
+    name: 'NCS - CI and CD'
   variables:
     SetTagsNameScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
     SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
