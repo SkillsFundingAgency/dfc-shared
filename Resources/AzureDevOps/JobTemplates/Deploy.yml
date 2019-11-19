@@ -1,19 +1,28 @@
 parameters:
   AzureSubscription: ''
+  AksAdClientApplicationName: ''
+  AksAdServerApplicationName: ''
+  AksServicePrincipalName: ''
+  DfcDevOpsScriptRoot: ''
   envAbbreviation: ''
   Environment: ''
   EnvironmentTag: ''
   resourceGroup: ''
   ParentBusinessTag: ''
   ServiceOfferingTag: ''
+  SharedKeyVaultName: ''
   
 jobs:
 - deployment: DeployToDev
   pool:
     name: 'NCS - CI and CD'
   variables:
-    SetTagsNameScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
+    SetTagsScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
     SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
+    New-ApplicationRegistrationScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/New-ApplicationRegistration.ps1
+    New-ApplicationRegistrationScriptFilePath: $(System.DefaultWorkingDirectory)\_SkillsFundingAgency_dfc-devops\PSScripts\New-ApplicationRegistration.ps1
+    Add-AzureAdApiPermissionsToAppScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Add-AzureAdApiPermissionsToApp.ps1
+    Add-AzureAdApiPermissionsToAppScriptFilePath: $(System.DefaultWorkingDirectory)\_SkillsFundingAgency_dfc-devops\PSScripts\Add-AzureAdApiPermissionsToApp.ps1
   environment: ${{ parameters.Environment }}
   strategy:
     runOnce:
@@ -36,7 +45,7 @@ jobs:
           displayName: 'Download Set-EsfaResourceGroupTags script'
           inputs:
             targetType: 'inline'
-            script: Invoke-WebRequest -Uri $(SetTagsNameScriptUrl) -OutFile $(SetTagsScriptFilePath)
+            script: Invoke-WebRequest -Uri $(SetTagsScriptUrl) -OutFile $(SetTagsScriptFilePath)
         - task: AzurePowerShell@3
           displayName: 'Resource group tagging'
           inputs:
@@ -44,6 +53,25 @@ jobs:
             scriptType: filePath
             ScriptPath: $(SetTagsScriptFilePath)
             ScriptArguments: '-ResourceGroupName ${{ parameters.resourceGroup }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
+            azurePowerShellVersion: LatestVersion
+        - task: PowerShell@2
+          name: DownloadNewApplicationRegistrationScript
+          displayName: 'Download New-ApplicationRegistration script'
+          inputs:
+            targetType: 'inline'
+            script: Invoke-WebRequest -Uri $(New-ApplicationRegistrationScriptUrl) -OutFile $(New-ApplicationRegistrationScriptFilePath)
+        - task: PowerShell@2
+          name: DownloadAddAzureAdApiPermissionsToAppSScript
+          displayName: 'Download Add-AzureAdApiPermissionsToAppS script'
+          inputs:
+            targetType: 'inline'
+            script: Invoke-WebRequest -Uri $(Add-AzureAdApiPermissionsToAppScriptUrl) -OutFile $(Add-AzureAdApiPermissionsToAppScriptFilePath)
+        - task: AzurePowerShell@3
+          displayName: 'Azure PowerShell script: New-AksServicePrincipals.ps1'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath: '$(System.DefaultWorkingDirectory)/_dfc-shared/Dfc.Shared/PSScripts/New-AksServicePrincipals.ps1'
+            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
         - task: AzureResourceGroupDeployment@2
           displayName: 'Azure Deployment: Shared infrastructure'
