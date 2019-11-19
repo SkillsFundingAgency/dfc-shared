@@ -9,3 +9,11 @@ variables:
   value: dev
 - name: sharedPrefix
   value: dfc-$(envAbbreviation)-shared
+- name: AksNodeResourceGroupName
+  value: $(sharedPrefix)-aksnodes-rg
+- name: AksSubnetName
+  value: dfc-aks-01
+- name: AksVirtualNetworkAddressPrefix
+  value: 10.0
+- name: AksVnetName
+  value: $(sharedPrefix)-aks-vnet

@@ -8,6 +8,21 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "aksNodeResourceGroupName": {
+      "type": "string"
+    },
+    "aksRouteTableName": {
+      "type": "string"
+    },
+    "aksSubnetName": {
+      "type": "string"
+    },
+    "aksVirtualNetworkAddressPrefix": {
+      "type": "string"
+    },
+    "aksVnetName": {
+      "type": "string"
+    },
     "apimExists": {
       "type": "bool",
       "metadata": {
@@ -237,6 +252,36 @@
           "parameters": {
               "containerRegistryName": {
                   "value": "[variables('containerRegistryName')]"
+              }
+          }
+      }
+    },
+    {
+      "name": "sharedAksNetwork",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[equals(parameters('envType'),'dev')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+              "uri": "[concat(variables('localTemplatesUrl'), 'networks/aks-vnet.json')]",
+              "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+              "aksNodeResourceGroupName": {
+                  "value": "[parameters('aksNodeResourceGroupName')]"
+              },
+              "aksRouteTableName": {
+                  "value": "[parameters('aksRouteTableName')]"
+              },
+              "aksSubnetName": {
+                  "value": "[parameters('aksSubnetName')]"
+              },
+              "virtualNetworkAddressPrefix": {
+                  "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
+              },
+              "vnetName": {
+                  "value": "[parameters('aksVnetName')]"
               }
           }
       }

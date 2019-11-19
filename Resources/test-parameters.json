@@ -11,6 +11,21 @@
     "deployApim": {
       "value": false
     },
+    "aksNodeResourceGroupName": {
+      "value": "dfc-foo-stax-shared-aksnodes-rg"
+    },
+    "aksRouteTableName": {
+      "value": "aks-agentpool-12345678-routetable"
+    },
+    "aksSubnetName": {
+      "value": "dfc-aks-01"
+    },
+    "aksVirtualNetworkAddressPrefix": {
+      "value": "10.0"
+    },
+    "aksVnetName": {
+      "value": "dfc-foo-shared-aks-vnet"
+    },
     "apimHostnameRoot": {
       "value": "api.notarealservice.org.uk"
     },

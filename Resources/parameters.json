@@ -11,6 +11,21 @@
     "deployApim": {
       "value": true
     },
+    "aksNodeResourceGroupName": {
+      "value": "__AksNodeResourceGroupName__"
+    },
+    "aksRouteTableName": {
+      "value": "__AksRouteTableName__"
+    },
+    "aksSubnetName": {
+      "value": "__AksSubnetName__"
+    },
+    "aksVirtualNetworkAddressPrefix": {
+      "value": "__AksVirtualNetworkAddressPrefix__"
+    },
+    "aksVnetName": {
+      "value": "__AksVnetName__"
+    },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
     },
