@@ -20,9 +20,9 @@ jobs:
     SetTagsScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
     SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
     New-ApplicationRegistrationScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/New-ApplicationRegistration.ps1
-    New-ApplicationRegistrationScriptFilePath: $(System.DefaultWorkingDirectory)\_SkillsFundingAgency_dfc-devops\PSScripts\New-ApplicationRegistration.ps1
+    New-ApplicationRegistrationScriptFilePath: $(System.DefaultWorkingDirectory)\New-ApplicationRegistration.ps1
     Add-AzureAdApiPermissionsToAppScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Add-AzureAdApiPermissionsToApp.ps1
-    Add-AzureAdApiPermissionsToAppScriptFilePath: $(System.DefaultWorkingDirectory)\_SkillsFundingAgency_dfc-devops\PSScripts\Add-AzureAdApiPermissionsToApp.ps1
+    Add-AzureAdApiPermissionsToAppScriptFilePath: $(System.DefaultWorkingDirectory)\Add-AzureAdApiPermissionsToApp.ps1
   environment: ${{ parameters.Environment }}
   strategy:
     runOnce:

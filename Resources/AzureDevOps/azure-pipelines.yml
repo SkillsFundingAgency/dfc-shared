@@ -57,7 +57,7 @@ stages:
       AksAdClientApplicationName: ${{ variables.AksAdClientApplicationName }}
       AksAdServerApplicationName: ${{ variables.AksAdServerApplicationName }}
       AksServicePrincipalName: ${{ variables.AksServicePrincipalName }}
-      DfcDevOpsScriptRoot: '_SkillsFundingAgency_dfc-devops/PSScripts'
+      DfcDevOpsScriptRoot: ''
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
