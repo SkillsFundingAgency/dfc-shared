@@ -28,7 +28,7 @@ stages:
       displayName: 'Tokenization: Transform file parameters.json'
       inputs:
         SourcePath: '$(System.DefaultWorkingDirectory)\Resources'
-        TargetFileNames: parameters.json
+        TargetFileNames: test-parameters.json
     - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
       parameters:
         ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
