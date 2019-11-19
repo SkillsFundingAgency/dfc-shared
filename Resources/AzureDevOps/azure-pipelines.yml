@@ -54,9 +54,9 @@ stages:
   - template: JobTemplates\Deploy.yml
     parameters:
       AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
-      AksAdClientApplicationName: ${{ variables.AksAdClientApplicationName }}
-      AksAdServerApplicationName: ${{ variables.AksAdServerApplicationName }}
-      AksServicePrincipalName: ${{ variables.AksServicePrincipalName }}
+      AksAdClientApplicationName: $(AksAdClientApplicationName)
+      AksAdServerApplicationName: $(AksAdServerApplicationName)
+      AksServicePrincipalName: $(AksServicePrincipalName)
       DfcDevOpsScriptRoot: ''
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
@@ -64,4 +64,4 @@ stages:
       resourceGroup: ${{ variables.resourceGroup }}
       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
-      SharedKeyVaultName: ${{ variables.sharedKeyVaultName }}
+      SharedKeyVaultName: $(sharedKeyVaultName)
