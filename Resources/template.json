@@ -222,7 +222,10 @@
   },
   "variables": {
     "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
-    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
+    "metadata": {
+      "comment": "Revert localTemplatesUrl path back to master when merging"
+    },
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/NCSD-2066-DeployAKS/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
