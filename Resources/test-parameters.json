@@ -21,28 +21,28 @@
       "value": "dfc-foo-stax-shared-aksnodes-rg"
     },
     "aksRbacClientAppId": {
-      "value": "00000000-0000-0000-0000-000000000000"
+      "value": "__AksRbacClientAppId__"
     },
     "aksRbacServerAppId": {
-      "value": "00000000-0000-0000-0000-000000000000"
+      "value": "__AksRbacServerAppId__"
     },
     "aksRbacServerAppSecret": {
-      "value": "not-a-real-secret"
+      "value": "__AksRbacServerAppSecret__"
     },
     "aksRbacTenantId": {
-      "value": "00000000-0000-0000-0000-000000000000"
+      "value": "__AksRbacTenantId__"
     },
     "aksRouteTableName": {
       "value": "aks-agentpool-12345678-routetable"
     },
     "aksServiceCidr": {
-      "value": ""
+      "value": "__AksServiceCidr__"
     },
     "aksServicePrincipalClientId": {
-      "value": "00000000-0000-0000-0000-000000000000"
+      "value": "__AksServicePrincipalClientId__"
     },
     "aksServicePrincipalSecret": {
-      "value": "not-a-real-secret"
+      "value": "__AksServicePrincipalSecret__"
     },
     "aksSubnetName": {
       "value": "dfc-aks-01"

@@ -19,8 +19,16 @@ stages:
   - job: TestAndPublish
     pool:
       name: 'NCS - CI and CD'
+    variables:
+      - group: 'KeyVault - dfc-dev-shared-kv'
+      - group: dfc-shared-infrastructure-dev
     steps:
     # ARM template
+    - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+      displayName: 'Tokenization: Transform file parameters.json'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)\Resources'
+        TargetFileNames: parameters.json
     - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
       parameters:
         ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
