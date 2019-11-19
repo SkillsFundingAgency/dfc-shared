@@ -70,7 +70,7 @@ jobs:
           displayName: 'Azure PowerShell script: New-AksServicePrincipals.ps1'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
-            ScriptPath: '$(System.DefaultWorkingDirectory)/_dfc-shared/Dfc.Shared/PSScripts/New-AksServicePrincipals.ps1'
+            ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared/PSScripts/New-AksServicePrincipals.ps1'
             ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
         - task: AzureResourceGroupDeployment@2
