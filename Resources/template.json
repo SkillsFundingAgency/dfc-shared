@@ -526,7 +526,7 @@
       "dependsOn": [
         "sharedApimServiceBasic",
         "sharedKeyVault",
-        "keyvaultReadAccessCopy"
+        "defaultKeyVaultWriteAccessCopy"
       ]
     },
     {
