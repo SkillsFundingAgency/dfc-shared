@@ -8,11 +8,38 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "aksDnsServiceIp": {
+      "type": "string"
+    },
+    "aksKubernetesVersion": {
+      "type": "string"
+    },
     "aksNodeResourceGroupName": {
+      "type": "string"
+    },
+    "aksRbacClientAppId": {
+      "type": "string"
+    },
+    "aksRbacServerAppId": {
+      "type": "string"
+    },
+    "aksRbacServerAppSecret": {
+      "type": "securestring"
+    },
+    "aksRbacTenantId": {
       "type": "string"
     },
     "aksRouteTableName": {
       "type": "string"
+    },
+    "aksServiceCidr": {
+      "type": "string"
+    },
+    "aksServicePrincipalClientId": {
+      "type": "string"
+    },
+    "aksServicePrincipalSecret": {
+      "type": "securestring"
     },
     "aksSubnetName": {
       "type": "string"
@@ -22,6 +49,13 @@
     },
     "aksVnetName": {
       "type": "string"
+    },
+    "aksVnetResourceGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Only required if the VNet will be externally created (ie PP or PROD).  The resource group that holds the VNet that AKS will be connected to."
+      }
     },
     "apimExists": {
       "type": "bool",
@@ -114,11 +148,13 @@
     },
     "defaultKeyVaultReadAccess": {
       "type": "array",
-      "defaultValue": []
+      "defaultValue": [
+      ]
     },
     "defaultKeyVaultWriteAccess": {
       "type": "array",
-      "defaultValue": [],
+      "defaultValue": [
+      ],
       "metadata": {
         "description": "A list of azure service pricipals to assign write access to certificates on the shared key vault"
       }
@@ -238,7 +274,9 @@
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
     "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
     "defaultWriteAccessHack": "[if(empty(parameters('defaultKeyVaultWriteAccess')), 1, length(parameters('defaultKeyVaultWriteAccess')))]",
-    "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]"
+    "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]",
+    "aksClusterName": "[concat(parameters('sharedPrefix'), '-aks')]",
+    "aksNodeResourceGroupName": "[concat(variables('aksClusterName'), 'nodes-rg')]"
   },
   "resources": [
     {
@@ -247,47 +285,106 @@
       "condition": "[or(equals(parameters('environmentName'), 'DEV'), equals(parameters('environmentName'), 'PRD'))]",
       "apiVersion": "2017-05-10",
       "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-              "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'container-registry.json')]",
-              "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-              "containerRegistryName": {
-                  "value": "[variables('containerRegistryName')]"
-              }
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'container-registry.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "containerRegistryName": {
+            "value": "[variables('containerRegistryName')]"
           }
+        }
       }
     },
     {
-      "name": "sharedAksNetwork",
+      "name": "sharedAzureKubernetesServiceNetwork",
       "type": "Microsoft.Resources/deployments",
       "condition": "[equals(parameters('envType'),'dev')]",
       "apiVersion": "2017-05-10",
       "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-              "uri": "[concat(variables('localTemplatesUrl'), 'networks/aks-vnet.json')]",
-              "contentVersion": "1.0.0.0"
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'networks/aks-vnet.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "aksNodeResourceGroupName": {
+            "value": "[parameters('aksNodeResourceGroupName')]"
           },
-          "parameters": {
-              "aksNodeResourceGroupName": {
-                  "value": "[parameters('aksNodeResourceGroupName')]"
-              },
-              "aksRouteTableName": {
-                  "value": "[parameters('aksRouteTableName')]"
-              },
-              "aksSubnetName": {
-                  "value": "[parameters('aksSubnetName')]"
-              },
-              "virtualNetworkAddressPrefix": {
-                  "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
-              },
-              "vnetName": {
-                  "value": "[parameters('aksVnetName')]"
-              }
+          "aksRouteTableName": {
+            "value": "[parameters('aksRouteTableName')]"
+          },
+          "aksSubnetName": {
+            "value": "[parameters('aksSubnetName')]"
+          },
+          "virtualNetworkAddressPrefix": {
+            "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
+          },
+          "vnetName": {
+            "value": "[parameters('aksVnetName')]"
           }
+        }
       }
+    },
+    {
+      "name": "sharedAzureKubernetesService",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'aks.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "clusterName": {
+            "value": "[variables('aksClusterName')]"
+          },
+          "dnsServiceIp": {
+            "value": "[parameters('aksDnsServiceIp')]"
+          },
+          "kubernetesVersion": {
+            "value": "[parameters('aksKubernetesVersion')]"
+          },
+          "nodeResourceGroup": {
+            "value": "[variables('aksNodeResourceGroupName')]"
+          },
+          "rbacClientAppId": {
+            "value": "[parameters('aksRbacClientAppId')]"
+          },
+          "rbacServerAppId": {
+            "value": "[parameters('aksRbacServerAppId')]"
+          },
+          "rbacServerAppSecret": {
+            "value": "[parameters('aksRbacServerAppSecret')]"
+          },
+          "rbacTenantId": {
+            "value": "[parameters('aksRbacTenantId')]"
+          },
+          "serviceCidr": {
+            "value": "[parameters('aksServiceCidr')]"
+          },
+          "servicePrincipalClientId": {
+            "value": "[parameters('aksServicePrincipalClientId')]"
+          },
+          "servicePrincipalSecret": {
+            "value": "[parameters('aksServicePrincipalSecret')]"
+          },
+          "subnetName": {
+            "value": "[parameters('aksSubnetName')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('aksVnetName')]"
+          },
+          "virtualNetworkResourceGroup": {
+            "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
+          }
+        }
+      },
+      "dependsOn": [
+        "sharedAzureKubernetesServiceNetwork"
+      ]
     },
     {
       "name": "sharedManagedInstanceEnvironment",
@@ -372,7 +469,7 @@
       ],
       "metadata": {
         "description": "The count parameter in the copy block is populated with either the length of the defaultKeyVaultReadAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
-      },      
+      },
       "copy": {
         "name": "keyvaultReadAccessCopy",
         "count": "[variables('defaultKeyVaultReadAccessHack')]",
@@ -417,7 +514,7 @@
       ],
       "metadata": {
         "description": "The count parameter in copy block is populated with either the length of the certificateWriteAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
-      },      
+      },
       "copy": {
         "name": "defaultKeyVaultWriteAccessCopy",
         "count": "[variables('defaultWriteAccessHack')]",
@@ -545,13 +642,13 @@
             "value": "[parameters('apimNetworkSecurityGroup')]"
           },
           "aseSubnetName": {
-              "value": "[parameters('aseSubnetName')]"
+            "value": "[parameters('aseSubnetName')]"
           },
           "aseVnetName": {
-              "value": "[parameters('aseVnetName')]"
+            "value": "[parameters('aseVnetName')]"
           },
           "aseVNetResourceGroupName": {
-              "value": "[parameters('aseVNetResourceGroupName')]"
+            "value": "[parameters('aseVNetResourceGroupName')]"
           }
         }
       }
@@ -651,13 +748,13 @@
             "value": "[parameters('aseNetworkSecurityGroup')]"
           },
           "aseSubnetName": {
-              "value": "[parameters('aseSubnetName')]"
+            "value": "[parameters('aseSubnetName')]"
           },
           "aseVnetName": {
-              "value": "[parameters('aseVnetName')]"
+            "value": "[parameters('aseVnetName')]"
           },
           "aseVNetResourceGroupName": {
-              "value": "[parameters('aseVNetResourceGroupName')]"
+            "value": "[parameters('aseVNetResourceGroupName')]"
           }
         }
       }

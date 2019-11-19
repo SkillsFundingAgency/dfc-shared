@@ -47,6 +47,7 @@ stages:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
   - template: VariableTemplates\ReleaseVariables.yml
+  - group: 'KeyVault - dfc-dev-shared-kv'
   - group: dfc-shared-dev
   - group: dfc-shared-infrastructure-dev
   - group: dfc-cds-dev

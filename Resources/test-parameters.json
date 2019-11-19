@@ -11,11 +11,38 @@
     "deployApim": {
       "value": false
     },
+    "aksDnsServiceIp": {
+      "value": "10.2.5.10"
+    },
+    "aksKubernetesVersion": {
+      "value": "1.14.8"
+    },
     "aksNodeResourceGroupName": {
       "value": "dfc-foo-stax-shared-aksnodes-rg"
     },
+    "aksRbacClientAppId": {
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    "aksRbacServerAppId": {
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    "aksRbacServerAppSecret": {
+      "value": "not-a-real-secret"
+    },
+    "aksRbacTenantId": {
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
     "aksRouteTableName": {
       "value": "aks-agentpool-12345678-routetable"
+    },
+    "aksServiceCidr": {
+      "value": ""
+    },
+    "aksServicePrincipalClientId": {
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    "aksServicePrincipalSecret": {
+      "value": "not-a-real-secret"
     },
     "aksSubnetName": {
       "value": "dfc-aks-01"
