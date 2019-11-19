@@ -44,6 +44,8 @@ stages:
 
 - stage: DeployToDev
   variables:
+  - name: dfcSharedPrefix
+    value: dfc-dev-shared
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
   - template: VariableTemplates\ReleaseVariables.yml
