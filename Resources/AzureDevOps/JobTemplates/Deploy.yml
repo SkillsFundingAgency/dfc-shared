@@ -13,7 +13,7 @@ parameters:
   SharedKeyVaultName: ''
   
 jobs:
-- deployment: DeployToDev
+- deployment: DeployTo${{ parameters.Environment }}
   pool:
     name: 'NCS - CI and CD'
   variables:
@@ -47,7 +47,7 @@ jobs:
             targetType: 'inline'
             script: Invoke-WebRequest -Uri $(SetTagsScriptUrl) -OutFile $(SetTagsScriptFilePath)
         - task: AzurePowerShell@3
-          displayName: 'Resource group tagging'
+          displayName: 'Tagging Resource Group ${{ parameters.resourceGroup }}'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             scriptType: filePath
@@ -74,7 +74,7 @@ jobs:
             ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
         - task: AzureResourceGroupDeployment@2
-          displayName: 'Azure Deployment: Shared infrastructure'
+          displayName: 'Azure Deployment: Shared infrastructure to ${{ parameters.resourceGroup }}'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             resourceGroupName: '${{ parameters.resourceGroup }}'
