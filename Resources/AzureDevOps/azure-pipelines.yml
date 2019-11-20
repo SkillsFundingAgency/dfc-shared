@@ -54,12 +54,12 @@ stages:
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
-  - template: VariableTemplates\ReleaseVariables.yml
+  - template: VariableTemplates\SharedEnvironmentVariables.yml
   - group: 'KeyVault - dfc-dev-shared-kv'
   - group: dfc-shared-dev
   - group: dfc-shared-infrastructure-dev
   - group: dfc-cds-dev
-  - template: VariableTemplates\DevVariables.yml
+  - template: VariableTemplates\DevEnvironmentVariables.yml
   jobs:
   - template: JobTemplates\Deploy.yml
     parameters:
