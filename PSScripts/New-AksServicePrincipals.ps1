@@ -19,6 +19,9 @@ The permissions granted will be Directory.Read.All and User.Read.  The name shou
 .PARAMETER DfcDevOpsScriptRoot
 The path to the PSScripts folder in the local copy of the dfc-devops repo, eg $(System.DefaultWorkingDirectory)/_SkillsFundingAgency_dfc-devops/PSScripts in an Azure DevOps task
 
+.PARAMETER SharedKeyVaultName
+The name of the KeyVault where the App Registration secrets will be stored.  Must be in the same tenant.
+
 .NOTES
 These documents are generally for Azure CLI rather than PowerShell but are a useful reference point
 AksServicePrincipalName: https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal
@@ -55,7 +58,7 @@ else {
 
 }
 
-# Create Service Principl with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
+# Create Service Principal with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
 $AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -DelegatedPermissions "Directory.Read.All",  "User.Read" -Verbose
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -Verbose
