@@ -10,7 +10,7 @@ resources:
     type: github
     name: SkillsFundingAgency/dfc-devops
     endpoint: 'GitHub (ESFA)'
-    ref: refs/heads/NCSD-2194-AddSharedResources
+    ref: refs/heads/NCSD-2203-AddArmDeployTemplate
 
 pr:
   branches:
