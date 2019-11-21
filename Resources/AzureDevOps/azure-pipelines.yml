@@ -6,6 +6,11 @@ resources:
     name: SkillsFundingAgency/dfc-devops
     endpoint: 'GitHub (ESFA)'
     ref: refs/tags/v1.2.1
+  - repository: dfc-devops-test
+    type: github
+    name: SkillsFundingAgency/dfc-devops
+    endpoint: 'GitHub (ESFA)'
+    ref: refs/heads/NCSD-2194-AddSharedResources
 
 pr:
   branches:

@@ -35,25 +35,6 @@ jobs:
             ScriptPath:  '$(Pipeline.Workspace)/Dfc.Shared/PSScripts/Set-ArmParameters.ps1'
             ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
             azurePowerShellVersion: LatestVersion
-        - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-          displayName: 'Tokenization: Transform file parameters.json'
-          inputs:
-            SourcePath: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates'
-            TargetFileNames: parameters.json
-        - task: PowerShell@2
-          name: DownloadSetEsfaResourceGroupTagsScript
-          displayName: 'Download Set-EsfaResourceGroupTags script'
-          inputs:
-            targetType: 'inline'
-            script: Invoke-WebRequest -Uri $(SetTagsScriptUrl) -OutFile $(SetTagsScriptFilePath)
-        - task: AzurePowerShell@3
-          displayName: 'Tagging Resource Group ${{ parameters.resourceGroup }}'
-          inputs:
-            azureSubscription: ${{ parameters.AzureSubscription }}
-            scriptType: filePath
-            ScriptPath: $(SetTagsScriptFilePath)
-            ScriptArguments: '-ResourceGroupName ${{ parameters.resourceGroup }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
-            azurePowerShellVersion: LatestVersion
         - task: PowerShell@2
           name: DownloadNewApplicationRegistrationScript
           displayName: 'Download New-ApplicationRegistration script'
@@ -73,12 +54,11 @@ jobs:
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared/PSScripts/New-AksServicePrincipals.ps1'
             ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
-        - task: AzureResourceGroupDeployment@2
-          displayName: 'Azure Deployment: Shared infrastructure to ${{ parameters.resourceGroup }}'
-          inputs:
-            azureSubscription: ${{ parameters.AzureSubscription }}
-            resourceGroupName: '${{ parameters.resourceGroup }}'
-            location: 'West Europe'
-            csmFile: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates/template.json'
-            csmParametersFile: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates/parameters.json'
-            deploymentOutputs: ARMOutputs
+        - template: dfc-arm-deploy.yml@dfc-devops-test
+          parameters:
+            ArmTemplateRoot: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates'
+            AzureSubscription: ${{ parameters.AzureSubscription }}
+            EnvironmentTag: ${{ parameters.EnvironmentTag }}
+            ParentBusinessTag: ${{ parameters.ParentBusinessTag }}
+            ResourceGroup: ${{ parameters.resourceGroup }}
+            ServiceOfferingTag: ${{ parameters.ServiceOfferingTag }}
