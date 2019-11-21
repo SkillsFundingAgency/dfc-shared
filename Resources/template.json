@@ -320,8 +320,7 @@
         }
       },
       "dependsOn": [
-        "sharedKeyVault",
-        "sharedApimKeyVaultAccessPolicy"
+        "sharedKeyVault"
       ],
       "metadata": {
         "description": "The count parameter in the copy block is populated with either the length of the defaultKeyVaultReadAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
@@ -361,7 +360,7 @@
       },
       "dependsOn": [
         "sharedKeyVault",
-        "keyvaultReadAccessCopy"
+        "sharedApimKeyVaultAccessPolicy"
       ],
       "metadata": {
         "description": "The count parameter in copy block is populated with either the length of the certificateWriteAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
