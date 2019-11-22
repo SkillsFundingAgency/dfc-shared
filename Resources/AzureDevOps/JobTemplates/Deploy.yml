@@ -54,7 +54,7 @@ jobs:
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared/PSScripts/New-AksServicePrincipals.ps1'
             ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
-        - template: AzureDevOpsTemplates/Deploy/StepTemplates/dfc-arm-deploy.yml@dfc-devops-test
+        - template: AzureDevOpsTemplates/Deploy/StepTemplates/dfc-arm-deploy.yml@dfc-devops
           parameters:
             ArmTemplateRoot: '$(Pipeline.Workspace)/Dfc.Shared/ArmTemplates'
             AzureSubscription: ${{ parameters.AzureSubscription }}
