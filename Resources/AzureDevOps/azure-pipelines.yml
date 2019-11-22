@@ -33,7 +33,7 @@ stages:
       inputs:
         SourcePath: '$(System.DefaultWorkingDirectory)\Resources'
         TargetFileNames: test-parameters.json
-    - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
+    - template: AzureDevOpsTemplates/Build/StepTemplates/dfc-arm-build.yml@dfc-devops
       parameters:
         ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
         SolutionBaseName: $(SolutionBaseName)
