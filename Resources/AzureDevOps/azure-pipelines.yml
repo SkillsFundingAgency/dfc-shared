@@ -1,3 +1,7 @@
+variables:
+- name: SolutionBaseName
+  value: Dfc.Shared
+
 resources:
   repositories:
   - repository: self
@@ -5,7 +9,7 @@ resources:
     type: github
     name: SkillsFundingAgency/dfc-devops
     endpoint: 'GitHub (ESFA)'
-    ref: refs/tags/v1.7.1
+    ref: refs/heads/NCSD-2194-FixArmBuildForPipelines
 
 pr:
   branches:
@@ -32,18 +36,19 @@ stages:
     - template: AzureDevOpsTemplates/Build/dfc-arm-build.yml@dfc-devops
       parameters:
         ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
-        steps:
+        SolutionBaseName: $(SolutionBaseName)
+        PublishPipelineArtifact: true
     - task: CopyFiles@2
       displayName: 'Copy PSScripts Files to: $(Build.ArtifactStagingDirectory)'
       inputs:
         Contents: 'PSScripts/**/*.ps1'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/Resources/PSScripts'
     - task: PublishPipelineArtifact@0
       displayName: Publish Pipeline Artifact
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)
-        artifactName: Dfc.Shared
-    # Also publish build artifact for backwards compatibility
+        targetPath: $(Build.ArtifactStagingDirectory)/Resources/PSScripts
+        artifactName: Dfc.Shared.Resources.PSScripts
+    # Also publish build artifact for backwards compatibility with classic Release Definition
     - task: PublishBuildArtifacts@1
       displayName: Publish Build Artifact
       inputs:
