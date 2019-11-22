@@ -9,7 +9,7 @@ resources:
     type: github
     name: SkillsFundingAgency/dfc-devops
     endpoint: 'GitHub (ESFA)'
-    ref: refs/heads/NCSD-2194-FixArmBuildForPipelines
+    ref: refs/tags/v1.7.2
 
 pr:
   branches:
