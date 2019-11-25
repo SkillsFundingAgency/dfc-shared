@@ -11,6 +11,9 @@
     "deployApim": {
       "value": true
     },
+    "aksAgentVmSize": {
+      "value": "__AksAgentVmSize__"
+    },
     "aksDnsServiceIp": {
       "value": "__AksDnsServiceIp__"
     },

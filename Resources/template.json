@@ -8,6 +8,9 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
+    "aksAgentVmSize": {
+      "type": "string"
+    },
     "aksDnsServiceIp": {
       "type": "string"
     },
@@ -340,6 +343,9 @@
         "parameters": {
           "clusterName": {
             "value": "[variables('aksClusterName')]"
+          },
+          "agentVMSize": {
+            "value": "[parameters('aksAgentVmSize')]"
           },
           "dnsServiceIp": {
             "value": "[parameters('aksDnsServiceIp')]"

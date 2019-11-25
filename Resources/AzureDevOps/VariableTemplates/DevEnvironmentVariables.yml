@@ -9,6 +9,8 @@ variables:
   value: dev
 - name: sharedPrefix
   value: dfc-$(envAbbreviation)-shared
+- name: AksAgentVmSize
+  value: Standard_D4s_v3
 - name: AksNodeResourceGroupName
   value: $(sharedPrefix)-aksnodes-rg
 - name: AksSubnetName
