@@ -109,10 +109,21 @@
       }
     },
     "environmentName": {
-      "type": "string"
+      "type": "string",
+      "allowedValues": [
+        "dev",
+        "sit",
+        "oat",
+        "pp",
+        "prd"
+      ]
     },
     "envType": {
       "type": "string",
+      "allowedValues": [
+        "dev",
+        "prod"
+      ],
       "metadata": {
         "description": "Type of environment, either dev or prod"
       }
@@ -611,6 +622,7 @@
     },
     {
       "name": "appGatewayNetworkSecurityGroup",
+      "condition": "[not(equals(parameters('environmentName'), 'oat'))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "dependsOn": [
