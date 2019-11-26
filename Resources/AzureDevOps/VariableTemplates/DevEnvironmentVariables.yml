@@ -10,7 +10,7 @@ variables:
 - name: sharedPrefix
   value: dfc-$(envAbbreviation)-shared
 - name: AksAgentVmSize
-  value: Standard_DS12-2_v2
+  value: Standard_DS12_v2
 - name: AksNodeResourceGroupName
   value: $(sharedPrefix)-aksnodes-rg
 - name: AksSubnetName
