@@ -111,11 +111,12 @@
     "environmentName": {
       "type": "string",
       "allowedValues": [
-        "dev",
-        "sit",
-        "oat",
-        "pp",
-        "prd"
+        "DEV",
+        "SIT",
+        "LAB",
+        "OAT",
+        "PP",
+        "PRD"
       ]
     },
     "envType": {
