@@ -76,14 +76,13 @@ jobs:
             ScriptArguments: '-ApisToRemove @( "Echo API" ) -ApimResourceGroup "$(sharedPrefix)-rg" -ApimServiceName "$(sharedPrefix)-apim"'
             azurePowerShellVersion: LatestVersion
         - task: AzurePowerShell@4
-          condition: in(${{ parameters.Environment}}, 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED')
           displayName: 'Azure PowerShell script: Set-KeyVaultCertificateIssuer'
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-KeyVaultCertificateIssuer.ps1'
             ScriptArguments: '-AdministratorPhoneNumber "${{ parameters.CertificateIssuerAdministratorPhoneNumber }}" -CertificateIssuerPassword "${{ parameters.CertificateIssuerPassword }}" -KeyVaultName "${{ parameters.SharedKeyVaultName }}" -CertificateIssuerAccountId "${{ parameters.CertificateIssuerAccountId }}"'
             azurePowerShellVersion: LatestVersion
-          condition: succeededOrFailed()
+          condition: and(succeededOrFailed(), in(${{ parameters.Environment}}, 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
 
 
 
