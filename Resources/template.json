@@ -623,7 +623,7 @@
     },
     {
       "name": "appGatewayNetworkSecurityGroup",
-      "condition": "[not(equals(parameters('environmentName'), 'oat'))]",
+      "condition": "[not(equals(parameters('environmentName'), 'OAT'))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "dependsOn": [
