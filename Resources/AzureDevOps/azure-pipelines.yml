@@ -73,6 +73,9 @@ stages:
       AksAdClientApplicationName: $(AksAdClientApplicationName)
       AksAdServerApplicationName: $(AksAdServerApplicationName)
       AksServicePrincipalName: $(AksServicePrincipalName)
+      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+      CertificateIssuerPassword: $(CertificateIssuerPassword)
       DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
