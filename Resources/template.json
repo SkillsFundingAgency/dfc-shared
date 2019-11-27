@@ -365,7 +365,8 @@
           "certificatePermissions": {
             "value": [
               "create",
-              "update"
+              "update",
+              "setissuers"
             ]
           }
         }
