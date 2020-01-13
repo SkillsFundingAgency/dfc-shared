@@ -709,7 +709,7 @@
       "value": "[variables('storageAccountName')]"
     },
     "storageAccountKey": {
-      "type": "string",
+      "type": "securestring",
       "value": "[reference('sharedStorage').outputs.storageKey.Value]"
     },
     "sqlServerName": {
