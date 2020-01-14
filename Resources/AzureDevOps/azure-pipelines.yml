@@ -76,7 +76,7 @@ stages:
       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
       CertificateIssuerPassword: $(CertificateIssuerPassword)
-      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
+      DfcDevOpsScriptRoot: $(Agent.BuildDirectory)/dfc-devops/PSScripts
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
