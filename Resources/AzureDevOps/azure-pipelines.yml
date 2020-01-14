@@ -81,7 +81,8 @@ stages:
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
-      resourceGroup: ${{ variables.resourceGroup }}
+      ResourceGroup: ${{ variables.resourceGroup }}
       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
       SharedKeyVaultName: $(sharedKeyVaultName)
+      SharedPrefix: ${{ variables.sharedPrefix }}

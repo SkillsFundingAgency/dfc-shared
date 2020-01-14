@@ -3,6 +3,7 @@ parameters:
   AksAdClientApplicationName: ''
   AksAdServerApplicationName: ''
   AksServicePrincipalName: ''
+  ApimApisToRemove: '"Echo API"' #Comma seperated list of strings wrapped in double quotes
   CertificateIssuerAccountId: ''
   CertificateIssuerAdministratorPhoneNumber: ''
   CertificateIssuerPassword: ''
@@ -10,10 +11,11 @@ parameters:
   envAbbreviation: ''
   Environment: ''
   EnvironmentTag: ''
-  resourceGroup: ''
+  ResourceGroup: ''
   ParentBusinessTag: ''
   ServiceOfferingTag: ''
   SharedKeyVaultName: ''
+  SharedPrefix: ''
   
 jobs:
 - deployment: DeployTo_${{ parameters.Environment }}
@@ -63,26 +65,24 @@ jobs:
             AzureSubscription: ${{ parameters.AzureSubscription }}
             EnvironmentTag: ${{ parameters.EnvironmentTag }}
             ParentBusinessTag: ${{ parameters.ParentBusinessTag }}
-            ResourceGroup: ${{ parameters.resourceGroup }}
+            ResourceGroup: ${{ parameters.ResourceGroup }}
             ServiceOfferingTag: ${{ parameters.ServiceOfferingTag }}
         - task: AzurePowerShell@4
-          condition: false
           displayName: 'Remove Default APIs from APIM'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
-            ##TO DO: move this script to dfc-shared
+            ##TO DO: remove this script from dfc-devops when merging this change back to master
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Remove-ApisFromApiManagement.ps1'
-            ##TO DO: parameterise these params
-            ScriptArguments: '-ApisToRemove @( "Echo API" ) -ApimResourceGroup "$(sharedPrefix)-rg" -ApimServiceName "$(sharedPrefix)-apim"'
+            ScriptArguments: '-ApisToRemove @( ${{ parameters.ApimApisToRemove }} ) -ApimResourceGroup "${{ parameters.ResourceGroup }}" -ApimServiceName "${{ parameters.SharedPrefix }}-apim"'
             azurePowerShellVersion: LatestVersion
         - task: AzurePowerShell@4
+          condition: and(succeededOrFailed(), in('${{ parameters.Environment}}', 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
           displayName: 'Azure PowerShell script: Set-KeyVaultCertificateIssuer'
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-KeyVaultCertificateIssuer.ps1'
             ScriptArguments: '-AdministratorPhoneNumber "${{ parameters.CertificateIssuerAdministratorPhoneNumber }}" -CertificateIssuerPassword "${{ parameters.CertificateIssuerPassword }}" -KeyVaultName "${{ parameters.SharedKeyVaultName }}" -CertificateIssuerAccountId "${{ parameters.CertificateIssuerAccountId }}"'
             azurePowerShellVersion: LatestVersion
-          condition: and(succeededOrFailed(), in('${{ parameters.Environment}}', 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
 
 
 
