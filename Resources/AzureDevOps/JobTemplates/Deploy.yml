@@ -82,7 +82,7 @@ jobs:
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-KeyVaultCertificateIssuer.ps1'
             ScriptArguments: '-AdministratorPhoneNumber "${{ parameters.CertificateIssuerAdministratorPhoneNumber }}" -CertificateIssuerPassword "${{ parameters.CertificateIssuerPassword }}" -KeyVaultName "${{ parameters.SharedKeyVaultName }}" -CertificateIssuerAccountId "${{ parameters.CertificateIssuerAccountId }}"'
             azurePowerShellVersion: LatestVersion
-          condition: and(succeededOrFailed(), in(${{ parameters.Environment}}, 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
+          condition: and(succeededOrFailed(), in('${{ parameters.Environment}}', 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
 
 
 
