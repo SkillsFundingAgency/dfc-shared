@@ -16,7 +16,7 @@ parameters:
   SharedKeyVaultName: ''
   
 jobs:
-- deployment: DeployTo${{ parameters.Environment }}
+- deployment: DeployTo_${{ parameters.Environment }}
   pool:
     name: 'NCS - CI and CD'
   variables:

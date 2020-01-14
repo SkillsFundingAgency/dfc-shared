@@ -56,7 +56,8 @@ stages:
         pathtoPublish: $(Build.ArtifactStagingDirectory)
         artifactName: drop
 
-- stage: DeployToDev
+- stage: DeployTo_DEV
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
