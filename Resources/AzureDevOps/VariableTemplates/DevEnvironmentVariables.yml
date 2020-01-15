@@ -21,3 +21,5 @@ variables:
   value: 10.0
 - name: AksVnetName
   value: $(sharedPrefix)-aks-vnet
+- name: ReleaseEnvironmentName
+  value: DEV

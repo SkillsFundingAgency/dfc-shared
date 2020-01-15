@@ -21,8 +21,6 @@ variables:
   value: $(defaultApiKeyVaultCertificatePath)
 - name: proxyApiKeyVaultCertificatePath
   value: $(defaultApiKeyVaultCertificatePath)
-- name: ReleaseEnvironmentName
-  value: DEV
 - name: resourceGroup
   value: $(sharedPrefix)-rg
 - name: ServiceOfferingTag
