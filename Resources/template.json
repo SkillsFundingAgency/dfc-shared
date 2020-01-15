@@ -101,7 +101,7 @@
       "type": "array",
       "defaultValue": []
     },
-    "certificateKeyVaultWriteAccess": {
+    "defaultKeyVaultWriteAccess": {
       "type": "array",
       "defaultValue": [],
       "metadata": {
@@ -231,7 +231,7 @@
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
     "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
-    "certificateWriteAccessHack": "[if(empty(parameters('certificateKeyVaultWriteAccess')), 1, length(parameters('certificateKeyVaultWriteAccess')))]",
+    "defaultKeyVaultWriteAccessHack": "[if(empty(parameters('defaultKeyVaultWriteAccess')), 1, length(parameters('defaultKeyVaultWriteAccess')))]",
     "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]"
   },
   "resources": [
@@ -345,9 +345,9 @@
       }
     },
     {
-      "name": "[concat('sharedKeyVaultCertificateWriteAccessPolicy-', copyIndex())]",
+      "name": "[concat('sharedKeyVaultDefaultWriteAccessPolicy-', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[greater(length(parameters('certificateKeyVaultWriteAccess')), 0)]",
+      "condition": "[greater(length(parameters('defaultKeyVaultWriteAccess')), 0)]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -360,7 +360,12 @@
             "value": "[variables('keyVaultName')]"
           },
           "servicePrincipalObjectId": {
-            "value": "[parameters('certificateKeyVaultWriteAccess')[copyIndex()]]"
+            "value": "[parameters('defaultKeyVaultWriteAccess')[copyIndex()]]"
+          },
+          "secretPermissions": {
+            "value": [
+              "set"
+            ]
           },
           "certificatePermissions": {
             "value": [
@@ -379,8 +384,8 @@
         "description": "The count parameter in copy block is populated with either the length of the certificateWriteAccess parameter, or 1 if it's empty  and is to work around copyIndex erroring when it's 0, even if it's in a conditional block."
       },      
       "copy": {
-        "name": "certificateKeyVaultWriteAccessCopy",
-        "count": "[variables('certificateWriteAccessHack')]",
+        "name": "defaultKeyVaultWriteAccessCopy",
+        "count": "[variables('defaultKeyVaultWriteAccessHack')]",
         "mode": "Serial",
         "batchSize": 1
       }
