@@ -98,7 +98,7 @@ stages:
   - group: dfc-shared-sit
   - group: dfc-shared-infrastructure-sit
   - group: dfc-cds-sit
-  - template: VariableTemplates\DevEnvironmentVariables.yml
+  - template: VariableTemplates\SitEnvironmentVariables.yml
   jobs:
   - template: JobTemplates\Deploy.yml
     parameters:
