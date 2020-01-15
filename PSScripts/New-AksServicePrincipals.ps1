@@ -67,4 +67,5 @@ $AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdClientApplicationName -ApiName $AksAdServerApplication.DisplayName -DelegatedPermissions "user_impersonation" -Verbose
 # Set the allowPublicClient property of the App Registration to true.  This step depends on the token for Microsoft Graph obtained during the execution of Add-AzureAdApiPermissionsToApp.ps1
 $AksAdClientApplication = Get-AzureRmADApplication -DisplayName $AksAdClientApplicationSpn.DisplayName
-Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true
+Write-Verbose "Setting allowPublicClient on $($AksAdClientApplicationSpn.DisplayName) [$($AksAdClientApplication.ObjectId)] to true"
+Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true -IdentifierUris @()
