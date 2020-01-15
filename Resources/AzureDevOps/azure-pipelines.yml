@@ -113,7 +113,7 @@ stages:
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'SIT_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
-      ResourceGroup: $(resourceGroup)
+      ResourceGroup: ${{ variables.resourceGroup }}
       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
       SharedKeyVaultName: $(sharedKeyVaultName)
