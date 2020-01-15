@@ -86,7 +86,7 @@ stages:
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
       SharedKeyVaultName: $(sharedKeyVaultName)
       SharedPrefix: ${{ variables.sharedPrefix }}
-      StorageAccountName: ${{ variables.StorageAccountName }}
+      StorageAccountName: $(sharedDfcStorageAccountName)
 
 - stage: DeployTo_SIT
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
@@ -118,4 +118,4 @@ stages:
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
       SharedKeyVaultName: $(sharedKeyVaultName)
       SharedPrefix: ${{ variables.sharedPrefix }}
-      StorageAccountName: ${{ variables.StorageAccountName }}
+      StorageAccountName: $(sharedDfcStorageAccountName)
