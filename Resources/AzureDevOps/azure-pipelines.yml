@@ -86,3 +86,4 @@ stages:
       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
       SharedKeyVaultName: $(sharedKeyVaultName)
       SharedPrefix: ${{ variables.sharedPrefix }}
+      StorageAccountName: ${{ variables.StorageAccountName }}

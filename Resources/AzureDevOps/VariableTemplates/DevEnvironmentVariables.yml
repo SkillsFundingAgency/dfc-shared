@@ -19,3 +19,5 @@ variables:
   value: 10.0
 - name: AksVnetName
   value: $(sharedPrefix)-aks-vnet
+- name: StorageAccountName
+  value: dfc$(envAbbreviation)sharedstr

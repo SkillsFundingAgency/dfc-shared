@@ -16,6 +16,7 @@ parameters:
   ServiceOfferingTag: ''
   SharedKeyVaultName: ''
   SharedPrefix: ''
+  StorageAccountName: ''
   
 jobs:
 - deployment: DeployTo_${{ parameters.Environment }}
@@ -28,6 +29,8 @@ jobs:
     New-ApplicationRegistrationScriptFilePath: $(System.DefaultWorkingDirectory)\New-ApplicationRegistration.ps1
     Add-AzureAdApiPermissionsToAppScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Add-AzureAdApiPermissionsToApp.ps1
     Add-AzureAdApiPermissionsToAppScriptFilePath: $(System.DefaultWorkingDirectory)\Add-AzureAdApiPermissionsToApp.ps1
+    New-TableOnStorageAccountScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/New-TableOnStorageAccount.ps1
+    New-TableOnStorageAccountScriptFilePath: $(System.DefaultWorkingDirectory)\New-TableOnStorageAccount.ps1
   environment: ${{ parameters.Environment }}
   strategy:
     runOnce:
@@ -40,6 +43,7 @@ jobs:
             ScriptPath:  '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-ArmParameters.ps1'
             ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
             azurePowerShellVersion: LatestVersion
+        # Download scripts and create AKS service principals
         - task: PowerShell@2
           name: DownloadNewApplicationRegistrationScript
           displayName: 'Download New-ApplicationRegistration script'
@@ -47,8 +51,8 @@ jobs:
             targetType: 'inline'
             script: Invoke-WebRequest -Uri $(New-ApplicationRegistrationScriptUrl) -OutFile $(New-ApplicationRegistrationScriptFilePath)
         - task: PowerShell@2
-          name: DownloadAddAzureAdApiPermissionsToAppSScript
-          displayName: 'Download Add-AzureAdApiPermissionsToAppS script'
+          name: DownloadAddAzureAdApiPermissionsToAppScript
+          displayName: 'Download Add-AzureAdApiPermissionsToApp script'
           inputs:
             targetType: 'inline'
             script: Invoke-WebRequest -Uri $(Add-AzureAdApiPermissionsToAppScriptUrl) -OutFile $(Add-AzureAdApiPermissionsToAppScriptFilePath)
@@ -59,6 +63,21 @@ jobs:
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/New-AksServicePrincipals.ps1'
             ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }}'
             azurePowerShellVersion: LatestVersion
+        # Download script and create shared configuration table
+        - task: PowerShell@2
+          name: DownloadNewTableOnStorageAccountScript
+          displayName: 'Download New-TableOnStorageAccount script'
+          inputs:
+            targetType: 'inline'
+            script: Invoke-WebRequest -Uri $(New-TableOnStorageAccountScriptUrl) -OutFile $(New-TableOnStorageAccountScriptFilePath)
+        - task: AzurePowerShell@4
+          displayName: 'Create shared configuration table'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath: $(New-TableOnStorageAccountScriptFilePath)
+            ScriptArguments: '-StorageAccountName ${{ parameters.StorageAccountName }} -ResourceGroupName ${{ parameters.ResourceGroup }} -TableName Configuration'
+            azurePowerShellVersion: LatestVersion
+        # Deploy ARM template
         - template: AzureDevOpsTemplates/Deploy/StepTemplates/dfc-arm-deploy.yml@dfc-devops
           parameters:
             ArmTemplateRoot: '$(Pipeline.Workspace)/Dfc.Shared.Resources.ArmTemplates'
@@ -67,6 +86,7 @@ jobs:
             ParentBusinessTag: ${{ parameters.ParentBusinessTag }}
             ResourceGroup: ${{ parameters.ResourceGroup }}
             ServiceOfferingTag: ${{ parameters.ServiceOfferingTag }}
+        # Remove unneeded APIM APIs
         - task: AzurePowerShell@4
           displayName: 'Remove Default APIs from APIM'
           inputs:
@@ -75,6 +95,7 @@ jobs:
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Remove-ApisFromApiManagement.ps1'
             ScriptArguments: '-ApisToRemove @( ${{ parameters.ApimApisToRemove }} ) -ApimResourceGroup "${{ parameters.ResourceGroup }}" -ApimServiceName "${{ parameters.SharedPrefix }}-apim"'
             azurePowerShellVersion: LatestVersion
+        # Set KeyVault certificate issuer (OAT, PP & PRD only)
         - task: AzurePowerShell@4
           condition: and(succeededOrFailed(), in('${{ parameters.Environment}}', 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
           displayName: 'Azure PowerShell script: Set-KeyVaultCertificateIssuer'
