@@ -87,3 +87,35 @@ stages:
       SharedKeyVaultName: $(sharedKeyVaultName)
       SharedPrefix: ${{ variables.sharedPrefix }}
       StorageAccountName: ${{ variables.StorageAccountName }}
+
+- stage: DeployTo_SIT
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  variables:
+  - group: dfc-shared-all
+  - group: dfc-shared-infrastructure-all
+  - template: VariableTemplates\SharedEnvironmentVariables.yml
+  - group: 'KeyVault - dfc-sit-shared-kv'
+  - group: dfc-shared-sit
+  - group: dfc-shared-infrastructure-sit
+  - group: dfc-cds-sit
+  - template: VariableTemplates\DevEnvironmentVariables.yml
+  jobs:
+  - template: JobTemplates\Deploy.yml
+    parameters:
+      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+      AksAdClientApplicationName: $(AksAdClientApplicationName)
+      AksAdServerApplicationName: $(AksAdServerApplicationName)
+      AksServicePrincipalName: $(AksServicePrincipalName)
+      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+      CertificateIssuerPassword: $(CertificateIssuerPassword)
+      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
+      envAbbreviation: ${{ variables.envAbbreviation }}
+      Environment: 'SIT_SHARED'
+      EnvironmentTag: ${{ variables.EnvironmentTag }}
+      ResourceGroup: ${{ variables.resourceGroup }}
+      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
+      SharedKeyVaultName: $(sharedKeyVaultName)
+      SharedPrefix: ${{ variables.sharedPrefix }}
+      StorageAccountName: ${{ variables.StorageAccountName }}
