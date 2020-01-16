@@ -91,7 +91,7 @@ Write-Verbose "Getting logs from $($LogFile.FullName)"
 $Logs = Get-Content -Path $LogFile
 if ($Logs -match "Registering service principal ...") {
 
-    Write-Verbose "Service Principal creation detected in logs, manual steps required"
+    Write-Verbose "Service Principal creation detected in logs, manual steps required, see dfc-shared README.md"
     throw "Service Principal permissions needs approving and variables may need to be created or updated in Azure DevOps, see dfc-shared README.md"
 
 }
