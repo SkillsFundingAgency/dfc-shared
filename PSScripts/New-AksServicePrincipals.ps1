@@ -42,7 +42,7 @@ param(
     [String]$SharedKeyVaultName
 )
 
-$LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name "$env:Environment__Name-Logfile.log" -Force
+$LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name "$Env:Environment_Name-Logfile.log" -Force
 Start-Transcript -Path $LogFile
 
 # Create Service Principal with Contributor on Subscription
