@@ -57,14 +57,14 @@ else {
     New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
 
 }
-Write-Verbose "Writing AksServicePrincipal id value [$($AksServicePrincipal.Id)] to variable AksServicePrincipalClientId"
-Write-Output "##vso[task.setvariable variable=AksServicePrincipalClientId]$($AksServicePrincipal.Id)"
+Write-Verbose "Writing AksServicePrincipal ApplicationId value [$($AksServicePrincipal.ApplicationId)] to variable AksServicePrincipalClientId"
+Write-Output "##vso[task.setvariable variable=AksServicePrincipalClientId]$($AksServicePrincipal.ApplicationId)"
 
 # Create Service Principal with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
 $AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -DelegatedPermissions "Directory.Read.All", "User.Read" -Verbose
-Write-Verbose "Writing AksAdServerApplication id value [$($AksAdServerApplication.Id)] to variable AksRbacServerAppId"
-Write-Output "##vso[task.setvariable variable=AksRbacServerAppId]$($AksAdServerApplication.Id)"
+Write-Verbose "Writing AksAdServerApplication ApplicationId value [$($AksAdServerApplication.ApplicationId)] to variable AksRbacServerAppId"
+Write-Output "##vso[task.setvariable variable=AksRbacServerAppId]$($AksAdServerApplication.ApplicationId)"
 
 # Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
 $AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -Verbose
@@ -73,5 +73,5 @@ $AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.
 $AksAdClientApplication = Get-AzureRmADApplication -DisplayName $AksAdClientApplicationSpn.DisplayName
 Write-Verbose "Setting allowPublicClient on $($AksAdClientApplicationSpn.DisplayName) [$($AksAdClientApplication.ObjectId)] to true"
 Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true -IdentifierUris @()
-Write-Verbose "Writing AksAdClientApplicationSpn id value [$($AksAdClientApplicationSpn.Id)] to variable AksRbacClientAppId"
-Write-Output "##vso[task.setvariable variable=AksRbacClientAppId]$($AksAdClientApplicationSpn.Id)"
+Write-Verbose "Writing AksAdClientApplicationSpn ApplicationId value [$($AksAdClientApplicationSpn.ApplicationId)] to variable AksRbacClientAppId"
+Write-Output "##vso[task.setvariable variable=AksRbacClientAppId]$($AksAdClientApplicationSpn.ApplicationId)"
