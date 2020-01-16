@@ -12,7 +12,7 @@
       "value": false
     },
     "aksAgentVmSize": {
-      "value": "Standard_DS2_v2"
+      "value": "Standard_DS1_v2"
     },
     "aksDnsServiceIp": {
       "value": "10.2.5.10"
