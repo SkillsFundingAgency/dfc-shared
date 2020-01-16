@@ -18,11 +18,10 @@ parameters:
   SharedPrefix: ''
   StorageAccountName: ''
 
-pool:
-  name: 'NCS - CI and CD'
-
 jobs:
 - deployment: DeployTo_${{ parameters.Environment }}
+  pool:
+    name: 'NCS - CI and CD'
   variables:
     SetTagsScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
     SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1

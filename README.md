@@ -31,3 +31,5 @@ To run the deployment without Managed SQL Instance set the paramter 'deployManag
 ## Testing
 
 If the template is run locally please ensure you clean up the resources created to avoid pipeline failures with name clashes. If you do not do this the template wil fail with inner errors such as "The account -storage account- is already in another resource group in this susbscription.\"
+
+Test-AzureRmResourceGroupDeployment is ran as part of the pipeline.  When running this against a template that includes Azure Kubernetes Service the tests will fail if some depedancies don't exist in the tenant that the test runs in.  These depedencies include service principals and their secrets and availabilty of VM vCPU cores.  To identify what is causing the test to fail run it locally with the debug switch.
