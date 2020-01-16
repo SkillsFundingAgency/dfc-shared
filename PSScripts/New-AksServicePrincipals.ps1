@@ -42,9 +42,11 @@ param(
     [String]$SharedKeyVaultName
 )
 
+$LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name Logfile.log
+
 # Create Service Principal with Contributor on Subscription
 $Context = Get-AzureRmContext
-$AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+$AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose | Tee-Object -FilePath $LogFile -Append
 $ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
 if ($ExistingAssignment) {
 
@@ -63,7 +65,7 @@ Write-Verbose "Writing AksServicePrincipal ApplicationId value [$($AksServicePri
 Write-Output "##vso[task.setvariable variable=AksServicePrincipalClientId]$($AksServicePrincipal.ApplicationId)"
 
 # Create Service Principal with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
-$AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+$AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose | Tee-Object -FilePath $LogFile -Append
 # Service Principal isn't immediately available to add API permissions to
 Start-Sleep -Seconds 15
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -DelegatedPermissions "Directory.Read.All", "User.Read" -Verbose
@@ -71,7 +73,7 @@ Write-Verbose "Writing AksAdServerApplication ApplicationId value [$($AksAdServe
 Write-Output "##vso[task.setvariable variable=AksRbacServerAppId]$($AksAdServerApplication.ApplicationId)"
 
 # Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
-$AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -Verbose
+$AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -Verbose | Tee-Object -FilePath $LogFile -Append
 # Service Principal isn't immediately available to add API permissions to
 Start-Sleep -Seconds 15
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdClientApplicationName -ApiName $AksAdServerApplication.DisplayName -DelegatedPermissions "user_impersonation" -Verbose
@@ -81,3 +83,17 @@ Write-Verbose "Setting allowPublicClient on $($AksAdClientApplicationSpn.Display
 Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true -IdentifierUris @()
 Write-Verbose "Writing AksAdClientApplicationSpn ApplicationId value [$($AksAdClientApplicationSpn.ApplicationId)] to variable AksRbacClientAppId"
 Write-Output "##vso[task.setvariable variable=AksRbacClientAppId]$($AksAdClientApplicationSpn.ApplicationId)"
+
+Write-Verbose "Getting logs from $($LogFile.FullName)"
+$Logs = Get-Content -Path $LogFile
+if ($Logs -match "Registering service principal ...") {
+
+    Write-Verbose "Service Principal creation detected in logs, manual steps required"
+    throw "Service Principal permissions needs approving and variables may need to be created or updated in Azure DevOps, see dfc-shared README.md"
+
+}
+else {
+
+    Write-Verbose "Service Principal creation not detected in logs"
+
+}
