@@ -9,7 +9,7 @@ resources:
     type: github
     name: SkillsFundingAgency/dfc-devops
     endpoint: 'GitHub (ESFA)'
-    ref: refs/tags/v1.7.2
+    ref: refs/tags/v1.10.1
 
 pr:
   branches:
@@ -28,16 +28,11 @@ stages:
       - group: dfc-shared-infrastructure-dev
     steps:
     # ARM template
-    - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-      displayName: 'Tokenization: Transform file parameters.json'
-      inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)\Resources'
-        TargetFileNames: test-parameters.json
     - template: AzureDevOpsTemplates/Build/StepTemplates/dfc-arm-build.yml@dfc-devops
       parameters:
         ArmTemplateRoot: '$(System.DefaultWorkingDirectory)\Resources'
         SolutionBaseName: $(SolutionBaseName)
-        PublishPipelineArtifact: true
+        TokenizeTestParameters: true
     - task: CopyFiles@2
       displayName: 'Copy PSScripts Files to: $(Build.ArtifactStagingDirectory)'
       inputs:
