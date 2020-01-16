@@ -54,6 +54,7 @@ if ($ExistingAssignment) {
 else {
 
     Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
+    Start-Sleep -Seconds 15
     New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
 
 }
