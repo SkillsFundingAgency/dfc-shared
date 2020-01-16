@@ -8,12 +8,12 @@ Each environment (DEV, LAB, SIT, PP and PRD) will have its own shared resources.
 Deployed using the comnbination of a template file and a parameters file.
 
 Two parameters files must be maintained:
-    * [parameters.json](Resources\parameters.json) is used in the Azure DevOps pipeline and has tokenized values managed within Azure DevOps.
-    * [test-parameters.json](Resources\template.json) for local and test deployment.
+    * [parameters.json](Resources/parameters.json) is used in the Azure DevOps pipeline and has tokenized values managed within Azure DevOps.
+    * [test-parameters.json](Resources/template.json) for local and test deployment.
 
 ## Deploying
 
-After completing the initial deployment the permissions on the AKS Service Principals will need approving.  The Service Principals are created and approved by the [New-AksServicePrincipals.ps1](PSScripts\New-AksServicePrincipals.ps1) script.  The script will parse the logs to detect the creation of any new Service Principals, if it does it will abort the deployment.  The manual steps below will need to be completed before rerunning the deployment.
+After completing the initial deployment the permissions on the AKS Service Principals will need approving.  The Service Principals are created and approved by the [New-AksServicePrincipals.ps1](PSScripts/New-AksServicePrincipals.ps1) script.  The script will parse the logs to detect the creation of any new Service Principals, if it does it will abort the deployment.  The manual steps below will need to be completed before rerunning the deployment.
 
 1. To approve the permissions added by the script:
 - Log on to the Azure Portal of the relevant tenent and elevant your permissions if necessary
