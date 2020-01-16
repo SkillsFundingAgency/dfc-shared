@@ -54,6 +54,7 @@ if ($ExistingAssignment) {
 else {
 
     Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
+    # Service Principal isn't immediately available to add role to
     Start-Sleep -Seconds 15
     New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
 
@@ -63,12 +64,16 @@ Write-Output "##vso[task.setvariable variable=AksServicePrincipalClientId]$($Aks
 
 # Create Service Principal with Delegated Permissions Directory.Read.All & User.Read and Application Permissions Directory.Read.All
 $AksAdServerApplication = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdServerApplicationName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
+# Service Principal isn't immediately available to add API permissions to
+Start-Sleep -Seconds 15
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdServerApplicationName -ApiName "Microsoft Graph" -ApplicationPermissions "Directory.Read.All" -DelegatedPermissions "Directory.Read.All", "User.Read" -Verbose
 Write-Verbose "Writing AksAdServerApplication ApplicationId value [$($AksAdServerApplication.ApplicationId)] to variable AksRbacServerAppId"
 Write-Output "##vso[task.setvariable variable=AksRbacServerAppId]$($AksAdServerApplication.ApplicationId)"
 
 # Create Service Principal with Delegated user_impersonation on $AksAdServerApplication
 $AksAdClientApplicationSpn = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksAdClientApplicationName -Verbose
+# Service Principal isn't immediately available to add API permissions to
+Start-Sleep -Seconds 15
 & $DfcDevOpsScriptRoot/Add-AzureAdApiPermissionsToApp.ps1 -AppRegistrationDisplayName $AksAdClientApplicationName -ApiName $AksAdServerApplication.DisplayName -DelegatedPermissions "user_impersonation" -Verbose
 # Set the allowPublicClient property of the App Registration to true.  This step depends on the token for Microsoft Graph obtained during the execution of Add-AzureAdApiPermissionsToApp.ps1
 $AksAdClientApplication = Get-AzureRmADApplication -DisplayName $AksAdClientApplicationSpn.DisplayName
