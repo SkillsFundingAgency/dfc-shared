@@ -42,7 +42,7 @@ param(
     [String]$SharedKeyVaultName
 )
 
-$LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name Logfile.log
+$LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name "$env:Release__EnvironmentName-Logfile.log" -Force
 
 # Create Service Principal with Contributor on Subscription
 $Context = Get-AzureRmContext
