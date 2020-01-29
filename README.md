@@ -24,9 +24,7 @@ After completing the initial deployment the permissions on the AKS Service Princ
 
 Rerun the failed deployment.
 
-To run the deployment without APIM, set the parameter 'deployApim' to false.
-
-To run the deployment without Managed SQL Instance set the paramter 'deployManageSql' to 'false'.
+To run the deployment without APIM, set the ARM template parameter 'deployApim' to false.
 
 ## Testing
 

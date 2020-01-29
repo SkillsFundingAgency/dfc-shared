@@ -115,3 +115,35 @@ stages:
       SharedKeyVaultName: $(sharedKeyVaultName)
       SharedPrefix: ${{ variables.sharedPrefix }}
       StorageAccountName: $(sharedDfcStorageAccountName)
+
+- stage: DeployTo_LAB
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  variables:
+  - group: dfc-shared-all
+  - group: dfc-shared-infrastructure-all
+  - template: VariableTemplates\SharedEnvironmentVariables.yml
+  - group: 'KeyVault - dfc-lab-shared-kv'
+  - group: dfc-shared-lab
+  - group: dfc-shared-infrastructure-lab
+  #- group: dfc-cds-lab # isn't currently required in LAB
+  - template: VariableTemplates\LabEnvironmentVariables.yml
+  jobs:
+  - template: JobTemplates\Deploy.yml
+    parameters:
+      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+      AksAdClientApplicationName: $(AksAdClientApplicationName)
+      AksAdServerApplicationName: $(AksAdServerApplicationName)
+      AksServicePrincipalName: $(AksServicePrincipalName)
+      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+      CertificateIssuerPassword: $(CertificateIssuerPassword)
+      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
+      envAbbreviation: ${{ variables.envAbbreviation }}
+      Environment: 'LAB_SHARED'
+      EnvironmentTag: ${{ variables.EnvironmentTag }}
+      ResourceGroup: ${{ variables.resourceGroup }}
+      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
+      SharedKeyVaultName: $(sharedKeyVaultName)
+      SharedPrefix: ${{ variables.sharedPrefix }}
+      StorageAccountName: $(sharedDfcStorageAccountName)
