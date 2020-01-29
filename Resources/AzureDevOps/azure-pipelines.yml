@@ -125,7 +125,7 @@ stages:
   - group: 'KeyVault - dfc-lab-shared-kv'
   - group: dfc-shared-lab
   - group: dfc-shared-infrastructure-lab
-  #- group: dfc-cds-lab # isn't currently required in LAB
+  - group: dfc-cds-dev # this mimics the configuration in the classic release definition
   - template: VariableTemplates\LabEnvironmentVariables.yml
   jobs:
   - template: JobTemplates\Deploy.yml
