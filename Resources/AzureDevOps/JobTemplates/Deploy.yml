@@ -43,7 +43,7 @@ jobs:
             ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
             azurePowerShellVersion: LatestVersion
         - checkout: dfc-devops
-          path: '$(Build.SourcesDirectory)\dfc-devops\'
+          path: 'dfc-devops\'
         - task: AzurePowerShell@3
           displayName: 'Create & tag AKS node Resource Group ${{ parameters.AksNodeResourceGroupName }}'
           inputs:
