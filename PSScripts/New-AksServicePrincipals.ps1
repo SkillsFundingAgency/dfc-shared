@@ -73,7 +73,7 @@ foreach ($ResourceGroup in $AksServicePrincipalManagedRgs) {
 }
 
 $AllAssignments = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id
-if ($AllAssignments.Count -gt 2) {
+if ($AllAssignments.Count -gt $AksServicePrincipalManagedRgs.Count) {
 
     Write-Warning "AksServicePrincipal has been assigned additional roles, please review"
 
