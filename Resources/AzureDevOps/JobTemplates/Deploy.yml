@@ -49,7 +49,7 @@ jobs:
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             scriptType: filePath
-            ScriptPath: '$(Build.SourcesDirectory)\dfc-devops\PSScripts\Set-EsfaResourceGroupTags.ps1'
+            ScriptPath: '$(Agent.BuildDirectory)\dfc-devops\PSScripts\Set-EsfaResourceGroupTags.ps1'
             ScriptArguments: '-ResourceGroupName ${{ parameters.AksNodeResourceGroupName }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
             azurePowerShellVersion: LatestVersion
         ##TODO: modify script to add perms to RGs rather than subscription
