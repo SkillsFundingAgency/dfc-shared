@@ -43,13 +43,13 @@ jobs:
             ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
             azurePowerShellVersion: LatestVersion
         - checkout: dfc-devops
-          path: 'dfc-devops\'
+          path: 's/dfc-devops/'
         - task: AzurePowerShell@3
           displayName: 'Create & tag AKS node Resource Group ${{ parameters.AksNodeResourceGroupName }}'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             scriptType: filePath
-            ScriptPath: '$(Agent.BuildDirectory)\dfc-devops\PSScripts\Set-EsfaResourceGroupTags.ps1'
+            ScriptPath: '$(Build.SourcesDirectory)/dfc-devops/PSScripts/Set-EsfaResourceGroupTags.ps1'
             ScriptArguments: '-ResourceGroupName ${{ parameters.AksNodeResourceGroupName }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
             azurePowerShellVersion: LatestVersion
         ##TODO: modify script to add perms to RGs rather than subscription
