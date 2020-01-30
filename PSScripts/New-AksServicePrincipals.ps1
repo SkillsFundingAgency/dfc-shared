@@ -16,6 +16,10 @@ The name of the AAD Application registration that will be granted permissions us
 The name of the AAD Application registration that will be granted permissions on the Microsoft Graph API to interact with AAD on behalf of the AKS cluster.
 The permissions granted will be Directory.Read.All and User.Read.  The name should be in the format dfc-<env>-shared-aks-api.
 
+.PARAMETER AksServicePrincipalManagedRgs
+An array of resource group names that the AksServicePrincipal will be assigned the Contributor role on.  
+The service principal requires this role on the resource group it's VNet is deployed into and the resource group it's nodes are created in.
+
 .PARAMETER DfcDevOpsScriptRoot
 The path to the PSScripts folder in the local copy of the dfc-devops repo, eg $(System.DefaultWorkingDirectory)/_SkillsFundingAgency_dfc-devops/PSScripts in an Azure DevOps task
 
@@ -39,27 +43,39 @@ param(
     [Parameter(Mandatory=$true)]
     [String]$DfcDevOpsScriptRoot,
     [Parameter(Mandatory=$true)]
+    [String[]]$AksServicePrincipalManagedRgs,
+    [Parameter(Mandatory=$true)]
     [String]$SharedKeyVaultName
 )
 
 $LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name "$Env:Environment_Name-Logfile.log" -Force
 Start-Transcript -Path $LogFile
 
-# Create Service Principal with Contributor on Subscription
-$Context = Get-AzureRmContext
+# Create Service Principal with Contributor on AKS managed resource groups
 $AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
-$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
-if ($ExistingAssignment) {
+foreach ($ResourceGroup in $AksServicePrincipalManagedRgs) {
 
-    Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName) on /subscriptions/$($Context.Subscription.Id)"
+    $ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -ResourceGroupName $ResourceGroup
+    if ($ExistingAssignment) {
+
+        Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName) on $ResourceGroup"
+    
+    }
+    else {
+    
+        Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
+        # Service Principal isn't immediately available to add role to
+        Start-Sleep -Seconds 15
+        New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -ResourceGroupName $ResourceGroup
+    
+    }
 
 }
-else {
 
-    Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id)"
-    # Service Principal isn't immediately available to add role to
-    Start-Sleep -Seconds 15
-    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
+$AllAssignments = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id
+if ($AllAssignments -gt 2) {
+
+    Write-Warning "AksServicePrincipal has been assigned additional roles, please review"
 
 }
 Write-Verbose "Writing AksServicePrincipal ApplicationId value [$($AksServicePrincipal.ApplicationId)] to variable AksServicePrincipalClientId"
