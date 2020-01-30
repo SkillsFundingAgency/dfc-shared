@@ -74,7 +74,6 @@ stages:
       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
       CertificateIssuerPassword: $(CertificateIssuerPassword)
-      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'DEV_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
@@ -107,7 +106,6 @@ stages:
       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
       CertificateIssuerPassword: $(CertificateIssuerPassword)
-      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'SIT_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}
@@ -140,7 +138,6 @@ stages:
       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
       CertificateIssuerPassword: $(CertificateIssuerPassword)
-      DfcDevOpsScriptRoot: '$(System.DefaultWorkingDirectory)'
       envAbbreviation: ${{ variables.envAbbreviation }}
       Environment: 'LAB_SHARED'
       EnvironmentTag: ${{ variables.EnvironmentTag }}

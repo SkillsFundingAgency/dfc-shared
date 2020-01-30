@@ -8,7 +8,6 @@ parameters:
   CertificateIssuerAccountId: ''
   CertificateIssuerAdministratorPhoneNumber: ''
   CertificateIssuerPassword: ''
-  DfcDevOpsScriptRoot: ''
   envAbbreviation: ''
   Environment: ''
   EnvironmentTag: ''
@@ -21,15 +20,6 @@ parameters:
 
 jobs:
 - deployment: DeployTo_${{ parameters.Environment }}
-  variables:
-    SetTagsScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Set-EsfaResourceGroupTags.ps1
-    SetTagsScriptFilePath: $(System.DefaultWorkingDirectory)\Set-EsfaResourceGroupTags.ps1
-    New-ApplicationRegistrationScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/New-ApplicationRegistration.ps1
-    New-ApplicationRegistrationScriptFilePath: $(System.DefaultWorkingDirectory)\New-ApplicationRegistration.ps1
-    Add-AzureAdApiPermissionsToAppScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/Add-AzureAdApiPermissionsToApp.ps1
-    Add-AzureAdApiPermissionsToAppScriptFilePath: $(System.DefaultWorkingDirectory)\Add-AzureAdApiPermissionsToApp.ps1
-    New-TableOnStorageAccountScriptUrl: https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/PSScripts/New-TableOnStorageAccount.ps1
-    New-TableOnStorageAccountScriptFilePath: $(System.DefaultWorkingDirectory)\New-TableOnStorageAccount.ps1
   environment: ${{ parameters.Environment }}
   strategy:
     runOnce:
@@ -53,38 +43,20 @@ jobs:
             ScriptArguments: '-ResourceGroupName ${{ parameters.AksNodeResourceGroupName }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
             azurePowerShellVersion: LatestVersion
         ##TODO: modify script to add perms to RGs rather than subscription
-        # Download scripts and create AKS service principals
-        - task: PowerShell@2
-          name: DownloadNewApplicationRegistrationScript
-          displayName: 'Download New-ApplicationRegistration script'
-          inputs:
-            targetType: 'inline'
-            script: Invoke-WebRequest -Uri $(New-ApplicationRegistrationScriptUrl) -OutFile $(New-ApplicationRegistrationScriptFilePath)
-        - task: PowerShell@2
-          name: DownloadAddAzureAdApiPermissionsToAppScript
-          displayName: 'Download Add-AzureAdApiPermissionsToApp script'
-          inputs:
-            targetType: 'inline'
-            script: Invoke-WebRequest -Uri $(Add-AzureAdApiPermissionsToAppScriptUrl) -OutFile $(Add-AzureAdApiPermissionsToAppScriptFilePath)
+        # Create AKS service principals
         - task: AzurePowerShell@3
           displayName: 'Azure PowerShell script: New-AksServicePrincipals.ps1'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/New-AksServicePrincipals.ps1'
-            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksServicePrincipalManagedRgs "${{ parameters.ResourceGroup }}", "${{ parameters.AksNodeResourceGroupName }}" -DfcDevOpsScriptRoot ${{ parameters.DfcDevOpsScriptRoot }} -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
+            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksServicePrincipalManagedRgs "${{ parameters.ResourceGroup }}", "${{ parameters.AksNodeResourceGroupName }}" -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
             azurePowerShellVersion: LatestVersion
-        # Download script and create shared configuration table
-        - task: PowerShell@2
-          name: DownloadNewTableOnStorageAccountScript
-          displayName: 'Download New-TableOnStorageAccount script'
-          inputs:
-            targetType: 'inline'
-            script: Invoke-WebRequest -Uri $(New-TableOnStorageAccountScriptUrl) -OutFile $(New-TableOnStorageAccountScriptFilePath)
+        # Create shared configuration table
         - task: AzurePowerShell@4
           displayName: 'Create shared configuration table'
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
-            ScriptPath: $(New-TableOnStorageAccountScriptFilePath)
+            ScriptPath: $(Build.SourcesDirectory)/dfc-devops/PSScripts/New-TableOnStorageAccount.ps1
             ScriptArguments: '-StorageAccountName ${{ parameters.StorageAccountName }} -ResourceGroupName ${{ parameters.ResourceGroup }} -TableName Configuration'
             azurePowerShellVersion: LatestVersion
         # Deploy ARM template
