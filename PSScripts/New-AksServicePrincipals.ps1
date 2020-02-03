@@ -94,7 +94,7 @@ else {
     Write-Verbose "Assigning 'Resource Group Contributor' to $($AksServicePrincipal.Id) on /subscriptions/$($Context.Subscription.Id)"
     # Service Principal isn't immediately available to add role to
     Start-Sleep -Seconds 15
-    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -Scope "/subscriptions/$($Context.Subscription.Id)"
+    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName "Resource Group Contributor" -Scope "/subscriptions/$($Context.Subscription.Id)"
 
 }
 
