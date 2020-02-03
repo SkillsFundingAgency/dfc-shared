@@ -100,7 +100,7 @@ else {
 
 $AllAssignments = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id
 # Validates that the AksServicePrincipal has only been assigned 2 roles (One for dfc-<env>-shared-rg, the other for dfc-<env>-shared-aksnodes-rg).
-if ($AllAssignments.Count -gt 2) {
+if ($AllAssignments.Count -gt 3) {
 
     Write-Warning "AksServicePrincipal has been assigned additional roles, please review"
 
