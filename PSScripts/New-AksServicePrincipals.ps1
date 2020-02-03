@@ -51,11 +51,12 @@ param(
 $LogFile = New-Item -Path $DfcDevOpsScriptRoot -Name "$Env:Environment_Name-Logfile.log" -Force
 Start-Transcript -Path $LogFile
 
+$Context = Get-AzureRmContext
+
 # Create role definition to allow creation of new Resource Groups by service principal
 if (!(Get-AzureRmRoleDefinition -Name "Resource Group Contributor")) {
 
     Write-Verbose "Creating Resource Group Contributor role"
-    $Context = Get-AzureRmContext
     $Role = Get-AzureRmRoleDefinition -Name Reader
     $Role.Name = "Resource Group Contributor"
     $Role.Description = "Lets you create new resource groups but not add to, delete or modify them"
