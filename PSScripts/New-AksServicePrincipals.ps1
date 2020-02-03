@@ -69,7 +69,7 @@ if (!(Get-AzureRmRoleDefinition -Name "Resource Group Contributor")) {
 
 # Create Service Principal with Contributor on AKS resource group and Resource Group Contributor on the Subscription.  AKS needs to be able to create the resource group that contains it's nodes, the ARM deployment will error if this resource group has already been created.
 $AksServicePrincipal = & $DfcDevOpsScriptRoot/New-ApplicationRegistration.ps1 -AppRegistrationName $AksServicePrincipalName -AddSecret -KeyVaultName $SharedKeyVaultName -Verbose
-$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -ResourceGroupName $AksResourceGroup
+$ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName "Network Contributor" -ResourceGroupName $AksResourceGroup
 if ($ExistingAssignment) {
 
     Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName) on $AksResourceGroup"
@@ -77,10 +77,10 @@ if ($ExistingAssignment) {
 }
 else {
 
-    Write-Verbose "Assigning 'Contributor' to $($AksServicePrincipal.Id) on $AksResourceGroup"
+    Write-Verbose "Assigning 'Network Contributor' to $($AksServicePrincipal.Id) on $AksResourceGroup"
     # Service Principal isn't immediately available to add role to
     Start-Sleep -Seconds 15
-    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName Contributor -ResourceGroupName $AksResourceGroup
+    New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName "Network Contributor" -ResourceGroupName $AksResourceGroup
 
 }
 $ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName "Resource Group Contributor" -Scope "/subscriptions/$($Context.Subscription.Id)"
