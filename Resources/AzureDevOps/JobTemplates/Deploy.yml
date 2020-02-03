@@ -34,14 +34,6 @@ jobs:
             azurePowerShellVersion: LatestVersion
         - checkout: dfc-devops
           path: 's/dfc-devops/'
-        - task: AzurePowerShell@3
-          displayName: 'Create & tag AKS node Resource Group ${{ parameters.AksNodeResourceGroupName }}'
-          inputs:
-            azureSubscription: ${{ parameters.AzureSubscription }}
-            scriptType: filePath
-            ScriptPath: '$(Build.SourcesDirectory)/dfc-devops/PSScripts/Set-EsfaResourceGroupTags.ps1'
-            ScriptArguments: '-ResourceGroupName ${{ parameters.AksNodeResourceGroupName }} -Environment "${{ parameters.EnvironmentTag }}" -ParentBusiness "${{ parameters.ParentBusinessTag }}" -ServiceOffering "${{ parameters.ServiceOfferingTag }}"'
-            azurePowerShellVersion: LatestVersion
         ##TODO: modify script to add perms to RGs rather than subscription
         # Create AKS service principals
         - task: AzurePowerShell@3
@@ -49,7 +41,7 @@ jobs:
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/New-AksServicePrincipals.ps1'
-            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksServicePrincipalManagedRgs "${{ parameters.ResourceGroup }}", "${{ parameters.AksNodeResourceGroupName }}" -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/PSScripts/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
+            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksResourceGroup ${{ parameters.ResourceGroup }} -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/PSScripts/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
             azurePowerShellVersion: LatestVersion
         # Create shared configuration table
         - task: AzurePowerShell@4
