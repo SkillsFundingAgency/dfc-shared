@@ -24,13 +24,15 @@ After completing the initial deployment the permissions on the AKS Service Princ
 
 Rerun the failed deployment.
 
-#### Notes on the AKS route table
+To run the deployment without APIM, set the ARM template parameter 'deployApim' to false.
+
+## Post Deployment Steps
+
+1. Add the name of the AKS created route table to the variable group  *dfc-shared-infrastructure-<env>*, inside this variable group is variable called *AksRouteTableName*.  On the initial deployment the value of this variable should be null.  Once AKS has been deployed the value should be set to the name of the route table, this can be found in the dfc-<env>-shared-aksnodes-rg resource group.  If it isn't set the route table will not be attached to the subnet (and therefore AKS) and you will experience intermittent network related failures.
+
+### Notes on the AKS route table
 
 The AKS service depends on a subnet, this subnet needs minimal configuration as the AKS service principal will handle that.  A [vnet and associated subnet](Resources\networks\aks-vnet.json) is defined in this repo.  On the initial deployment it will be deployed without a route table, when the AKS service is deployed it will create a route table and add that to the subnet, this will be created in a resource group called dfc-<env>-shared-aksnodes-rg.  To prevent routetable setting on the subtnet being reset on subsequent deployments we need to pass the name of the routetable AKS creates in as an ARM template parameter.
-
-Each environment has an associated variable group called *dfc-shared-infrastructure-<env>*, inside this variable group is variable called *AksRouteTableName*.  On the initial deployment the value of this variable should be null.  Once AKS has been deployed the value should be set to the name of the route table, this can be found in the dfc-<env>-shared-aksnodes-rg resource group.  If it isn't set the route table will not be attached to the subnet (and therefore AKS) and you will experience intermittent network related failures.
-
-To run the deployment without APIM, set the ARM template parameter 'deployApim' to false.
 
 ## Testing
 
