@@ -13,7 +13,7 @@ param(
 
 if ($GenerallyAvailableUpgradesCount -gt 0) {
 
-    Write-Warning "Upgrades available for Kubernetes service.  See logs on previous task for details."
+    Write-Warning "There are $GenerallyAvailableUpgradesCount upgrades available for Kubernetes service.  See logs on previous task for details."
 
 }
 else {
