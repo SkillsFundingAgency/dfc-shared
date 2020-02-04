@@ -93,6 +93,7 @@ jobs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
             scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
             scriptArguments: '-Verbose'
+            azurePowerShellVersion: LatestVersion
 
 
 
