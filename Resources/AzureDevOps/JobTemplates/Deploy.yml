@@ -81,13 +81,18 @@ jobs:
             azurePowerShellVersion: LatestVersion
         # Check for Kubernetes upgrades
         - task: AzureCLI@2
-          displayName: 'Azure PowerShell script: Test-AksAvailableUpgrades'
+          displayName: 'Azure CLI script: Output-AksAvailableUpgrades'
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
             scriptType: ps
-            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
+            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Output-AksAvailableUpgrades.ps1'
             arguments: '-AksResourceGroup ${{ parameters.ResourceGroup }} -AksServiceName ${{ parameters.AksServiceName }} -Verbose'
-
+        - task: AzurePowerShell@4
+          displayName: 'Azure PowerShell script: Test-AksAvailableUpgrades'
+          inputs:
+            azureSubscription: '${{ parameters.AzureSubscription }}'
+            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
+            scriptArguments: '-Verbose'
 
 
 

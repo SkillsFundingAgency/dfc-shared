@@ -1,18 +1,16 @@
+<#
+.SYNOPSIS
+Tests the output of Ouput-AksAvailableUpgrades.
+
+.DESCRIPTION
+Tests the output of Ouput-AksAvailableUpgrades.  Ouput-AksAvailableUpgrades uses the az cli to get the available AKS upgrades and writes the count of these to a variable.  This script writes out a warning to Azure DevOps if upgrades are available.  The Az Cli task can't write warnings to Azure DevOps.
+#>
 [CmdletBinding()]
-param(
-    [Parameter(Mandatory=$true)]
-    [String]$AksResourceGroup,
-    [Parameter(Mandatory=$true)]
-    [String]$AksServiceName
-)
+param()
 
-$Upgrades = az aks get-upgrades --resource-group $AksResourceGroup --name $AksServiceName | ConvertFrom-Json
-$GenerallyAvailableUpgrades = $Upgrades.controlPlaneProfile.upgrades | Where-Object { $_.isPreview -ne $true }
+if ($GenerallyAvailableUpgradesCount -gt 0) {
 
-if ($GenerallyAvailableUpgrades) {
-
-    Write-Warning "Upgrades available for Kubernetes service"
-    $GenerallyAvailableUpgrades
+    Write-Warning "Upgrades available for Kubernetes service.  See logs on previous task for details."
 
 }
 else {
