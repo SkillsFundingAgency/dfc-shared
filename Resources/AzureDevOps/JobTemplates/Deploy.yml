@@ -35,7 +35,6 @@ jobs:
             azurePowerShellVersion: LatestVersion
         - checkout: dfc-devops
           path: 's/dfc-devops/'
-        ##TODO: modify script to add perms to RGs rather than subscription
         # Create AKS service principals
         - task: AzurePowerShell@3
           displayName: 'Azure PowerShell script: New-AksServicePrincipals.ps1'
@@ -92,7 +91,7 @@ jobs:
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
             scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
-            scriptArguments: '-Verbose'
+            scriptArguments: '-GenerallyAvailableUpgradesCount $(GenerallyAvailableUpgradesCount) -Verbose'
             azurePowerShellVersion: LatestVersion
 
 

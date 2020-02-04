@@ -6,7 +6,10 @@ Tests the output of Ouput-AksAvailableUpgrades.
 Tests the output of Ouput-AksAvailableUpgrades.  Ouput-AksAvailableUpgrades uses the az cli to get the available AKS upgrades and writes the count of these to a variable.  This script writes out a warning to Azure DevOps if upgrades are available.  The Az Cli task can't write warnings to Azure DevOps.
 #>
 [CmdletBinding()]
-param()
+param(
+    [Parameter(Mandatory=$true)]
+    [int]$GenerallyAvailableUpgradesCount
+)
 
 if ($GenerallyAvailableUpgradesCount -gt 0) {
 
