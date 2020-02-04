@@ -80,13 +80,13 @@ jobs:
             ScriptArguments: '-AdministratorPhoneNumber "${{ parameters.CertificateIssuerAdministratorPhoneNumber }}" -CertificateIssuerPassword "${{ parameters.CertificateIssuerPassword }}" -KeyVaultName "${{ parameters.SharedKeyVaultName }}" -CertificateIssuerAccountId "${{ parameters.CertificateIssuerAccountId }}"'
             azurePowerShellVersion: LatestVersion
         # Check for Kubernetes upgrades
-        - task: AzurePowerShell@4
+        - task: AzureCLI@2
           displayName: 'Azure PowerShell script: Test-AksAvailableUpgrades'
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
-            ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
-            ScriptArguments: '-AksResourceGroup ${{ parameters.ResourceGroup }} -AksServiceName ${{ parameters.AksServiceName }} -Verbose'
-            azurePowerShellVersion: LatestVersion
+            scriptType: pscore
+            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
+            arguments: '-AksResourceGroup ${{ parameters.ResourceGroup }} -AksServiceName ${{ parameters.AksServiceName }} -Verbose'
 
 
 
