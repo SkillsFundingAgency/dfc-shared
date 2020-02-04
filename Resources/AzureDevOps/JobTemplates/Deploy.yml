@@ -84,7 +84,7 @@ jobs:
           displayName: 'Azure PowerShell script: Test-AksAvailableUpgrades'
           inputs:
             azureSubscription: '${{ parameters.AzureSubscription }}'
-            scriptType: pscore
+            scriptType: ps
             scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
             arguments: '-AksResourceGroup ${{ parameters.ResourceGroup }} -AksServiceName ${{ parameters.AksServiceName }} -Verbose'
 
