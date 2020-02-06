@@ -41,10 +41,15 @@ stages:
         TargetFolder: '$(Build.ArtifactStagingDirectory)/Resources/PSScripts'
         flattenFolders: true
     - task: PublishPipelineArtifact@0
-      displayName: Publish Pipeline Artifact
+      displayName: Publish PSScripts Pipeline Artifact
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/Resources/PSScripts
         artifactName: Dfc.Shared.Resources.PSScripts
+    - task: PublishPipelineArtifact@0
+      displayName: Publish AksManifests Pipeline Artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/Resources/AksManifests
+        artifactName: Dfc.Shared.Resources.AksManifests
     # Also publish build artifact for backwards compatibility with classic Release Definition
     - task: PublishBuildArtifacts@1
       displayName: Publish Build Artifact
