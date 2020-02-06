@@ -108,7 +108,7 @@ else {
 
 }
 Set-SpnResourceGroupRoleAssignment -ResourceGroup $AksResourceGroup -RoleDefinitionName "Network Contributor" -ServicePrincipalObjectId $AksServicePrincipal.Id
-Set-SpnResourceGroupRoleAssignment -ResourceGroup $AksResourceGroup -RoleDefinitionName "ACR Pull" -ServicePrincipalObjectId $AksServicePrincipal.Id
+Set-SpnResourceGroupRoleAssignment -ResourceGroup $AksResourceGroup -RoleDefinitionName "AcrPull" -ServicePrincipalObjectId $AksServicePrincipal.Id
 
 $AllAssignments = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id
 # Validates that the AksServicePrincipal has only been assigned 2 roles (One for dfc-<env>-shared-rg, the other for dfc-<env>-shared-aksnodes-rg).
