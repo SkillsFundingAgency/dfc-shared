@@ -48,7 +48,7 @@ stages:
     - task: PublishPipelineArtifact@0
       displayName: Publish AksManifests Pipeline Artifact
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)/Resources/AksManifests
+        targetPath: Resources/AksManifests
         artifactName: Dfc.Shared.Resources.AksManifests
     # Also publish build artifact for backwards compatibility with classic Release Definition
     - task: PublishBuildArtifacts@1
