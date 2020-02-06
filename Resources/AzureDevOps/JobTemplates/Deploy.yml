@@ -1,5 +1,6 @@
 parameters:
   AzureSubscription: ''
+  AcrResourceGroup: ''
   AksAdClientApplicationName: ''
   AksAdServerApplicationName: ''
   AksNodeResourceGroupName: ''
@@ -41,7 +42,7 @@ jobs:
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/New-AksServicePrincipals.ps1'
-            ScriptArguments: '-AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksResourceGroup ${{ parameters.ResourceGroup }} -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/PSScripts/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
+            ScriptArguments: '-AcrResourceGroup ${{ parameters.AcrResourceGroup }} -AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksResourceGroup ${{ parameters.ResourceGroup }} -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/PSScripts/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
             azurePowerShellVersion: LatestVersion
         # Create shared configuration table
         - task: AzurePowerShell@4
