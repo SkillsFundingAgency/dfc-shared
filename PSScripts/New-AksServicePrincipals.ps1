@@ -5,6 +5,9 @@ Creates the Service Principals and App Registrations required by an Azure Kubern
 .DESCRIPTION
 Creates the Service Principals and App Registrations required by an Azure Kubernetes Cluster.  The Application (Client) IDs are written out to Azure DevOps variables to be consumed by later steps in the pipeline.
 
+.PARAMETER AcrResourceGroup
+The resource group where the Azure Container Registry that this AKS cluster will use resides
+
 .PARAMETER AksServicePrincipalName
 The name of the AAD Service Principal that will be granted Contributor rights on the Azure Subscription that the AKS cluster resides in.
 If executed from Azure DevOps this will be the default subscription of the Azure DevOps Service Principal.  The name should be in the format dfc-<env>-shared-aks-svc.
@@ -19,6 +22,9 @@ The permissions granted will be Directory.Read.All and User.Read.  The name shou
 .PARAMETER AksServicePrincipalManagedRgs
 An array of resource group names that the AksServicePrincipal will be assigned the Contributor role on.  
 The service principal requires this role on the resource group it's VNet is deployed into and the resource group it's nodes are created in.
+
+.PARAMETER AksResourceGroup
+The resource group that will hold the AKS service and it's VNet
 
 .PARAMETER DfcDevOpsScriptRoot
 The path to the PSScripts folder in the local copy of the dfc-devops repo, eg $(System.DefaultWorkingDirectory)/_SkillsFundingAgency_dfc-devops/PSScripts in an Azure DevOps task
@@ -35,15 +41,17 @@ AksAdClientApplicationName & AksAdServerApplicationName: https://docs.microsoft.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
-    [String]$AksServicePrincipalName,
+    [String]$AcrResourceGroup,
     [Parameter(Mandatory=$true)]
     [String]$AksAdClientApplicationName,
     [Parameter(Mandatory=$true)]
     [String]$AksAdServerApplicationName,
     [Parameter(Mandatory=$true)]
-    [String]$DfcDevOpsScriptRoot,
-    [Parameter(Mandatory=$true)]
     [String]$AksResourceGroup,
+    [Parameter(Mandatory=$true)]
+    [String]$AksServicePrincipalName,
+    [Parameter(Mandatory=$true)]
+    [String]$DfcDevOpsScriptRoot,
     [Parameter(Mandatory=$true)]
     [String]$SharedKeyVaultName
 )
@@ -107,7 +115,8 @@ else {
     New-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id -RoleDefinitionName "Resource Group Contributor" -Scope "/subscriptions/$($Context.Subscription.Id)"
 
 }
-Set-SpnResourceGroupRoleAssignment -ResourceGroup $AksResourceGroup -RoleDefinitionName "Contributor" -ServicePrincipalObjectId $AksServicePrincipal.Id
+Set-SpnResourceGroupRoleAssignment -ResourceGroup $AksResourceGroup -RoleDefinitionName "Network Contributor" -ServicePrincipalObjectId $AksServicePrincipal.Id
+Set-SpnResourceGroupRoleAssignment -ResourceGroup $AcrResourceGroup -RoleDefinitionName "AcrPull" -ServicePrincipalObjectId $AksServicePrincipal.Id
 
 $AllAssignments = Get-AzureRmRoleAssignment -ObjectId $AksServicePrincipal.Id
 # Validates that the AksServicePrincipal has only been assigned 2 roles (One for dfc-<env>-shared-rg, the other for dfc-<env>-shared-aksnodes-rg).
