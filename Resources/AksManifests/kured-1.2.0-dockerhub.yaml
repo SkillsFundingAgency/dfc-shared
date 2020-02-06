@@ -108,7 +108,7 @@ spec:
              - --start-time "01:00"
              - --end-time "04:00"
              - --slack-channel dfc-devops-alerts
-             - --slack-hook-url=https://hooks.slack.com/services/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
+             - --slack-hook-url=__DfcDevOpsAlertsSlackHook__
 #            - --alert-filter-regexp=^RebootRequired$
 #            - --blocking-pod-selector=runtime=long,cost=expensive
 #            - --blocking-pod-selector=name=temperamental

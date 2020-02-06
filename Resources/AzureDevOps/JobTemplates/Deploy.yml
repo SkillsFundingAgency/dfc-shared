@@ -94,6 +94,11 @@ jobs:
             scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
             scriptArguments: '-GenerallyAvailableUpgradesCount $(GenerallyAvailableUpgradesCount) -Verbose'
             azurePowerShellVersion: LatestVersion
+        - task: esfadevops.Tokenization.custom-build-task.Tokenization@0
+          displayName: 'Tokenization: Transform file kured-1.2.0-dockerhub.yaml'
+          inputs:
+            SourcePath: $(Pipeline.Workspace)/Dfc.Shared.Resources.AksManifests/
+            TargetFileNames: kured-1.2.0-dockerhub.yaml
         - task: Kubernetes@1
           displayName: kubectl deploy kured daemonset
           inputs:
@@ -102,7 +107,7 @@ jobs:
             azureResourceGroup: ${{ parameters.ResourceGroup }}
             kubernetesCluster: ${{ parameters.AksServiceName }}
             useClusterAdmin: true
-            namespace: 'default'
+            namespace: 'kube-system'
             command: 'apply'
             arguments: '--filename=$(Pipeline.Workspace)/Dfc.Shared.Resources.AksManifests/kured-1.2.0-dockerhub.yaml'
 
