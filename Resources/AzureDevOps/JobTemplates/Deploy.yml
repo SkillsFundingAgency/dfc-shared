@@ -98,9 +98,9 @@ jobs:
           displayName: kubectl deploy kured daemonset
           inputs:
             connectionType: Azure Resource Manager
-            azureSubscriptionEndpoint: ${{ parameters.AzureSubscriptionEndpoint }}
-            azureResourceGroup: ${{ parameters.AksResourceGroup }}
-            kubernetesCluster: ${{ parameters.KubernetesCluster }}
+            azureSubscriptionEndpoint: ${{ parameters.AzureSubscription }}
+            azureResourceGroup: ${{ parameters.ResourceGroup }}
+            kubernetesCluster: ${{ parameters.AksServiceName }}
             useClusterAdmin: true
             namespace: 'default'
             command: 'apply'
