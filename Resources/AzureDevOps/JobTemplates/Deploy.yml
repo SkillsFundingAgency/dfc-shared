@@ -101,7 +101,7 @@ jobs:
             TargetFileNames: kured-1.2.0-dockerhub.yaml
         - task: Kubernetes@1
           displayName: kubectl deploy kured daemonset
-          condition: ne(${{ parameters.Environment}}, "PRD_SHARED")
+          condition: ne('${{ parameters.Environment }}', 'PRD_SHARED')
           inputs:
             connectionType: Azure Resource Manager
             azureSubscriptionEndpoint: ${{ parameters.AzureSubscription }}
