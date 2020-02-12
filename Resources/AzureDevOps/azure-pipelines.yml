@@ -57,104 +57,104 @@ stages:
         pathtoPublish: $(Build.ArtifactStagingDirectory)
         artifactName: drop
 
-- stage: DeployTo_DEV
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-  variables:
-  - group: dfc-shared-all
-  - group: dfc-shared-infrastructure-all
-  - template: VariableTemplates\SharedEnvironmentVariables.yml
-  - group: 'KeyVault - dfc-dev-shared-kv'
-  - group: dfc-shared-dev
-  - group: dfc-shared-infrastructure-dev
-  - group: dfc-cds-dev
-  - template: VariableTemplates\DevEnvironmentVariables.yml
-  jobs:
-  - template: JobTemplates\Deploy.yml
-    parameters:
-      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
-      AcrResourceGroup: $(ACRResourceGroup)
-      AksAdClientApplicationName: $(AksAdClientApplicationName)
-      AksAdServerApplicationName: $(AksAdServerApplicationName)
-      AksNodeResourceGroupName: $(AksNodeResourceGroupName)
-      AksServiceName: $(sharedAksCluster)
-      AksServicePrincipalName: $(AksServicePrincipalName)
-      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
-      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
-      CertificateIssuerPassword: $(CertificateIssuerPassword)
-      envAbbreviation: ${{ variables.envAbbreviation }}
-      Environment: 'DEV_SHARED'
-      EnvironmentTag: ${{ variables.EnvironmentTag }}
-      ResourceGroup: ${{ variables.resourceGroup }}
-      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
-      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
-      SharedKeyVaultName: $(sharedKeyVaultName)
-      SharedPrefix: ${{ variables.sharedPrefix }}
-      StorageAccountName: $(sharedDfcStorageAccountName)
+# - stage: DeployTo_DEV
+#   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+#   variables:
+#   - group: dfc-shared-all
+#   - group: dfc-shared-infrastructure-all
+#   - template: VariableTemplates\SharedEnvironmentVariables.yml
+#   - group: 'KeyVault - dfc-dev-shared-kv'
+#   - group: dfc-shared-dev
+#   - group: dfc-shared-infrastructure-dev
+#   - group: dfc-cds-dev
+#   - template: VariableTemplates\DevEnvironmentVariables.yml
+#   jobs:
+#   - template: JobTemplates\Deploy.yml
+#     parameters:
+#       AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+#       AcrResourceGroup: $(ACRResourceGroup)
+#       AksAdClientApplicationName: $(AksAdClientApplicationName)
+#       AksAdServerApplicationName: $(AksAdServerApplicationName)
+#       AksNodeResourceGroupName: $(AksNodeResourceGroupName)
+#       AksServiceName: $(sharedAksCluster)
+#       AksServicePrincipalName: $(AksServicePrincipalName)
+#       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+#       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+#       CertificateIssuerPassword: $(CertificateIssuerPassword)
+#       envAbbreviation: ${{ variables.envAbbreviation }}
+#       Environment: 'DEV_SHARED'
+#       EnvironmentTag: ${{ variables.EnvironmentTag }}
+#       ResourceGroup: ${{ variables.resourceGroup }}
+#       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+#       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
+#       SharedKeyVaultName: $(sharedKeyVaultName)
+#       SharedPrefix: ${{ variables.sharedPrefix }}
+#       StorageAccountName: $(sharedDfcStorageAccountName)
 
-- stage: DeployTo_SIT
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-  variables:
-  - group: dfc-shared-all
-  - group: dfc-shared-infrastructure-all
-  - template: VariableTemplates\SharedEnvironmentVariables.yml
-  - group: 'KeyVault - dfc-sit-shared-kv'
-  - group: dfc-shared-sit
-  - group: dfc-shared-infrastructure-sit
-  - group: dfc-cds-sit
-  - template: VariableTemplates\SitEnvironmentVariables.yml
-  jobs:
-  - template: JobTemplates\Deploy.yml
-    parameters:
-      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
-      AcrResourceGroup: $(ACRResourceGroup)
-      AksAdClientApplicationName: $(AksAdClientApplicationName)
-      AksAdServerApplicationName: $(AksAdServerApplicationName)
-      AksNodeResourceGroupName: $(AksNodeResourceGroupName)
-      AksServiceName: $(sharedAksCluster)
-      AksServicePrincipalName: $(AksServicePrincipalName)
-      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
-      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
-      CertificateIssuerPassword: $(CertificateIssuerPassword)
-      envAbbreviation: ${{ variables.envAbbreviation }}
-      Environment: 'SIT_SHARED'
-      EnvironmentTag: ${{ variables.EnvironmentTag }}
-      ResourceGroup: ${{ variables.resourceGroup }}
-      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
-      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
-      SharedKeyVaultName: $(sharedKeyVaultName)
-      SharedPrefix: ${{ variables.sharedPrefix }}
-      StorageAccountName: $(sharedDfcStorageAccountName)
+# - stage: DeployTo_SIT
+#   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+#   variables:
+#   - group: dfc-shared-all
+#   - group: dfc-shared-infrastructure-all
+#   - template: VariableTemplates\SharedEnvironmentVariables.yml
+#   - group: 'KeyVault - dfc-sit-shared-kv'
+#   - group: dfc-shared-sit
+#   - group: dfc-shared-infrastructure-sit
+#   - group: dfc-cds-sit
+#   - template: VariableTemplates\SitEnvironmentVariables.yml
+#   jobs:
+#   - template: JobTemplates\Deploy.yml
+#     parameters:
+#       AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+#       AcrResourceGroup: $(ACRResourceGroup)
+#       AksAdClientApplicationName: $(AksAdClientApplicationName)
+#       AksAdServerApplicationName: $(AksAdServerApplicationName)
+#       AksNodeResourceGroupName: $(AksNodeResourceGroupName)
+#       AksServiceName: $(sharedAksCluster)
+#       AksServicePrincipalName: $(AksServicePrincipalName)
+#       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+#       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+#       CertificateIssuerPassword: $(CertificateIssuerPassword)
+#       envAbbreviation: ${{ variables.envAbbreviation }}
+#       Environment: 'SIT_SHARED'
+#       EnvironmentTag: ${{ variables.EnvironmentTag }}
+#       ResourceGroup: ${{ variables.resourceGroup }}
+#       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+#       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
+#       SharedKeyVaultName: $(sharedKeyVaultName)
+#       SharedPrefix: ${{ variables.sharedPrefix }}
+#       StorageAccountName: $(sharedDfcStorageAccountName)
 
-- stage: DeployTo_LAB
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-  variables:
-  - group: dfc-shared-all
-  - group: dfc-shared-infrastructure-all
-  - template: VariableTemplates\SharedEnvironmentVariables.yml
-  - group: 'KeyVault - dfc-lab-shared-kv'
-  - group: dfc-shared-lab
-  - group: dfc-shared-infrastructure-lab
-  - group: dfc-cds-dev # this mimics the configuration in the classic release definition
-  - template: VariableTemplates\LabEnvironmentVariables.yml
-  jobs:
-  - template: JobTemplates\Deploy.yml
-    parameters:
-      AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
-      AcrResourceGroup: $(ACRResourceGroup)
-      AksAdClientApplicationName: $(AksAdClientApplicationName)
-      AksAdServerApplicationName: $(AksAdServerApplicationName)
-      AksNodeResourceGroupName: $(AksNodeResourceGroupName)
-      AksServiceName: $(sharedAksCluster)
-      AksServicePrincipalName: $(AksServicePrincipalName)
-      CertificateIssuerAccountId: $(CertificateIssuerAccountId)
-      CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
-      CertificateIssuerPassword: $(CertificateIssuerPassword)
-      envAbbreviation: ${{ variables.envAbbreviation }}
-      Environment: 'LAB_SHARED'
-      EnvironmentTag: ${{ variables.EnvironmentTag }}
-      ResourceGroup: ${{ variables.resourceGroup }}
-      ParentBusinessTag: ${{ variables.ParentBusinessTag }}
-      ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
-      SharedKeyVaultName: $(sharedKeyVaultName)
-      SharedPrefix: ${{ variables.sharedPrefix }}
-      StorageAccountName: $(sharedDfcStorageAccountName)
+# - stage: DeployTo_LAB
+#   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+#   variables:
+#   - group: dfc-shared-all
+#   - group: dfc-shared-infrastructure-all
+#   - template: VariableTemplates\SharedEnvironmentVariables.yml
+#   - group: 'KeyVault - dfc-lab-shared-kv'
+#   - group: dfc-shared-lab
+#   - group: dfc-shared-infrastructure-lab
+#   - group: dfc-cds-dev # this mimics the configuration in the classic release definition
+#   - template: VariableTemplates\LabEnvironmentVariables.yml
+#   jobs:
+#   - template: JobTemplates\Deploy.yml
+#     parameters:
+#       AzureSubscription: 'SFA-CDH-Dev/Test (962cae10-2950-412a-93e3-d8ae92b17896)'
+#       AcrResourceGroup: $(ACRResourceGroup)
+#       AksAdClientApplicationName: $(AksAdClientApplicationName)
+#       AksAdServerApplicationName: $(AksAdServerApplicationName)
+#       AksNodeResourceGroupName: $(AksNodeResourceGroupName)
+#       AksServiceName: $(sharedAksCluster)
+#       AksServicePrincipalName: $(AksServicePrincipalName)
+#       CertificateIssuerAccountId: $(CertificateIssuerAccountId)
+#       CertificateIssuerAdministratorPhoneNumber: $(CertificateIssuerAdministratorPhoneNumber)
+#       CertificateIssuerPassword: $(CertificateIssuerPassword)
+#       envAbbreviation: ${{ variables.envAbbreviation }}
+#       Environment: 'LAB_SHARED'
+#       EnvironmentTag: ${{ variables.EnvironmentTag }}
+#       ResourceGroup: ${{ variables.resourceGroup }}
+#       ParentBusinessTag: ${{ variables.ParentBusinessTag }}
+#       ServiceOfferingTag: ${{ variables.ServiceOfferingTag }}
+#       SharedKeyVaultName: $(sharedKeyVaultName)
+#       SharedPrefix: ${{ variables.sharedPrefix }}
+#       StorageAccountName: $(sharedDfcStorageAccountName)
