@@ -47,6 +47,22 @@
     "aksSubnetName": {
       "type": "string"
     },
+    "aksAppGatewaySubnetName": {
+      "type": "string"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The network security group assigned to the AKS App Gateway subnet"
+      }
+    },
+    "aksInboundIpAddressRange": {
+      "type": "string",
+      "defaultValue": "tbc",
+      "metadata": {
+        "description": "A comma separated list of IP addresses allowed to access the AKS App Gateway"
+      }
+    },
     "aksVirtualNetworkAddressPrefix": {
       "type": "string"
     },
@@ -332,6 +348,9 @@
           },
           "aksSubnetName": {
             "value": "[parameters('aksSubnetName')]"
+          },
+          "aksAppGatewaySubnetName": {
+            "value": "[parameters('aksAppGatewaySubnetName')]"
           },
           "virtualNetworkAddressPrefix": {
             "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
@@ -810,6 +829,39 @@
           },
           "cloudServiceIpAddress": {
             "value": "[parameters('appGatewayCloudServiceIpAddress')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "appGatewayNetworkSecurityGroup",
+      "condition": "[equals(parameters('envType'),'dev')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "sharedManagedInstanceEnvironment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/aksag-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('aksAppGatewayNetworkSecurityGroup')]"
+          },
+          "agSubnetName": {
+            "value": "[parameters('aksAppGatewaySubnetName')]"
+          },
+          "vnetName": {
+            "value": "[parameters('aksVnetName')]"
+          },
+          "vnetResourceGroupName": {
+            "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
+          },
+          "inboundIpAddressRange": {
+            "value": "[parameters('aksInboundIpAddressRange')]"
           }
         }
       }

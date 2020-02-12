@@ -50,6 +50,12 @@
     "aksSubnetName": {
       "value": "__AksSubnetName__"
     },
+    "aksAppGatewaySubnetName": {
+      "value": "__aksAppGatewaySubnetName__"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "value": "__aksAppGatewayNetworkSecurityGroup__"
+    },
     "aksVirtualNetworkAddressPrefix": {
       "value": "__AksVirtualNetworkAddressPrefix__"
     },

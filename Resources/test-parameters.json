@@ -50,6 +50,12 @@
     "aksSubnetName": {
       "value": "dfc-aks-01"
     },
+    "aksAppGatewaySubnetName": {
+      "value": "dfc-aks-ag-01"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "value": "dfc-aks-ag-nsg"
+    },
     "aksVirtualNetworkAddressPrefix": {
       "value": "10.0"
     },
