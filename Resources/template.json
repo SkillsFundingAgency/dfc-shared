@@ -58,7 +58,7 @@
     },
     "aksInboundIpAddressRange": {
       "type": "string",
-      "defaultValue": "tbc",
+      "defaultValue": "0.0.0.0/0",
       "metadata": {
         "description": "A comma separated list of IP addresses allowed to access the AKS App Gateway"
       }
@@ -834,7 +834,7 @@
       }
     },
     {
-      "name": "appGatewayNetworkSecurityGroup",
+      "name": "aksAppGatewayNetworkSecurityGroup",
       "condition": "[equals(parameters('envType'),'dev')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
