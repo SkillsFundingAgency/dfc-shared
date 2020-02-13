@@ -1,3 +1,7 @@
+# dfc-shared pipeline
+# contains release stages that have a condition set to false (so they never run)
+# these can be enabled again when YAML releases are production ready 
+
 variables:
 - name: SolutionBaseName
   value: Dfc.Shared
@@ -50,15 +54,9 @@ stages:
       inputs:
         targetPath: Resources/AksManifests
         artifactName: Dfc.Shared.Resources.AksManifests
-    # Also publish build artifact for backwards compatibility with classic Release Definition
-    - task: PublishBuildArtifacts@1
-      displayName: Publish Build Artifact
-      inputs:
-        pathtoPublish: $(Build.ArtifactStagingDirectory)
-        artifactName: drop
 
 - stage: DeployTo_DEV
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: false
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
@@ -92,7 +90,7 @@ stages:
       StorageAccountName: $(sharedDfcStorageAccountName)
 
 - stage: DeployTo_SIT
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: false
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
@@ -126,7 +124,7 @@ stages:
       StorageAccountName: $(sharedDfcStorageAccountName)
 
 - stage: DeployTo_LAB
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: false
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-infrastructure-all
