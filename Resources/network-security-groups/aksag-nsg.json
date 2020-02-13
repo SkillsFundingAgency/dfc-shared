@@ -81,7 +81,7 @@
                         "name": "Inbound_BOLT",
                         "properties": {
                             "direction": "Inbound",
-                            "priority": 120,
+                            "priority": 130,
                             "access": "Allow",
                             "description": "Allow BOLT access only from allowed IP addresses",
                             "sourceAddressPrefix": "[if(variables('isIpArray'), json('null'), parameters('inboundIpAddressRange'))]",
