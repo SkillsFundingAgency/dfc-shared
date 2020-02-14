@@ -53,6 +53,13 @@
     "aksVnetName": {
       "type": "string"
     },
+    "aksVnetCreate": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Bool to determine whether to create a VNet for AKS - defaults to create a VNet"
+      }
+    },
     "aksVnetResourceGroupName": {
       "type": "string",
       "defaultValue": "",
@@ -315,7 +322,7 @@
     {
       "name": "sharedAzureKubernetesServiceNetwork",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[equals(parameters('envType'),'dev')]",
+      "condition": "[parameters('aksVnetCreate')]",
       "apiVersion": "2017-05-10",
       "properties": {
         "mode": "Incremental",
@@ -396,7 +403,7 @@
             "value": "[parameters('aksVnetName')]"
           },
           "virtualNetworkResourceGroup": {
-            "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
+            "value": "[if(parameters('aksVnetCreate'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
           }
         }
       },
