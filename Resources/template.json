@@ -288,7 +288,7 @@
     "cdnName": "[concat(parameters('sharedPrefix'),'-cdn')]",
     "deployAse": "[not(equals(parameters('aseDomainName'), ''))]",
     "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
-    "defaultWriteAccessHack": "[if(empty(parameters('defaultKeyVaultWriteAccess')), 1, length(parameters('defaultKeyVaultWriteAccess')))]",
+    "defaultKeyVaultWriteAccessHack": "[if(empty(parameters('defaultKeyVaultWriteAccess')), 1, length(parameters('defaultKeyVaultWriteAccess')))]",
     "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]",
     "aksClusterName": "[concat(parameters('sharedPrefix'), '-aks')]",
     "aksNodeResourceGroupName": "[concat(variables('aksClusterName'), 'nodes-rg')]"
@@ -536,7 +536,7 @@
       },
       "copy": {
         "name": "defaultKeyVaultWriteAccessCopy",
-        "count": "[variables('defaultWriteAccessHack')]",
+        "count": "[variables('defaultKeyVaultWriteAccessHack')]",
         "mode": "Serial",
         "batchSize": 1
       }
