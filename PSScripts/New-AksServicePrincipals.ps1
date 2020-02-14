@@ -40,19 +40,19 @@ AksAdClientApplicationName & AksAdServerApplicationName: https://docs.microsoft.
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$AcrResourceGroup,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$AksAdClientApplicationName,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$AksAdServerApplicationName,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$AksResourceGroup,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$AksServicePrincipalName,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$DfcDevOpsScriptRoot,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [String]$SharedKeyVaultName
 )
 
@@ -64,19 +64,25 @@ function Set-SpnResourceGroupRoleAssignment {
         $ServicePrincipalObjectId
     )
 
-    $ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $ServicePrincipalObjectId -RoleDefinitionName $RoleDefinitionName -ResourceGroupName $ResourceGroup
-    if ($ExistingAssignment) {
+    $spnResourceGroup = Get-AzureRmResourceGroup -ResourceGroupName $ResourceGroup -ErrorAction SilentlyContinue
+    if ($spnResourceGroup) {
+        $ExistingAssignment = Get-AzureRmRoleAssignment -ObjectId $ServicePrincipalObjectId -RoleDefinitionName $RoleDefinitionName -ResourceGroupName $ResourceGroup
+        if ($ExistingAssignment) {
 
-        Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName) on $ResourceGroup"
+            Write-Verbose "$($ExistingAssignment.DisplayName) is assigned $($ExistingAssignment.RoleDefinitionName) on $ResourceGroup"
 
+        }
+        else {
+
+            Write-Verbose "Assigning '$RoleDefinitionName' to $ServicePrincipalObjectId on $ResourceGroup"
+            # Service Principal isn't immediately available to add role to
+            Start-Sleep -Seconds 15
+            New-AzureRmRoleAssignment -ObjectId $ServicePrincipalObjectId -RoleDefinitionName $RoleDefinitionName -ResourceGroupName $ResourceGroup
+
+        }
     }
     else {
-
-        Write-Verbose "Assigning '$RoleDefinitionName' to $ServicePrincipalObjectId on $ResourceGroup"
-        # Service Principal isn't immediately available to add role to
-        Start-Sleep -Seconds 15
-        New-AzureRmRoleAssignment -ObjectId $ServicePrincipalObjectId -RoleDefinitionName $RoleDefinitionName -ResourceGroupName $ResourceGroup
-
+        Write-Warning "No access to $ResourceGroup, unable to assert if $ServicePrincipalObjectId has role $RoleDefinitionName"
     }
 }
 
