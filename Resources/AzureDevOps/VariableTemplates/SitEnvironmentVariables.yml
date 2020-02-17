@@ -1,0 +1,25 @@
+# NOTE: This file is used to hold variables that are specific to the SIT environment of the dfc-shared pipeline.  
+# Variables that will be shared across multiple pipelines should be stored in Azure DevOps variable libraries
+variables:
+- name: apimHostnameRoot
+  value: api.nationalcareersservice.org.uk
+- name: envAbbreviation
+  value: sit
+- name: EnvironmentTag
+  value: Dev/Test
+- name: envType
+  value: dev
+- name: sharedPrefix
+  value: dfc-$(envAbbreviation)-shared
+- name: AksAgentVmSize
+  value: Standard_DS12_v2
+- name: AksNodeResourceGroupName
+  value: $(sharedPrefix)-aksnodes-rg
+- name: AksSubnetName
+  value: dfc-aks-01
+- name: AksVirtualNetworkAddressPrefix
+  value: 10.0
+- name: AksVnetName
+  value: $(sharedPrefix)-aks-vnet
+- name: ReleaseEnvironmentName
+  value: SIT

@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aksNodeResourceGroupName": {
+            "type": "string"
+        },
+        "aksRouteTableName": {
+            "type": "string"
+        },
+        "aksSubnetName": {
+            "type": "string"
+        },
+        "virtualNetworkAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0"
+        },
+        "vnetName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "routeTable": {
+            "id": "[resourceId(parameters('aksNodeResourceGroupName'), 'Microsoft.Network/routeTables', parameters('aksRouteTableName'))]"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('vnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[concat(parameters('virtualNetworkAddressPrefix'), '.0.0/16')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('aksSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[concat(parameters('virtualNetworkAddressPrefix'), '.0.0/24')]",
+                            "routeTable": "[if(greater(length(parameters('aksRouteTableName')), 0), variables('routeTable'), json('null'))]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

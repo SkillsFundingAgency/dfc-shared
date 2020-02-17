@@ -1,0 +1,116 @@
+parameters:
+  AzureSubscription: ''
+  AcrResourceGroup: ''
+  AksAdClientApplicationName: ''
+  AksAdServerApplicationName: ''
+  AksNodeResourceGroupName: ''
+  AksServiceName: ''
+  AksServicePrincipalName: ''
+  ApimApisToRemove: '"Echo API"' #Comma seperated list of strings wrapped in double quotes
+  CertificateIssuerAccountId: ''
+  CertificateIssuerAdministratorPhoneNumber: ''
+  CertificateIssuerPassword: ''
+  envAbbreviation: ''
+  Environment: ''
+  EnvironmentTag: ''
+  ResourceGroup: ''
+  ParentBusinessTag: ''
+  ServiceOfferingTag: ''
+  SharedKeyVaultName: ''
+  SharedPrefix: ''
+  StorageAccountName: ''
+
+jobs:
+- deployment: DeployTo_${{ parameters.Environment }}
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: AzurePowerShell@3
+          displayName: 'Azure PowerShell script: Set-ArmParameters'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath:  '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-ArmParameters.ps1'
+            ScriptArguments: '-Environment "${{ parameters.envAbbreviation }}" -Verbose'
+            azurePowerShellVersion: LatestVersion
+        - checkout: dfc-devops
+          path: 's/dfc-devops/'
+        # Create AKS service principals
+        - task: AzurePowerShell@3
+          displayName: 'Azure PowerShell script: New-AksServicePrincipals.ps1'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/New-AksServicePrincipals.ps1'
+            ScriptArguments: '-AcrResourceGroup ${{ parameters.AcrResourceGroup }} -AksServicePrincipalName ${{ parameters.AksServicePrincipalName }} -AksAdClientApplicationName ${{ parameters.AksAdClientApplicationName }} -AksAdServerApplicationName ${{ parameters.AksAdServerApplicationName }} -AksResourceGroup ${{ parameters.ResourceGroup }} -DfcDevOpsScriptRoot $(Build.SourcesDirectory)/dfc-devops/PSScripts/ -SharedKeyVaultName ${{ parameters.SharedKeyVaultName }} -Verbose'
+            azurePowerShellVersion: LatestVersion
+        # Create shared configuration table
+        - task: AzurePowerShell@4
+          displayName: 'Create shared configuration table'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ScriptPath: $(Build.SourcesDirectory)/dfc-devops/PSScripts/New-TableOnStorageAccount.ps1
+            ScriptArguments: '-StorageAccountName ${{ parameters.StorageAccountName }} -ResourceGroupName ${{ parameters.ResourceGroup }} -TableName Configuration'
+            azurePowerShellVersion: LatestVersion
+        # Deploy ARM template
+        - template: AzureDevOpsTemplates/Deploy/StepTemplates/dfc-arm-deploy.yml@dfc-devops
+          parameters:
+            ArmTemplateRoot: '$(Pipeline.Workspace)/Dfc.Shared.Resources.ArmTemplates'
+            AzureSubscription: ${{ parameters.AzureSubscription }}
+            EnvironmentTag: ${{ parameters.EnvironmentTag }}
+            ParentBusinessTag: ${{ parameters.ParentBusinessTag }}
+            ResourceGroup: ${{ parameters.ResourceGroup }}
+            ServiceOfferingTag: ${{ parameters.ServiceOfferingTag }}
+        # Remove unneeded APIM APIs
+        - task: AzurePowerShell@4
+          displayName: 'Remove Default APIs from APIM'
+          inputs:
+            azureSubscription: ${{ parameters.AzureSubscription }}
+            ##TO DO: remove this script from dfc-devops when merging this change back to master
+            ScriptPath: 's/dfc-devops/PSScripts/Remove-ApisFromApiManagement.ps1'
+            ScriptArguments: '-ApisToRemove @( ${{ parameters.ApimApisToRemove }} ) -ApimResourceGroup "${{ parameters.ResourceGroup }}" -ApimServiceName "${{ parameters.SharedPrefix }}-apim"'
+            azurePowerShellVersion: LatestVersion
+        # Set KeyVault certificate issuer (OAT, PP & PRD only)
+        - task: AzurePowerShell@4
+          condition: and(succeededOrFailed(), in('${{ parameters.Environment}}', 'OAT_SHARED', 'PP_SHARED', 'PRD_SHARED'))
+          displayName: 'Azure PowerShell script: Set-KeyVaultCertificateIssuer'
+          inputs:
+            azureSubscription: '${{ parameters.AzureSubscription }}'
+            ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Set-KeyVaultCertificateIssuer.ps1'
+            ScriptArguments: '-AdministratorPhoneNumber "${{ parameters.CertificateIssuerAdministratorPhoneNumber }}" -CertificateIssuerPassword "${{ parameters.CertificateIssuerPassword }}" -KeyVaultName "${{ parameters.SharedKeyVaultName }}" -CertificateIssuerAccountId "${{ parameters.CertificateIssuerAccountId }}"'
+            azurePowerShellVersion: LatestVersion
+        # Check for Kubernetes upgrades
+        - task: AzureCLI@2
+          displayName: 'Azure CLI script: Output-AksAvailableUpgrades'
+          inputs:
+            azureSubscription: '${{ parameters.AzureSubscription }}'
+            scriptType: ps
+            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Output-AksAvailableUpgrades.ps1'
+            arguments: '-AksResourceGroup ${{ parameters.ResourceGroup }} -AksServiceName ${{ parameters.AksServiceName }} -Verbose'
+        - task: AzurePowerShell@4
+          displayName: 'Azure PowerShell script: Test-AksAvailableUpgrades'
+          inputs:
+            azureSubscription: '${{ parameters.AzureSubscription }}'
+            scriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Test-AksAvailableUpgrades.ps1'
+            scriptArguments: '-GenerallyAvailableUpgradesCount $(GenerallyAvailableUpgradesCount) -Verbose'
+            azurePowerShellVersion: LatestVersion
+        - task: esfadevops.Tokenization.custom-build-task.Tokenization@0
+          displayName: 'Tokenization: Transform file kured-1.2.0-dockerhub.yaml'
+          inputs:
+            SourcePath: $(Pipeline.Workspace)/Dfc.Shared.Resources.AksManifests/
+            TargetFileNames: kured-1.2.0-dockerhub.yaml
+        - task: Kubernetes@1
+          displayName: kubectl deploy kured daemonset
+          condition: ne('${{ parameters.Environment }}', 'PRD_SHARED')
+          inputs:
+            connectionType: Azure Resource Manager
+            azureSubscriptionEndpoint: ${{ parameters.AzureSubscription }}
+            azureResourceGroup: ${{ parameters.ResourceGroup }}
+            kubernetesCluster: ${{ parameters.AksServiceName }}
+            useClusterAdmin: true
+            namespace: 'kube-system'
+            command: 'apply'
+            arguments: '--filename=$(Pipeline.Workspace)/Dfc.Shared.Resources.AksManifests/kured-1.2.0-dockerhub.yaml'
+
+
+

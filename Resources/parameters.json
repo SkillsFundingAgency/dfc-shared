@@ -11,6 +11,54 @@
     "deployApim": {
       "value": true
     },
+    "aksAgentVmSize": {
+      "value": "__AksAgentVmSize__"
+    },
+    "aksDnsServiceIp": {
+      "value": "__AksDnsServiceIp__"
+    },
+    "aksKubernetesVersion": {
+      "value": "__AksKubernetesVersion__"
+    },
+    "aksNodeResourceGroupName": {
+      "value": "__AksNodeResourceGroupName__"
+    },
+    "aksRbacClientAppId": {
+      "value": "__AksRbacClientAppId__"
+    },
+    "aksRbacServerAppId": {
+      "value": "__AksRbacServerAppId__"
+    },
+    "aksRbacServerAppSecret": {
+      "value": "__AksRbacServerAppSecret__"
+    },
+    "aksRbacTenantId": {
+      "value": "__AksRbacTenantId__"
+    },
+    "aksRouteTableName": {
+      "value": "__AksRouteTableName__"
+    },
+    "aksServiceCidr": {
+      "value": "__AksServiceCidr__"
+    },
+    "aksServicePrincipalClientId": {
+      "value": "__AksServicePrincipalClientId__"
+    },
+    "aksServicePrincipalSecret": {
+      "value": "__AksServicePrincipalSecret__"
+    },
+    "aksSubnetName": {
+      "value": "__AksSubnetName__"
+    },
+    "aksVirtualNetworkAddressPrefix": {
+      "value": "__AksVirtualNetworkAddressPrefix__"
+    },
+    "aksVnetName": {
+      "value": "__AksVnetName__"
+    },
+    "aksVnetResourceGroupName": {
+      "value": "__AksVnetResourceGroupName__"
+    },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
     },

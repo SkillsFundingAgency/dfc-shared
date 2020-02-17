@@ -11,6 +11,51 @@
     "deployApim": {
       "value": false
     },
+    "aksAgentVmSize": {
+      "value": "Standard_DS1_v2"
+    },
+    "aksDnsServiceIp": {
+      "value": "10.2.5.10"
+    },
+    "aksKubernetesVersion": {
+      "value": "1.14.8"
+    },
+    "aksNodeResourceGroupName": {
+      "value": "dfc-foo-stax-shared-aksnodes-rg"
+    },
+    "aksRbacClientAppId": {
+      "value": "__AksRbacClientAppId__"
+    },
+    "aksRbacServerAppId": {
+      "value": "__AksRbacServerAppId__"
+    },
+    "aksRbacServerAppSecret": {
+      "value": "__AksRbacServerAppSecret__"
+    },
+    "aksRbacTenantId": {
+      "value": "__AksRbacTenantId__"
+    },
+    "aksRouteTableName": {
+      "value": "aks-agentpool-12345678-routetable"
+    },
+    "aksServiceCidr": {
+      "value": "__AksServiceCidr__"
+    },
+    "aksServicePrincipalClientId": {
+      "value": "__AksServicePrincipalClientId__"
+    },
+    "aksServicePrincipalSecret": {
+      "value": "__AksServicePrincipalSecret__"
+    },
+    "aksSubnetName": {
+      "value": "dfc-aks-01"
+    },
+    "aksVirtualNetworkAddressPrefix": {
+      "value": "10.0"
+    },
+    "aksVnetName": {
+      "value": "dfc-foo-shared-aks-vnet"
+    },
     "apimHostnameRoot": {
       "value": "api.notarealservice.org.uk"
     },
