@@ -67,6 +67,22 @@
         "description": "Only required if the VNet will be externally created (ie PP or PROD).  The resource group that holds the VNet that AKS will be connected to."
       }
     },
+    "aksAppGatewaySubnetName": {
+      "type": "string"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The network security group assigned to the AKS App Gateway subnet"
+      }
+    },
+    "aksInboundIpAddressRange": {
+      "type": "string",
+      "defaultValue": "0.0.0.0/0",
+      "metadata": {
+        "description": "A comma separated list of IP addresses allowed to access the AKS App Gateway"
+      }
+    },
     "apimExists": {
       "type": "bool",
       "metadata": {
@@ -283,7 +299,7 @@
     "metadata": {
       "comment": "Revert localTemplatesUrl path back to master when merging"
     },
-    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/NCSD-2066-DeployAKS/Resources/",
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/NCSD-2794_aksag_subnetnsg/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
@@ -339,6 +355,9 @@
           },
           "aksSubnetName": {
             "value": "[parameters('aksSubnetName')]"
+          },
+          "aksAppGatewaySubnetName": {
+            "value": "[parameters('aksAppGatewaySubnetName')]"
           },
           "virtualNetworkAddressPrefix": {
             "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
@@ -817,6 +836,39 @@
           },
           "cloudServiceIpAddress": {
             "value": "[parameters('appGatewayCloudServiceIpAddress')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "aksAppGatewayNetworkSecurityGroup",
+      "condition": "[equals(parameters('envType'),'dev')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "sharedManagedInstanceEnvironment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/aksag-nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[parameters('aksAppGatewayNetworkSecurityGroup')]"
+          },
+          "agSubnetName": {
+            "value": "[parameters('aksAppGatewaySubnetName')]"
+          },
+          "vnetName": {
+            "value": "[parameters('aksVnetName')]"
+          },
+          "vnetResourceGroupName": {
+            "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
+          },
+          "inboundIpAddressRange": {
+            "value": "[parameters('aksInboundIpAddressRange')]"
           }
         }
       }

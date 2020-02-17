@@ -1,0 +1,99 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "agSubnetName": {
+            "type": "string"
+        },
+        "vnetName": {
+            "type": "string"
+        },
+        "vnetResourceGroupName": {
+            "type": "string"
+        },
+        "inboundIpAddressRange": {
+            "type": "string",
+            "metadata": {
+                "description": "Restricts HTTP(S) traffic in the NSG to the passed in range"
+            }
+        }
+    },
+    "variables": {
+        "isIpArray": "[contains(parameters('inboundIpAddressRange'), ',')]",
+        "IpArray": "[split(parameters('inboundIpAddressRange'), ',')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-06-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "HealthMonitoring",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 100,
+                            "access": "Allow",
+                            "description": "Allow the App Gateway to retrieve health status data",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "65200-65535",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "Inbound_HTTP",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 110,
+                            "access": "Allow",
+                            "description": "Allow HTTP access only from allowed IP addresses",
+                            "sourceAddressPrefix": "[if(variables('isIpArray'), json('null'), parameters('inboundIpAddressRange'))]",
+                            "sourceAddressPrefixes": "[if(variables('isIpArray'), variables('ipArray'), json('[]'))]",
+                            "sourcePortRange": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "7474",
+                            "destinationAddressPrefix": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('agSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+                        }
+                    },
+                    {
+                        "name": "Inbound_HTTPS",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 120,
+                            "access": "Allow",
+                            "description": "Allow HTTPS access only from allowed IP addresses",
+                            "sourceAddressPrefix": "[if(variables('isIpArray'), json('null'), parameters('inboundIpAddressRange'))]",
+                            "sourceAddressPrefixes": "[if(variables('isIpArray'), variables('ipArray'), json('[]'))]",
+                            "sourcePortRange": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "7473",
+                            "destinationAddressPrefix": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('agSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+                        }
+                    },
+                    {
+                        "name": "Inbound_BOLT",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 130,
+                            "access": "Allow",
+                            "description": "Allow BOLT access only from allowed IP addresses",
+                            "sourceAddressPrefix": "[if(variables('isIpArray'), json('null'), parameters('inboundIpAddressRange'))]",
+                            "sourceAddressPrefixes": "[if(variables('isIpArray'), variables('ipArray'), json('[]'))]",
+                            "sourcePortRange": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "7687",
+                            "destinationAddressPrefix": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('agSubnetName')), '2018-07-01', 'Full').properties.addressPrefix]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
