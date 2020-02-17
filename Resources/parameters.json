@@ -59,6 +59,12 @@
     "aksVnetResourceGroupName": {
       "value": "__AksVnetResourceGroupName__"
     },
+    "aksAppGatewaySubnetName": {
+      "value": "__aksAppGatewaySubnetName__"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "value": "__aksAppGatewayNetworkSecurityGroup__"
+    },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
     },

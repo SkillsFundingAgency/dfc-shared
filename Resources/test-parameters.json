@@ -56,6 +56,12 @@
     "aksVnetName": {
       "value": "dfc-foo-shared-aks-vnet"
     },
+    "aksAppGatewaySubnetName": {
+      "value": "dfc-aks-ag-01"
+    },
+    "aksAppGatewayNetworkSecurityGroup": {
+      "value": "dfc-local-aksag-nsg"
+    },
     "apimHostnameRoot": {
       "value": "api.notarealservice.org.uk"
     },
