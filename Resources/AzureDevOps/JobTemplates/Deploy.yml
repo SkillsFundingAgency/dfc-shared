@@ -67,7 +67,7 @@ jobs:
           inputs:
             azureSubscription: ${{ parameters.AzureSubscription }}
             ##TO DO: remove this script from dfc-devops when merging this change back to master
-            ScriptPath: '$(Pipeline.Workspace)/Dfc.Shared.Resources.PSScripts/Remove-ApisFromApiManagement.ps1'
+            ScriptPath: 's/dfc-devops/PSScripts/Remove-ApisFromApiManagement.ps1'
             ScriptArguments: '-ApisToRemove @( ${{ parameters.ApimApisToRemove }} ) -ApimResourceGroup "${{ parameters.ResourceGroup }}" -ApimServiceName "${{ parameters.SharedPrefix }}-apim"'
             azurePowerShellVersion: LatestVersion
         # Set KeyVault certificate issuer (OAT, PP & PRD only)
