@@ -11,6 +11,9 @@
         "aksSubnetName": {
             "type": "string"
         },
+        "aksAppGatewaySubnetName": {
+            "type": "string"
+        },
         "virtualNetworkAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0"
@@ -42,6 +45,12 @@
                         "properties": {
                             "addressPrefix": "[concat(parameters('virtualNetworkAddressPrefix'), '.0.0/24')]",
                             "routeTable": "[if(greater(length(parameters('aksRouteTableName')), 0), variables('routeTable'), json('null'))]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('aksAppGatewaySubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[concat(parameters('virtualNetworkAddressPrefix'), '.1.0/24')]"
                         }
                     }
                 ]
