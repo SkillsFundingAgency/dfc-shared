@@ -46,9 +46,10 @@ if ($AddServicePrincipal) {
         Add-AzADGroupMember -MemberObjectId $ServicePrincipal.Id -TargetGroupObjectId $AksAadGroup.Id
 
     }
+    Remove-Variable -Name ExistingMember
 
 }
-Remove-Variable -Name ExistingMember
+
 
 if ($UsersToAdd) {
 
