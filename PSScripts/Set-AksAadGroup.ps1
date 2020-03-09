@@ -27,7 +27,8 @@ param(
 $AksAadGroup = Get-AzAdGroup -DisplayName  $AksAadGroupName
 if (!$AksAadGroup) {
 
-    $AksAadGroup = New-AzAdGroup -DisplayName $AksAadGroupName -MailNickname $AksAadGroupName
+    $MailNickname = $AksAadGroupName -join "-"
+    $AksAadGroup = New-AzAdGroup -DisplayName $AksAadGroupName -MailNickname $MailNickname
 
 }
 
