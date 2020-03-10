@@ -150,7 +150,7 @@ Start-Sleep -Seconds 15
 # Set the allowPublicClient property of the App Registration to true.  This step depends on the token for Microsoft Graph obtained during the execution of Add-AzureAdApiPermissionsToApp.ps1
 $AksAdClientApplication = Get-AzureRmADApplication -DisplayName $AksAdClientApplicationSpn.DisplayName
 Write-Verbose "Setting allowPublicClient on $($AksAdClientApplicationSpn.DisplayName) [$($AksAdClientApplication.ObjectId)] to true"
-Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true -IdentifierUris @()
+Set-AzureADApplication -ObjectId $AksAdClientApplication.ObjectId -PublicClient $true
 Write-Verbose "Writing AksAdClientApplicationSpn ApplicationId value [$($AksAdClientApplicationSpn.ApplicationId)] to variable AksRbacClientAppId"
 Write-Output "##vso[task.setvariable variable=AksRbacClientAppId]$($AksAdClientApplicationSpn.ApplicationId)"
 
