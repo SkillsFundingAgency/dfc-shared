@@ -84,7 +84,7 @@
       "value": "__apimSkuTier__"
     },
     "apimCapacity": {
-      "value": "__apimCapacity__"
+      "value": __apimCapacity__
     },
     "apimVnetName": {
       "value": "__apimVnetName__"
