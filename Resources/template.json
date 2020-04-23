@@ -768,6 +768,9 @@
           "skuTier": {
             "value": "[parameters('apimSkuTier')]"
           },
+          "capacity": {
+            "value": "[parameters('apimCapacity')]"
+          },
           "subnetName": {
             "value": "[parameters('apimSubnetName')]"
           },
