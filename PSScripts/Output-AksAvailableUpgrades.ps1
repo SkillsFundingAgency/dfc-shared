@@ -32,8 +32,14 @@ else {
 
     if ($null -ne $GenerallyAvailableUpgrades.kubernetesVersion) {
 
-        Write-Verbose "GenerallyAvailableUpgradesCount is assumed to be 1"
+        Write-Verbose "kubernetesVersion property has a value"
         Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]1"
+
+    }
+    else {
+
+        Write-Verbose "kubernetesVersion has no value"
+        Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]0"
 
     }
 
