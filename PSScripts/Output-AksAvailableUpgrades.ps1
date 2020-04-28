@@ -22,5 +22,26 @@ param(
 
 $Upgrades = az aks get-upgrades --resource-group $AksResourceGroup --name $AksServiceName | ConvertFrom-Json
 $GenerallyAvailableUpgrades = $Upgrades.controlPlaneProfile.upgrades | Where-Object { $_.isPreview -ne $true }
-Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]$($GenerallyAvailableUpgrades.Count)"
+Write-Verbose "GenerallyAvailableUpgradesCount is $($GenerallyAvailableUpgrades.Count)"
+if ($null -ne $GenerallyAvailableUpgrades.Count) {
+
+    Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]$($GenerallyAvailableUpgrades.Count)" 
+
+}
+else {
+
+    if ($null -ne $GenerallyAvailableUpgrades.kubernetesVersion) {
+
+        Write-Verbose "kubernetesVersion property has a value"
+        Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]1"
+
+    }
+    else {
+
+        Write-Verbose "kubernetesVersion has no value"
+        Write-Output "##vso[task.setvariable variable=GenerallyAvailableUpgradesCount]0"
+
+    }
+
+}
 $GenerallyAvailableUpgrades
