@@ -14,11 +14,14 @@
     "aksAgentVmSize": {
       "value": "Standard_DS1_v2"
     },
+    "agentNodeCount": {
+      "value": 1
+    },
     "aksDnsServiceIp": {
       "value": "10.2.5.10"
     },
     "aksKubernetesVersion": {
-      "value": "1.14.8"
+      "value": "1.15.11"
     },
     "aksNodeResourceGroupName": {
       "value": "dfc-foo-stax-shared-aksnodes-rg"

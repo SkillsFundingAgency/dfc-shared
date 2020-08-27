@@ -14,6 +14,9 @@
     "aksAgentVmSize": {
       "value": "__AksAgentVmSize__"
     },
+    "agentNodeCount": {
+      "value": __AgentNodeCount__
+    },
     "aksDnsServiceIp": {
       "value": "__AksDnsServiceIp__"
     },
