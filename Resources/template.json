@@ -12,7 +12,10 @@
       "type": "string"
     },
     "agentNodeCount": {
-      "type": "int"
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "maxValue": 50
     },
     "aksDnsServiceIp": {
       "type": "string"
