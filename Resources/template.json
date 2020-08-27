@@ -302,7 +302,7 @@
     }
   },
   "variables": {
-    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/NCSD-4353-apim-new-dev-portal/ArmTemplates/",
+    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "metadata": {
       "comment": "Revert localTemplatesUrl path back to master when merging"
     },
