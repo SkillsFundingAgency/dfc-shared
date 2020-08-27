@@ -15,7 +15,7 @@
       "value": "Standard_DS1_v2"
     },
     "agentNodeCount": {
-      "value": 1
+      "value": 5
     },
     "aksDnsServiceIp": {
       "value": "10.2.5.10"
