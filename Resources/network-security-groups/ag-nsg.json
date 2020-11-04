@@ -46,7 +46,7 @@
                             "priority": 100,
                             "access": "Allow",
                             "description": "Allow the App Gateway to retrieve health status data",
-                            "sourceAddressPrefix": "Internet",
+                            "sourceAddressPrefix": "GatewayManager",
                             "sourcePortRange": "*",
                             "protocol": "Tcp",
                             "destinationPortRange": "65200-65535",
