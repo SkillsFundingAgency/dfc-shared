@@ -557,8 +557,7 @@
           "certificatePermissions": {
             "value": [
               "create",
-              "update",
-              "setissuers"
+              "update"
             ]
           }
         }
