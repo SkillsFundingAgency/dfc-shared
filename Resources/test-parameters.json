@@ -21,7 +21,7 @@
       "value": "10.2.5.10"
     },
     "aksKubernetesVersion": {
-      "value": "1.17.16"
+      "value": "1.18.10"
     },
     "aksNodeResourceGroupName": {
       "value": "dfc-foo-stax-shared-aksnodes-rg"
