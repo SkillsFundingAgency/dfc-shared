@@ -513,7 +513,8 @@
               "get",
               "list",
               "getissuers",
-              "listissuers"
+              "listissuers",
+              "setissuers"
             ]
           }
         }
