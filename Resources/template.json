@@ -513,8 +513,7 @@
               "get",
               "list",
               "getissuers",
-              "listissuers",
-              "setissuers"
+              "listissuers"
             ]
           }
         }
@@ -558,7 +557,8 @@
           "certificatePermissions": {
             "value": [
               "create",
-              "update"
+              "update",
+              "setissuers"
             ]
           }
         }
