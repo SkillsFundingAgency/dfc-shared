@@ -8,8 +8,24 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
-    "aksAgentVmSize": {
+    "aksAgent1VmSize": {
       "type": "string"
+    },
+    "aksAgent2VmSize": {
+      "type": "string"
+    },
+    "agentPoolName1": {
+      "type": "string"
+    },
+    "agentPoolName2": {
+      "type": "string"
+    },
+    "AADadminGroupObjectIDs": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "An array of AAD group object ids to give administrative access."
+      }
     },
     "agentNodeCount": {
       "type": "int"
@@ -21,18 +37,6 @@
       "type": "string"
     },
     "aksNodeResourceGroupName": {
-      "type": "string"
-    },
-    "aksRbacClientAppId": {
-      "type": "string"
-    },
-    "aksRbacServerAppId": {
-      "type": "string"
-    },
-    "aksRbacServerAppSecret": {
-      "type": "securestring"
-    },
-    "aksRbacTenantId": {
       "type": "string"
     },
     "aksRouteTableName": {
@@ -302,11 +306,11 @@
     }
   },
   "variables": {
-    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/dev/ArmTemplates/",
     "metadata": {
       "comment": "Revert localTemplatesUrl path back to master when merging"
     },
-    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/dev/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
@@ -389,8 +393,20 @@
           "clusterName": {
             "value": "[variables('aksClusterName')]"
           },
-          "agentVMSize": {
-            "value": "[parameters('aksAgentVmSize')]"
+          "agent1VMSize": {
+            "value": "[parameters('aksAgent1VmSize')]"
+          },
+          "agent2VMSize": {
+            "value": "[parameters('aksAgent2VmSize')]"
+          },
+          "agentPoolName1": {
+            "value": "[parameters('agentPoolName1')]"
+          },
+          "agentPoolName2": {
+            "value": "[parameters('agentPoolName2')]"
+          },
+          "AADadminGroupObjectIDs": {
+            "value": "[parameters('AADadminGroupObjectIDs')]"
           },
           "agentNodeCount": {
             "value": "[parameters('agentNodeCount')]"
@@ -403,18 +419,6 @@
           },
           "nodeResourceGroup": {
             "value": "[variables('aksNodeResourceGroupName')]"
-          },
-          "rbacClientAppId": {
-            "value": "[parameters('aksRbacClientAppId')]"
-          },
-          "rbacServerAppId": {
-            "value": "[parameters('aksRbacServerAppId')]"
-          },
-          "rbacServerAppSecret": {
-            "value": "[parameters('aksRbacServerAppSecret')]"
-          },
-          "rbacTenantId": {
-            "value": "[parameters('aksRbacTenantId')]"
           },
           "serviceCidr": {
             "value": "[parameters('aksServiceCidr')]"

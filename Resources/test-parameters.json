@@ -11,8 +11,22 @@
     "deployApim": {
       "value": false
     },
-    "aksAgentVmSize": {
+    "aksAgent1VmSize": {
       "value": "Standard_DS1_v2"
+    },
+    "aksAgent2VmSize": {
+      "value": "Standard_DS1_v2"
+    },
+    "agentPoolName1": {
+      "value": "systempool"
+    },
+    "agentPoolName2": {
+      "value": "apppool"
+    },
+    "AADadminGroupObjectIDs":{
+      "value": [
+        "a8af88dc-009d-4866-8f57-be24f5a89c80"
+      ]
     },
     "agentNodeCount": {
       "value": 1
@@ -25,18 +39,6 @@
     },
     "aksNodeResourceGroupName": {
       "value": "dfc-foo-stax-shared-aksnodes-rg"
-    },
-    "aksRbacClientAppId": {
-      "value": "__AksRbacClientAppId__"
-    },
-    "aksRbacServerAppId": {
-      "value": "__AksRbacServerAppId__"
-    },
-    "aksRbacServerAppSecret": {
-      "value": "__AksRbacServerAppSecret__"
-    },
-    "aksRbacTenantId": {
-      "value": "__AksRbacTenantId__"
     },
     "aksRouteTableName": {
       "value": "aks-agentpool-12345678-routetable"
