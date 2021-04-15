@@ -24,7 +24,7 @@
       "value": "__agentPoolName2__"
     },
     "AADadminGroupObjectIDs":{
-      "value": "__AADadminGroupObjectIDs__"
+      "value": __AADadminGroupObjectIDs__
     },
     "agentNodeCount": {
       "value": __AgentNodeCount__
