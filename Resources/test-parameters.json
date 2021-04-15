@@ -12,10 +12,10 @@
       "value": false
     },
     "aksAgent1VmSize": {
-      "value": "Standard_DS1_v2"
+      "value": "Standard_DS12_v2"
     },
     "aksAgent2VmSize": {
-      "value": "Standard_DS1_v2"
+      "value": "Standard_DS12_v2"
     },
     "agentPoolName1": {
       "value": "systempool"
