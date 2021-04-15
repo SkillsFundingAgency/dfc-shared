@@ -310,7 +310,7 @@
     "metadata": {
       "comment": "Revert localTemplatesUrl path back to master when merging"
     },
-    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/dev/Resources/",
+    "localTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-shared/master/Resources/",
     "keyVaultName": "[concat(parameters('sharedPrefix'),'-kv')]",
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
