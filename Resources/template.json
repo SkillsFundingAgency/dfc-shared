@@ -380,7 +380,7 @@
       }
     },
     {
-      "name": "sharedAzureKubernetesService",
+      "name": "sharedAzureKubernetesServices",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "properties": {
