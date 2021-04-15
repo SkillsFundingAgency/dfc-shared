@@ -27,7 +27,10 @@
         "description": "An array of AAD group object ids to give administrative access."
       }
     },
-    "agentNodeCount": {
+    "agentNodeCount1": {
+      "type": "int"
+    },
+    "agentNodeCount2": {
       "type": "int"
     },
     "aksDnsServiceIp": {
@@ -408,8 +411,11 @@
           "AADadminGroupObjectIDs": {
             "value": "[parameters('AADadminGroupObjectIDs')]"
           },
-          "agentNodeCount": {
-            "value": "[parameters('agentNodeCount')]"
+          "agentNodeCount1": {
+            "value": "[parameters('agentNodeCount1')]"
+          },
+          "agentNodeCount2": {
+            "value": "[parameters('agentNodeCount2')]"
           },
           "dnsServiceIp": {
             "value": "[parameters('aksDnsServiceIp')]"

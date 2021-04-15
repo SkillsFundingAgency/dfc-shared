@@ -26,8 +26,11 @@
     "AADadminGroupObjectIDs":{
       "value": __AADadminGroupObjectIDs__
     },
-    "agentNodeCount": {
-      "value": __AgentNodeCount__
+    "agentNodeCount1": {
+      "value": __AgentNodeCount1__
+    },
+    "agentNodeCount2": {
+      "value": __AgentNodeCount2__
     },
     "aksDnsServiceIp": {
       "value": "__AksDnsServiceIp__"

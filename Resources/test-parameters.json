@@ -28,7 +28,10 @@
         "a8af88dc-009d-4866-8f57-be24f5a89c80"
       ]
     },
-    "agentNodeCount": {
+    "agentNodeCount1": {
+      "value": 1
+    },
+    "agentNodeCount2": {
       "value": 1
     },
     "aksDnsServiceIp": {
