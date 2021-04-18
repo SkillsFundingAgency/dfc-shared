@@ -114,7 +114,7 @@ spec:
             - --ds-namespace=kured-ns
             - --end-time=23:59:59
 #            - --lock-annotation=weave.works/kured-node-lock
-            - --period=0h0m30s
+            - --period=1h
 #            - --prometheus-url=http://prometheus.monitoring.svc.cluster.local
             - --reboot-days=sun,sat
 #            - --reboot-sentinel=/var/run/reboot-required
