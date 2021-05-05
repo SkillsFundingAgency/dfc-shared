@@ -11,11 +11,26 @@
     "deployApim": {
       "value": true
     },
-    "aksAgentVmSize": {
-      "value": "__AksAgentVmSize__"
+    "aksAgent1VmSize": {
+      "value": "__AksAgent1VmSize__"
     },
-    "agentNodeCount": {
-      "value": __AgentNodeCount__
+    "aksAgent2VmSize": {
+      "value": "__AksAgent2VmSize__"
+    },
+    "agentPoolName1": {
+      "value": "__agentPoolName1__"
+    },
+    "agentPoolName2": {
+      "value": "__agentPoolName2__"
+    },
+    "AADadminGroupObjectIDs":{
+      "value": __AADadminGroupObjectIDs__
+    },
+    "agentNodeCount1": {
+      "value": __AgentNodeCount1__
+    },
+    "agentNodeCount2": {
+      "value": __AgentNodeCount2__
     },
     "aksDnsServiceIp": {
       "value": "__AksDnsServiceIp__"
@@ -25,18 +40,6 @@
     },
     "aksNodeResourceGroupName": {
       "value": "__AksNodeResourceGroupName__"
-    },
-    "aksRbacClientAppId": {
-      "value": "__AksRbacClientAppId__"
-    },
-    "aksRbacServerAppId": {
-      "value": "__AksRbacServerAppId__"
-    },
-    "aksRbacServerAppSecret": {
-      "value": "__AksRbacServerAppSecret__"
-    },
-    "aksRbacTenantId": {
-      "value": "__AksRbacTenantId__"
     },
     "aksRouteTableName": {
       "value": "__AksRouteTableName__"

@@ -11,32 +11,37 @@
     "deployApim": {
       "value": false
     },
-    "aksAgentVmSize": {
-      "value": "Standard_DS1_v2"
+    "aksAgent1VmSize": {
+      "value": "Standard_DS12_v2"
     },
-    "agentNodeCount": {
+    "aksAgent2VmSize": {
+      "value": "Standard_DS12_v2"
+    },
+    "agentPoolName1": {
+      "value": "systempool"
+    },
+    "agentPoolName2": {
+      "value": "apppool"
+    },
+    "AADadminGroupObjectIDs":{
+      "value": [
+        "a8af88dc-009d-4866-8f57-be24f5a89c80"
+      ]
+    },
+    "agentNodeCount1": {
+      "value": 1
+    },
+    "agentNodeCount2": {
       "value": 1
     },
     "aksDnsServiceIp": {
       "value": "10.2.5.10"
     },
     "aksKubernetesVersion": {
-      "value": "1.18.10"
+      "value": "1.18.14"
     },
     "aksNodeResourceGroupName": {
       "value": "dfc-foo-stax-shared-aksnodes-rg"
-    },
-    "aksRbacClientAppId": {
-      "value": "__AksRbacClientAppId__"
-    },
-    "aksRbacServerAppId": {
-      "value": "__AksRbacServerAppId__"
-    },
-    "aksRbacServerAppSecret": {
-      "value": "__AksRbacServerAppSecret__"
-    },
-    "aksRbacTenantId": {
-      "value": "__AksRbacTenantId__"
     },
     "aksRouteTableName": {
       "value": "aks-agentpool-12345678-routetable"
