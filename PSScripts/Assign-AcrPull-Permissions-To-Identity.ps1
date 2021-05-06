@@ -1,19 +1,21 @@
 <#
 .SYNOPSIS
-Grants list,get permissions on supplied keyvault to supplied application identity
+Grants acrPull permissions on supplied resource group to supplied application identity
 
 .DESCRIPTION
-Grants list,get permissions on supplied keyvault to supplied application identity
+Grants acrPull permissions on supplied resource group to supplied application identity
 
-.PARAMETER KeyVaultName
-Name of the keyvault
+.PARAMETER ResourceGroupName
+Name of the ResourceGroupName
 
 .PARAMETER ServicePrincipalName
 Name of the service principal
 
+.PARAMETER RoleDefinitionName
+Name of the RoleDefinitionName
+
 .EXAMPLE
-Assign-AcrPull-Permissions-To-Identity.ps1 -KeyVaultName KeyVaultName -ServicePrincipalName ServicePrincipalName
-Assign-KeyVault-Permissions-To-Identity.ps1 -KeyVaultName dfc-dev-shared-kv -ServicePrincipalName dfc-dev-api-eventgridsubscriptions-fa -Verbose
+Assign-KeyVault-Permissions-To-Identity.ps1 -ResourceGroupName dfc-dev-shared-rg -ServicePrincipalName dfc-dev-api-eventgridsubscriptions-fa -RoleDefinitionName acrPull -Verbose
 #>
 [CmdletBinding()]
 param(
