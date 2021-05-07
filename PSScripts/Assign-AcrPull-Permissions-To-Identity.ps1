@@ -19,11 +19,11 @@ Assign-KeyVault-Permissions-To-Identity.ps1 -ResourceGroupName dfc-dev-shared-rg
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$ResourceGroupName,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$ServicePrincipalName,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$RoleDefinitionName
 )
 
@@ -33,9 +33,15 @@ if ($ServicePrincipalObject) {
     Write-Verbose "Setting Application Id for $($ServicePrincipalName)"
     $ObjectId = $ServicePrincipalObject.Id
 
-    Write-Verbose "Assigning $($RoleDefinitionName) permissions to $($ObjectId) with scope $($ResourceGroupName)"
-    New-AzRoleAssignment -ResourceGroupName $ResourceGroupName -ObjectId $ObjectId -RoleDefinitionName $RoleDefinitionName
+    Write-Verbose "checking $($RoleDefinitionName) permissions from $($ObjectId) with scope $($ResourceGroupName)"
+    if (Get-AzRoleAssignment -ResourceGroupName $ResourceGroupName -RoleDefinitionName $RoleDefinitionName -ObjectId $ObjectId) {
+        Write-Verbose "$($ServicePrincipalNamee) already has $RoleDefinitionName access on $($ResourceGroupName)"
+    } else {
+        Write-Verbose "Adding $($ServicePrincipalName) with $RoleDefinitionName access on $($ResourceGroupName)"
+        New-AzRoleAssignment -ResourceGroupName $ResourceGroupName -RoleDefinitionName $RoleDefinitionName -ObjectId $ObjectId -verbose 
+    }
 
-} else {
+}
+else {
     Write-Verbose "$($ServicePrincipalName) not found on subscription"
 }
