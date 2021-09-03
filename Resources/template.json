@@ -467,7 +467,7 @@
       },
       "dependsOn": [
         "sharedAzureKubernetesServiceNetwork",
-        "[resourceId(variables('logAnalyticsResourceGroupName'), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsResourceGroupName'), variables('logAnalyticsWorkspaceName'))]"
       ]
     },
     {
