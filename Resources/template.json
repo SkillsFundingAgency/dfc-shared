@@ -318,6 +318,7 @@
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
+    "logName": "[concat(parameters('sharedPrefix'),'-la')]",
     "apimOrganizationName": "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
@@ -379,6 +380,17 @@
           "vnetName": {
             "value": "[parameters('aksVnetName')]"
           }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "name": "[variables('logName')]",
+      "apiVersion": "2017-03-15-preview",
+      "location": "resourceGroup().location",
+      "properties": {
+        "sku": {
+          "name": "pergb2018"
         }
       }
     },
@@ -447,7 +459,8 @@
         }
       },
       "dependsOn": [
-        "sharedAzureKubernetesServiceNetwork"
+        "sharedAzureKubernetesServiceNetwork",
+        "[variables('logName')]"
       ]
     },
     {
