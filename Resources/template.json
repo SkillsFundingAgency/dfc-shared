@@ -318,8 +318,8 @@
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
-    "logName": "[concat('dfc-',parameters('envType'),'-shared-la')]",
-    "logResourceGroupName": "[concat('dfc-',parameters('envType'),'-shared-rg')]",
+    "logAnalyticsWorkspaceName": "[concat('dfc-',parameters('envType'),'-shared-la')]",
+    "logAnalyticsResourceGroupName": "[concat('dfc-',parameters('envType'),'-shared-rg')]",
     "apimOrganizationName": "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
@@ -458,16 +458,16 @@
             "value": "[if(parameters('aksVnetCreate'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
           },
           "logAnalyticsWorkspaceName": {
-            "value": "[variables('logName')]"
+            "value": "[variables('logAnalyticsWorkspaceName')]"
           },
           "logAnalyticsResourceGroupName": {
-            "value": "[variables('logResourceGroupName')]"
+            "value": "[variables('logAnalyticsResourceGroupName')]"
           }
         }
       },
       "dependsOn": [
         "sharedAzureKubernetesServiceNetwork",
-        "[variables('logName')]"
+        "[resourceId(variables('logAnalyticsResourceGroupName'), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
       ]
     },
     {
