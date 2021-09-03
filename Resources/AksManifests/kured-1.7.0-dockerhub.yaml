@@ -113,7 +113,6 @@ spec:
             - --period=1h
             - --reboot-days=sun,sat
             - --slack-hook-url=__DfcDevOpsAlertsSlackHook__
-            - --message-template-drain=Draining node %s
             - --start-time=0:00
             - --message-template-drain=Draining node %s in the __envAbbreviation__ Environment 
             - --message-template-reboot=Rebooting node %s in the __envAbbreviation__ Environment             
