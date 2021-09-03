@@ -387,7 +387,7 @@
       "type": "Microsoft.OperationalInsights/workspaces",
       "name": "[variables('logName')]",
       "apiVersion": "2017-03-15-preview",
-      "location": "resourceGroup().location",
+      "location": "[resourceGroup().location]",
       "properties": {
         "sku": {
           "name": "pergb2018"
