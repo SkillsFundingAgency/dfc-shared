@@ -318,8 +318,8 @@
     "storageAccountName": "[concat(replace(parameters('sharedPrefix'),'-',''),'str')]",
     "apimAdminEmail": "careersdevops@education.gov.uk",
     "apimName": "[concat(parameters('sharedPrefix'),'-apim')]",
-    "logAnalyticsWorkspaceName": "[concat('dfc-',parameters('envType'),'-shared-la')]",
-    "logAnalyticsResourceGroupName": "[concat('dfc-',parameters('envType'),'-shared-rg')]",
+    "logAnalyticsWorkspaceName": "[concat(parameters('sharedPrefix'),'-la')]",
+    "logAnalyticsResourceGroupName": "[concat(parameters('sharedPrefix'),'-rg')]",
     "apimOrganizationName": "National Careers Service",
     "sqlServerName": "[concat(parameters('sharedPrefix'),'-sql')]",
     "elasticPoolName": "[if(equals(parameters('envType'),'dev'), concat(parameters('sharedPrefix'),'-epl'), '')]",
@@ -384,20 +384,20 @@
         }
       }
     },
-    // {
-    //   "type": "Microsoft.OperationalInsights/workspaces",
-    //   "name": "[variables('logAnalyticsWorkspaceName')]",
-    //   "apiVersion": "2017-03-15-preview",
-    //   "location": "[resourceGroup().location]",
-    //   "properties": {
-    //     "resourceGroup": {
-    //       "name": "[variables('logAnalyticsResourceGroupName')]"
-    //     },
-    //     "sku": {
-    //       "name": "pergb2018"
-    //     }
-    //   }
-    // },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "name": "[variables('logAnalyticsWorkspaceName')]",
+      "apiVersion": "2017-03-15-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "resourceGroup": {
+          "name": "[variables('logAnalyticsResourceGroupName')]"
+        },
+        "sku": {
+          "name": "pergb2018"
+        }
+      }
+    },
     {
       "name": "sharedAzureKubernetesServices",
       "type": "Microsoft.Resources/deployments",
