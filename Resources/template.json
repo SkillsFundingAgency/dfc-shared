@@ -48,12 +48,6 @@
     "aksServiceCidr": {
       "type": "string"
     },
-    "aksServicePrincipalClientId": {
-      "type": "string"
-    },
-    "aksServicePrincipalSecret": {
-      "type": "securestring"
-    },
     "aksSubnetName": {
       "type": "string"
     },
@@ -309,7 +303,7 @@
     }
   },
   "variables": {
-    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "dfcDevOpsTemplatesUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/NCSD-5806-aks-removal-of-service-principal/ArmTemplates/",
     "metadata": {
       "comment": "Revert localTemplatesUrl path back to master when merging"
     },
@@ -444,12 +438,6 @@
           },
           "serviceCidr": {
             "value": "[parameters('aksServiceCidr')]"
-          },
-          "servicePrincipalClientId": {
-            "value": "[parameters('aksServicePrincipalClientId')]"
-          },
-          "servicePrincipalSecret": {
-            "value": "[parameters('aksServicePrincipalSecret')]"
           },
           "subnetName": {
             "value": "[parameters('aksSubnetName')]"

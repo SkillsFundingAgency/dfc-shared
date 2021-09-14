@@ -47,12 +47,6 @@
     "aksServiceCidr": {
       "value": "__AksServiceCidr__"
     },
-    "aksServicePrincipalClientId": {
-      "value": "__AksServicePrincipalClientId__"
-    },
-    "aksServicePrincipalSecret": {
-      "value": "__AksServicePrincipalSecret__"
-    },
     "aksSubnetName": {
       "value": "__AksSubnetName__"
     },
