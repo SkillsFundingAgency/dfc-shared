@@ -48,12 +48,6 @@
     "aksServiceCidr": {
       "type": "string"
     },
-    "aksServicePrincipalClientId": {
-      "type": "string"
-    },
-    "aksServicePrincipalSecret": {
-      "type": "securestring"
-    },
     "aksSubnetName": {
       "type": "string"
     },
@@ -444,12 +438,6 @@
           },
           "serviceCidr": {
             "value": "[parameters('aksServiceCidr')]"
-          },
-          "servicePrincipalClientId": {
-            "value": "[parameters('aksServicePrincipalClientId')]"
-          },
-          "servicePrincipalSecret": {
-            "value": "[parameters('aksServicePrincipalSecret')]"
           },
           "subnetName": {
             "value": "[parameters('aksSubnetName')]"
