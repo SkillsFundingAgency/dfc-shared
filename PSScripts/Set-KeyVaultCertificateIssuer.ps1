@@ -9,10 +9,10 @@ Adds a Certificate Authority to an Azure KeyVault if it doesn't exist and sets t
 A phone number for the administrator, this is an enforced requirement of Set-AzKeyVaultCertificateIssuer
 
 .PARAMETER CertificateIssuerAccountId
-The GlobalSign account id assigned to careersdeveops@education.gov.uk
+The DigiCert account id assigned to careersdeveops@education.gov.uk
 
 .PARAMETER CertificateIssuerPassword
-The password for the GlobalSign account registered to careersdeveops@education.gov.uk
+The password for the DigiCert account registered to careersdeveops@education.gov.uk
 
 .PARAMETER KeyVaultName
 The name of the KeyVault to add the CA to
@@ -29,7 +29,7 @@ param(
     [String]$KeyVaultName
 )
 
-$AdminDetails = New-AzKeyVaultCertificateAdministratorDetails -FirstName Careers -LastName DevOps -EmailAddress "careersdeveops@education.gov.uk" -PhoneNumber $AdministratorPhoneNumber
+$AdminDetails = New-AzKeyVaultCertificateAdministratorDetails -FirstName Careers -LastName Keyvault -EmailAddress "careersdeveops@education.gov.uk" -PhoneNumber $AdministratorPhoneNumber
 $OrgDetails = New-AzKeyVaultCertificateOrganizationDetails -AdministratorDetails $AdminDetails
 $SecurePassword = ConvertTo-SecureString -String $CertificateIssuerPassword -AsPlainText -Force
-Set-AzKeyVaultCertificateIssuer -VaultName $KeyVaultName -Name "GlobalSign" -IssuerProvider "GlobalSign" -AccountId $CertificateIssuerAccountId -ApiKey $SecurePassword -OrganizationDetails $OrgDetails -PassThru
+Set-AzKeyVaultCertificateIssuer -VaultName $KeyVaultName -Name "DigiCert" -IssuerProvider "DigiCert" -AccountId $CertificateIssuerAccountId -ApiKey $SecurePassword -OrganizationDetails $OrgDetails -PassThru
