@@ -380,6 +380,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces",
+      "condition": false,
       "name": "[variables('logAnalyticsWorkspaceName')]",
       "apiVersion": "2017-03-15-preview",
       "location": "[resourceGroup().location]",
@@ -394,6 +395,7 @@
     },
     {
       "name": "sharedAzureKubernetesServices",
+      "condition": false,
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-10-01",
       "properties": {
@@ -457,8 +459,7 @@
         }
       },
       "dependsOn": [
-        "sharedAzureKubernetesServiceNetwork",
-        "[variables('logAnalyticsWorkspaceName')]"
+        "sharedAzureKubernetesServiceNetwork"
       ]
     },
     {
