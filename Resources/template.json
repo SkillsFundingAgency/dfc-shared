@@ -657,6 +657,32 @@
       }
     },
     {
+      "name": "sharedSQLServerSqlVulnAssessment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "sharedSQLServer"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'SqlServer/sql-vulnerability-assessments.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "sqlServerName": {
+            "value": "[variables('sqlServerName')]"
+          },
+          "enabled": {
+            "value": true
+          },
+          "notificationEmails": {
+            "value": "careersdevops@education.gov.uk"
+          }
+        }
+      }
+    },
+    {
       "name": "sharedCDN",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
