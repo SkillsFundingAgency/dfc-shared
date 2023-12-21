@@ -8,85 +8,6 @@
         "description": "Prefix for all resources created for the project (except storage account, see below). Should be in the format dfc-env-proj"
       }
     },
-    "aksAgent1VmSize": {
-      "type": "string"
-    },
-    "aksAgent2VmSize": {
-      "type": "string"
-    },
-    "agentPoolName1": {
-      "type": "string"
-    },
-    "agentPoolName2": {
-      "type": "string"
-    },
-    "AADadminGroupObjectIDs": {
-      "type": "array",
-      "defaultValue": [],
-      "metadata": {
-        "description": "An array of AAD group object ids to give administrative access."
-      }
-    },
-    "agentNodeCount1": {
-      "type": "int"
-    },
-    "agentNodeCount2": {
-      "type": "int"
-    },
-    "aksDnsServiceIp": {
-      "type": "string"
-    },
-    "aksKubernetesVersion": {
-      "type": "string"
-    },
-    "aksNodeResourceGroupName": {
-      "type": "string"
-    },
-    "aksRouteTableName": {
-      "type": "string"
-    },
-    "aksServiceCidr": {
-      "type": "string"
-    },
-    "aksSubnetName": {
-      "type": "string"
-    },
-    "aksVirtualNetworkAddressPrefix": {
-      "type": "string"
-    },
-    "aksVnetName": {
-      "type": "string"
-    },
-    "aksVnetCreate": {
-      "type": "bool",
-      "defaultValue": true,
-      "metadata": {
-        "description": "Bool to determine whether to create a VNet for AKS - defaults to create a VNet"
-      }
-    },
-    "aksVnetResourceGroupName": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Only required if the VNet will be externally created (ie PP or PROD).  The resource group that holds the VNet that AKS will be connected to."
-      }
-    },
-    "aksAppGatewaySubnetName": {
-      "type": "string"
-    },
-    "aksAppGatewayNetworkSecurityGroup": {
-      "type": "string",
-      "metadata": {
-        "description": "The network security group assigned to the AKS App Gateway subnet"
-      }
-    },
-    "aksInboundIpAddressRange": {
-      "type": "string",
-      "defaultValue": "0.0.0.0/0",
-      "metadata": {
-        "description": "A comma separated list of IP addresses allowed to access the AKS App Gateway"
-      }
-    },
     "apimExists": {
       "type": "bool",
       "metadata": {
@@ -300,6 +221,24 @@
       "metadata": {
         "description": "Restricts HTTP(S) traffic to App Gateway to the passed in range"
       }
+    },
+    "redisCacheSkuName": {
+      "type": "string",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "The tier of the redis cache instance"
+      }
+    },
+    "redisCacheInstanceCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of redis cache instances"
+      }
     }
   },
   "variables": {
@@ -323,8 +262,7 @@
     "defaultKeyVaultReadAccessHack": "[if(empty(parameters('defaultKeyVaultReadAccess')), 1, length(parameters('defaultKeyVaultReadAccess')))]",
     "defaultKeyVaultWriteAccessHack": "[if(empty(parameters('defaultKeyVaultWriteAccess')), 1, length(parameters('defaultKeyVaultWriteAccess')))]",
     "containerRegistryName": "[toLower(concat(replace(parameters('sharedPrefix'),'-',''),'cr'))]",
-    "aksClusterName": "[concat(parameters('sharedPrefix'), '-aks')]",
-    "aksNodeResourceGroupName": "[concat(variables('aksClusterName'), 'nodes-rg')]"
+    "redisCacheName": "[concat(parameters('sharedPrefix'), '-rdc')]"
   },
   "resources": [
     {
@@ -346,42 +284,9 @@
       }
     },
     {
-      "name": "sharedAzureKubernetesServiceNetwork",
-      "type": "Microsoft.Resources/deployments",
-      "condition": "[parameters('aksVnetCreate')]",
-      "apiVersion": "2017-05-10",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('localTemplatesUrl'), 'networks/aks-vnet.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "aksNodeResourceGroupName": {
-            "value": "[parameters('aksNodeResourceGroupName')]"
-          },
-          "aksRouteTableName": {
-            "value": "[parameters('aksRouteTableName')]"
-          },
-          "aksSubnetName": {
-            "value": "[parameters('aksSubnetName')]"
-          },
-          "aksAppGatewaySubnetName": {
-            "value": "[parameters('aksAppGatewaySubnetName')]"
-          },
-          "virtualNetworkAddressPrefix": {
-            "value": "[parameters('aksVirtualNetworkAddressPrefix')]"
-          },
-          "vnetName": {
-            "value": "[parameters('aksVnetName')]"
-          }
-        }
-      }
-    },
-    {
       "type": "Microsoft.OperationalInsights/workspaces",
       "name": "[variables('logAnalyticsWorkspaceName')]",
-      "apiVersion": "2017-03-15-preview",
+      "apiVersion": "2022-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
         "resourceGroup": {
@@ -391,75 +296,6 @@
           "name": "pergb2018"
         }
       }
-    },
-    {
-      "name": "sharedAzureKubernetesServices",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'),'aks.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "clusterName": {
-            "value": "[variables('aksClusterName')]"
-          },
-          "agent1VMSize": {
-            "value": "[parameters('aksAgent1VmSize')]"
-          },
-          "agent2VMSize": {
-            "value": "[parameters('aksAgent2VmSize')]"
-          },
-          "agentPoolName1": {
-            "value": "[parameters('agentPoolName1')]"
-          },
-          "agentPoolName2": {
-            "value": "[parameters('agentPoolName2')]"
-          },
-          "AADadminGroupObjectIDs": {
-            "value": "[parameters('AADadminGroupObjectIDs')]"
-          },
-          "agentNodeCount1": {
-            "value": "[parameters('agentNodeCount1')]"
-          },
-          "agentNodeCount2": {
-            "value": "[parameters('agentNodeCount2')]"
-          },
-          "dnsServiceIp": {
-            "value": "[parameters('aksDnsServiceIp')]"
-          },
-          "kubernetesVersion": {
-            "value": "[parameters('aksKubernetesVersion')]"
-          },
-          "nodeResourceGroup": {
-            "value": "[variables('aksNodeResourceGroupName')]"
-          },
-          "serviceCidr": {
-            "value": "[parameters('aksServiceCidr')]"
-          },
-          "subnetName": {
-            "value": "[parameters('aksSubnetName')]"
-          },
-          "virtualNetworkName": {
-            "value": "[parameters('aksVnetName')]"
-          },
-          "virtualNetworkResourceGroup": {
-            "value": "[if(parameters('aksVnetCreate'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
-          },
-          "logAnalyticsWorkspaceName": {
-            "value": "[variables('logAnalyticsWorkspaceName')]"
-          },
-          "logAnalyticsResourceGroupName": {
-            "value": "[variables('logAnalyticsResourceGroupName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "sharedAzureKubernetesServiceNetwork",
-        "[variables('logAnalyticsWorkspaceName')]"
-      ]
     },
     {
       "name": "sharedManagedInstanceEnvironment",
@@ -878,39 +714,6 @@
       }
     },
     {
-      "name": "aksAppGatewayNetworkSecurityGroup",
-      "condition": "[equals(parameters('envType'),'dev')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "dependsOn": [
-        "sharedManagedInstanceEnvironment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('localTemplatesUrl'), 'network-security-groups/aksag-nsg.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "name": {
-            "value": "[parameters('aksAppGatewayNetworkSecurityGroup')]"
-          },
-          "agSubnetName": {
-            "value": "[parameters('aksAppGatewaySubnetName')]"
-          },
-          "vnetName": {
-            "value": "[parameters('aksVnetName')]"
-          },
-          "vnetResourceGroupName": {
-            "value": "[if(equals(parameters('envType'),'dev'), resourceGroup().name, parameters('aksVnetResourceGroupName'))]"
-          },
-          "inboundIpAddressRange": {
-            "value": "[parameters('aksInboundIpAddressRange')]"
-          }
-        }
-      }
-    },
-    {
       "name": "sharedAppServiceEnvironment",
       "type": "Microsoft.Resources/deployments",
       "condition": "[variables('deployAse')]",
@@ -945,6 +748,73 @@
       "dependsOn": [
         "aseNetworkSecurityGroup"
       ]
+    },
+    {
+      "name": "sharedRedisCache",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('dfcDevOpsTemplatesUrl'), 'redis.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "redisName": {
+            "value": "[variables('redisCacheName')]"
+          },
+          "redisSkuName": {
+            "value": "[parameters('redisCacheSkuName')]"
+          },
+          "redisCapacity": {
+            "value": "[parameters('redisCacheInstanceCount')]"
+          }
+        }
+      },
+      "dependsOn": [
+      ]
+    },
+    {
+      "name": "sharedRedisAuditLog",
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "apiVersion": "2021-05-01-preview",
+      "dependsOn": [
+        "sharedRedisCache", 
+        "sharedStorage"
+      ],
+      "properties": {
+        "logs": [
+          {
+            "category": null,
+            "categoryGroup": "audit",
+            "enabled": true
+          },
+          {
+            "category": null,
+            "categoryGroup": "allLogs",
+            "enabled": false
+          }
+        ],
+        "metrics": [
+          {
+            "category": "AllMetrics",
+            "enabled": false
+          }
+        ],
+        "storgeAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      }
+    },
+    {
+      "name": "[concat(variables('redisCacheName'), '/RedisConnectionString')]",
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2020-04-01-preview",
+      "dependsOn": [
+        "sharedRedisCache",
+        "sharedKeyVault"
+      ],
+      "properties": {
+        "value": "[reference('sharedRedisCache').outputs.redisConnectionString]",
+      }
     }
   ],
   "outputs": {
@@ -983,6 +853,10 @@
     "apimName": {
       "type": "string",
       "value": "[variables('apimName')]"
+    },
+    "redisCacheName": {
+      "type": "string",
+      "value": "[variables('redisCacheName')]"
     }
   }
 }
