@@ -781,8 +781,8 @@
       "apiVersion": "2021-05-01-preview",
       "scope": "[format('Microsoft.Cache/redis/{0}', variables('redisCacheName'))]",
       "dependsOn": [
-        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        "sharedRedisCache",
+        "sharedStorage"
       ],
       "properties": {
         "logs": [
@@ -811,8 +811,8 @@
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2020-04-01-preview",
       "dependsOn": [
-        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
+        "sharedRedisCache",
+        "sharedKeyVault"
       ],
       "properties": {
         "value": "[reference('sharedRedisCache').outputs.redisConnectionString]"
