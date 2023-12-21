@@ -779,6 +779,7 @@
       "name": "[concat(variables('redisCacheName'), '/redisAuditLog')]",
       "type": "Microsoft.Insights/diagnosticSettings",
       "apiVersion": "2021-05-01-preview",
+      "scope": "[format('Microsoft.Cache/redis/{0}', variables('redisCacheName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
