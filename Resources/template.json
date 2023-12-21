@@ -776,9 +776,9 @@
       ]
     },
     {
-      "name": "redisAuditLog",
+      "name": "[concat(variables('redisCacheName'), '/redisAuditLog')]",
       "type": "Microsoft.Insights/diagnosticSettings",
-      "apiVersion": "2019-05-01",
+      "apiVersion": "2021-05-01-preview",
       "dependsOn": [
         "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
@@ -803,8 +803,7 @@
           }
         ],
         "storgeAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-      },
-      "scope": "[format('Microsoft.Cache/redis/{0}', variables('redisCacheName'))]"
+      }
     },
     {
       "name": "RedisConnectionStringInKeyVault",
