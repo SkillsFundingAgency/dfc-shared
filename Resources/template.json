@@ -284,6 +284,7 @@
       }
     },
     {
+      "condition": false,
       "type": "Microsoft.OperationalInsights/workspaces",
       "name": "[variables('logAnalyticsWorkspaceName')]",
       "apiVersion": "2022-10-01",
