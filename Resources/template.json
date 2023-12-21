@@ -776,7 +776,7 @@
       ]
     },
     {
-      "name": "[concat(variables('redisCacheName'), '/redisAuditLog')]",
+      "name": "redisAuditLog",
       "type": "Microsoft.Insights/diagnosticSettings",
       "apiVersion": "2021-05-01-preview",
       "scope": "[format('Microsoft.Cache/redis/{0}', variables('redisCacheName'))]",
