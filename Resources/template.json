@@ -814,7 +814,7 @@
         "sharedKeyVault"
       ],
       "properties": {
-        "value": "[reference('sharedRedisCache').outputs.redisConnectionString]",
+        "value": "[reference('sharedRedisCache').outputs.redisConnectionString]"
       }
     }
   ],
