@@ -778,7 +778,7 @@
     {
       "name": "redisAuditLog",
       "type": "Microsoft.Insights/diagnosticSettings",
-      "apiVersion": "2021-05-01-preview",
+      "apiVersion": "2019-05-01",
       "dependsOn": [
         "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
