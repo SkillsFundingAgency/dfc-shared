@@ -776,7 +776,7 @@
       ]
     },
     {
-      "name": "sharedRedisAuditLog",
+      "name": "[concat(variables('redisCacheName'), '/redisAuditLog')]",
       "type": "Microsoft.Insights/diagnosticSettings",
       "apiVersion": "2021-05-01-preview",
       "dependsOn": [
@@ -806,7 +806,7 @@
       }
     },
     {
-      "name": "[concat(variables('redisCacheName'), '/RedisConnectionString')]",
+      "name": "RedisConnectionStringInKeyVault",
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2020-04-01-preview",
       "dependsOn": [
