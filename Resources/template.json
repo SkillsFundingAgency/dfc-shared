@@ -776,12 +776,12 @@
       ]
     },
     {
-      "name": "[concat(variables('redisCacheName'), '/redisAuditLog')]",
+      "name": "redisAuditLog",
       "type": "Microsoft.Insights/diagnosticSettings",
       "apiVersion": "2021-05-01-preview",
       "dependsOn": [
-        "sharedRedisCache", 
-        "sharedStorage"
+        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
       ],
       "properties": {
         "logs": [
@@ -803,15 +803,16 @@
           }
         ],
         "storgeAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-      }
+      },
+      "scope": "[format('Microsoft.Cache/redis/{0}', variables('redisCacheName'))]"
     },
     {
       "name": "RedisConnectionStringInKeyVault",
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2020-04-01-preview",
       "dependsOn": [
-        "sharedRedisCache",
-        "sharedKeyVault"
+        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
       ],
       "properties": {
         "value": "[reference('sharedRedisCache').outputs.redisConnectionString]"
