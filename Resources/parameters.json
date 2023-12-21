@@ -108,7 +108,7 @@
       "value": "__redisCacheSkuName__"
     },
     "redisCacheInstanceCount": {
-      "value": "__redisCacheInstanceCount__"
+      "value": __redisCacheInstanceCount__
     }
   }
 }
