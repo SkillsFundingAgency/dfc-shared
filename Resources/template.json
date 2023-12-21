@@ -807,9 +807,8 @@
       }
     },
     {
-      "name": "RedisConnectionStringInKeyVault",
+      "name": "[concat(variables('keyVaultName'), '/RedisConnectionStringInKeyVault')]",
       "type": "Microsoft.KeyVault/vaults/secrets",
-      "scope": "[format('Microsoft.KeyVault/vaults/{0}', variables('keyVaultName'))]",
       "apiVersion": "2020-04-01-preview",
       "dependsOn": [
         "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]",
