@@ -239,12 +239,6 @@
       "metadata": {
         "description": "The number of redis cache instances"
       }
-    },
-    "keyVaultAccessPolicies": {
-      "type": "array",
-      "metadata": {
-        "description": "A list of existing access policies to the key vault"
-      }
     }
   },
   "variables": {
