@@ -813,7 +813,7 @@
       }
     },
     {
-      "name": "[concat(variables('keyVaultName'), '/RedisConnectionStringInKeyVault')]",
+      "name": "[concat(variables('keyVaultName'), '/RedisConnectionString')]",
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2020-04-01-preview",
       "dependsOn": [
