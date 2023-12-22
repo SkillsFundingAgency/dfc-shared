@@ -239,6 +239,12 @@
       "metadata": {
         "description": "The number of redis cache instances"
       }
+    },
+    "keyVaultAccessPolicies": {
+      "type": "array",
+      "metadata": {
+        "description": "A list of existing access policies to the key vault"
+      }
     }
   },
   "variables": {
@@ -815,7 +821,7 @@
         "sharedKeyVault"
       ],
       "properties": {
-        "value": "[concat(variables('redisCacheName'), '.redis.cache.windows.net:6380,password=', listkeys(resourceId('Microsoft.Cache/redis', variables('redisCacheName')), '2015-08-01').primaryKey, ',ssl=True,abortConnect=False')]"
+        "value": "[reference('sharedRedisCache').outputs.redisConnectionString]"
       }
     }
   ],
