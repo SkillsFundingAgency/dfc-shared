@@ -815,7 +815,7 @@
         "sharedKeyVault"
       ],
       "properties": {
-        "value": "[reference('sharedRedisCache').outputs.redisConnectionString]"
+        "value": "[concat(reference(resourceId('Microsoft.Cache/redis', variables('redisCacheName'))).hostName, ':', reference(resourceId('Microsoft.Cache/redis', variables('redisCacheName'))).sslPort, ',password=', listkeys(resourceId('Microsoft.Cache/redis', variables('redisCacheName')), providers('Microsoft.Cache', 'redis').apiVersions[0]).primaryKey, ',ssl=True,abortConnect=False,syncTimeout=2000,allowAdmin=true')]"
       }
     }
   ],
