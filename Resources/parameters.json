@@ -11,60 +11,6 @@
     "deployApim": {
       "value": true
     },
-    "aksAgent1VmSize": {
-      "value": "__AksAgent1VmSize__"
-    },
-    "aksAgent2VmSize": {
-      "value": "__AksAgent2VmSize__"
-    },
-    "agentPoolName1": {
-      "value": "__agentPoolName1__"
-    },
-    "agentPoolName2": {
-      "value": "__agentPoolName2__"
-    },
-    "AADadminGroupObjectIDs":{
-      "value": __AADadminGroupObjectIDs__
-    },
-    "agentNodeCount1": {
-      "value": __AgentNodeCount1__
-    },
-    "agentNodeCount2": {
-      "value": __AgentNodeCount2__
-    },
-    "aksDnsServiceIp": {
-      "value": "__AksDnsServiceIp__"
-    },
-    "aksKubernetesVersion": {
-      "value": "__AksKubernetesVersion__"
-    },
-    "aksNodeResourceGroupName": {
-      "value": "__AksNodeResourceGroupName__"
-    },
-    "aksRouteTableName": {
-      "value": "__AksRouteTableName__"
-    },
-    "aksServiceCidr": {
-      "value": "__AksServiceCidr__"
-    },
-    "aksSubnetName": {
-      "value": "__AksSubnetName__"
-    },
-    "aksVirtualNetworkAddressPrefix": {
-      "value": "__AksVirtualNetworkAddressPrefix__"
-    },
-    "aksVnetName": {
-      "value": "__AksVnetName__"
-    },
-    "aksVnetResourceGroupName": {
-      "value": "__AksVnetResourceGroupName__"
-    },
-    "aksAppGatewaySubnetName": {
-      "value": "__aksAppGatewaySubnetName__"
-    },
-    "aksAppGatewayNetworkSecurityGroup": {
-      "value": "__aksAppGatewayNetworkSecurityGroup__"
-    },
     "apimHostnameRoot": {
       "value": "__apimHostnameRoot__"
     },
@@ -157,6 +103,12 @@
     },
     "appGatewayCloudServiceIpAddress": {
       "value": "__appGatewayCloudServiceIpAddress__"
+    },
+    "redisCacheSkuName": {
+      "value": "__redisCacheSkuName__"
+    },
+    "redisCacheInstanceCount": {
+      "value": __redisCacheInstanceCount__
     }
   }
 }
